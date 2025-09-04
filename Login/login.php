@@ -1,4 +1,42 @@
+<?php
+session_start();
+require_once('../config/connect.php');
 
+if ( isset($_POST['password']) && isset($_POST['email'])) {
+    function validate($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
+    $password = validate($_POST['password']);
+    $masv = validate($_POST['email']);
+
+
+    $sql = "SELECT * FROM db_account WHERE email='$email'";
+    $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        if ( $row['password'] === $password && $row['email'] === $email ) {
+            $_SESSION['password'] = $row['password'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['role'] = $row['role'];
+            if ($row['role'] == 'user') {
+                header("Location: user_dashboard.php?page=user_home");
+                exit();
+            } elseif ($row['role'] == 'admin') {
+                header("Location: admin_dashboard.php?page=admin_home");
+                exit();
+            } else {
+                header("Location: login.php?error=Tài khoản của bạn chưa được phân quyền!");
+                exit();
+            }
+        } else {
+            header("Location: login.php?error=Thông tin chưa chính xác. Vui lòng nhập!");
+            exit();
+        }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,3 +82,4 @@
     </form>
 </body>
 </html>
+
