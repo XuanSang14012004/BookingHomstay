@@ -25,7 +25,7 @@ if ( isset($_POST['password']) && isset($_POST['email'])) {
                 header("Location: user_dashboard.php?page=user_home");
                 exit();
             } elseif ($row['role'] == 'admin') {
-                header("Location: admin_dashboard.php?page=admin_home");
+                header("Location: admin.php?page=admin_home");
                 exit();
             } else {
                 header("Location: login.php?error=Tài khoản của bạn chưa được phân quyền!");
