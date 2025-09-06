@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý phòng</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>HomeStay</h2>
+        <ul>
+             <li><a href="admin.html"> Admin</a></li>
+            <li><a href="adminDashboard.html"> Dashboard</a></li>
+            <li><a href="adminBooking.html"> Quản lý Booking</a></li>
+            <li><a href="adminHomestay.html"> Quản lý Homestay</a></li>
+            <li><a href="adminUser.html"> Quản lý Người dùng</a></li>
+            <li><a href="rooms.html" class="active"> Quản lý phòng</a></li>
+            <li><a href="payment.html"> Quản lý thanh toán</a></li>
+            <li><a href="review.html"> Phản hồi đánh giá</a></li>
+            <li><a href="support.html"> Hỗ trợ khách hàng</a></li>
+            <li><a href="login.html"> Đăng xuất</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="header">
+            <h1>Quản lý phòng</h1>
+            <button class="btn" onclick="showAddRoomForm()">Thêm phòng</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên phòng</th>
+                        <th>Giá (VNĐ)</th>
+                        <th>Số lượng trống</th>
+                        <th>Số lượng đã thuê</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="roomTableBody">
+                    <tr>
+                        <td>101</td>
+                        <td>Phòng A101</td>
+                        <td>800,000</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>
+                            <button class="btn" onclick="showEditRoomForm(101)">Sửa</button>
+                            <button class="btn" onclick="deleteRoom(101)">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>102</td>
+                        <td>Phòng B102</td>
+                        <td>650,000</td>
+                        <td>1</td>
+                        <td>4</td>
+                        <td>
+                            <button class="btn" onclick="showEditRoomForm(102)">Sửa</button>
+                            <button class="btn" onclick="deleteRoom(102)">Xóa</button>
+                        </td>
+                    </tr>
+                    <!-- Thêm các dòng phòng khác tại đây -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Form thêm/sửa phòng -->
+        <div id="roomForm" style="display:none; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-top:20px;">
+            <h3 id="formTitle">Thêm phòng</h3>
+            <form id="formRoom" onsubmit="saveRoom(event)">
+                <input type="hidden" id="roomId">
+                <div class="mb-3">
+                    <label>Tên phòng</label>
+                    <input type="text" class="form-control" id="roomName" required>
+                </div>
+                <div class="mb-3">
+                    <label>Giá (VNĐ)</label>
+                    <input type="number" class="form-control" id="roomPrice" required>
+                </div>
+                <div class="mb-3">
+                    <label>Số lượng trống</label>
+                    <input type="number" class="form-control" id="roomAvailable" required>
+                </div>
+                <div class="mb-3">
+                    <label>Số lượng đã thuê</label>
+                    <input type="number" class="form-control" id="roomRented" required>
+                </div>
+                <button type="submit" class="btn">Lưu</button>
+                <button type="button" class="btn" onclick="hideRoomForm()">Hủy</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function showAddRoomForm() {
+            document.getElementById('formTitle').innerText = 'Thêm phòng';
+            document.getElementById('roomForm').style.display = 'block';
+            document.getElementById('formRoom').reset();
+            document.getElementById('roomId').value = '';
+        }
+        function showEditRoomForm(id) {
+            document.getElementById('formTitle').innerText = 'Sửa phòng #' + id;
+            document.getElementById('roomForm').style.display = 'block';
+            // TODO: Load dữ liệu phòng theo id để sửa (hiện tại là mẫu tĩnh)
+        }
+        function hideRoomForm() {
+            document.getElementById('roomForm').style.display = 'none';
+        }
+        function deleteRoom(id) {
+            if (confirm('Bạn có chắc muốn xóa phòng #' + id + '?')) {
+                // TODO: Xử lý xóa phòng ở backend
+            }
+        }
+        function saveRoom(event) {
+            event.preventDefault();
+            // TODO: Xử lý lưu phòng (thêm/sửa) ở backend
+            hideRoomForm();
+        }
+    </script>
+</body>
+</html>
