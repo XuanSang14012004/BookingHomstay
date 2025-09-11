@@ -1,24 +1,124 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminUser</title>
+    <title>Quản lý Khách Hàng</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Trang quản lý người dùng </h1>
+    <div class="sidebar">
+        <h2>HomeStay</h2>
+        <ul>
+             <li><a href="admin.html"> ADMIN</a></li>
+            <li><a href="adminDashboard.html"> Dashboard</a></li>
+            <li><a href="adminBooking.html" class="active"> Quản lý Booking</a></li>
+            <li><a href="adminUser.html"> Quản lý Người dùng</a></li>
+            <li><a href="rooms.html"> Quản lý phòng</a></li>
+            <li><a href="payment.html"> Quản lý thanh toán</a></li>
+            <li><a href="review.html"> Phản hồi đánh giá</a></li>
+            <li><a href="support.html"> Hỗ trợ khách hàng</a></li>
+            <li><a href="login.html"> Đăng xuất</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="header">
+            <h1>Quản lý Người dùng</h1>
+            <button class="btn" onclick="showAddUserForm()">Thêm Người dùng</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên người dùng</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Vai trò</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>vana@example.com</td>
+                        <td>0901234567</td>
+                        <td>Admin</td>
+                        <td>
+                            <button class="btn" onclick="showEditUserForm(1)">Sửa</button>
+                            <button class="btn" onclick="deleteUser(1)">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Trần Thị B</td>
+                        <td>thib@example.com</td>
+                        <td>0912345678</td>
+                        <td>Khách hàng</td>
+                        <td>
+                            <button class="btn" onclick="showEditUserForm(2)">Sửa</button>
+                            <button class="btn" onclick="deleteUser(2)">Xóa</button>
+                        </td>
+                    </tr>
+                    <!-- Thêm các dòng người dùng khác tại đây -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Form thêm/sửa người dùng -->
+        <div id="userForm" style="display:none; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-top:20px;">
+            <h3 id="formTitle">Thêm Người dùng</h3>
+            <form id="formUser" onsubmit="saveUser(event)">
+                <input type="hidden" id="userId">
+                <div class="mb-3">
+                    <label>Tên Người dùng</label>
+                    <input type="text" class="form-control" id="userName" required>
+                </div>
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="userEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label>Số điện thoại</label>
+                    <input type="text" class="form-control" id="userPhone" required>
+                </div>
+                <div class="mb-3">
+                    <label>Vai trò</label>
+                    <select class="form-control" id="userRole" required>
+                        <option value="Admin">Admin</option>
+                        <option value="Khách hàng">Khách hàng</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Lưu</button>
+                <button type="button" class="btn" onclick="hideUserForm()">Hủy</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function showAddUserForm() {
+            document.getElementById('formTitle').innerText = 'Thêm khách hàng';
+            document.getElementById('userForm').style.display = 'block';
+            document.getElementById('formUser').reset();
+            document.getElementById('userId').value = '';
+        }
+        function showEditUserForm(id) {
+            document.getElementById('formTitle').innerText = 'Sửa khách hàng #' + id;
+            document.getElementById('userForm').style.display = 'block';
+            // TODO: Load dữ liệu người dùng theo id để sửa (hiện tại là mẫu tĩnh)
+        }
+        function hideUserForm() {
+            document.getElementById('userForm').style.display = 'none';
+        }
+        function deleteUser(id) {
+            if (confirm('Bạn có chắc muốn xóa người này #' + id + '?')) {
+                // TODO: Xử lý xóa người dùng ở backend
+            }
+        }
+        function saveUser(event) {
+            event.preventDefault();
+            // TODO: Xử lý lưu người dùng (thêm/sửa) ở backend
+            hideUserForm();
+        }
+    </script>
 </body>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminUser</title>
-</head>
-<body>
-    <h1>Trang quản lý người dùng </h1>
-</body>
->>>>>>> d8a08ec0431c8ad4e9fcd143dd1212b4462ff856
 </html>

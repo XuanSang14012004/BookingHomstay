@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 .navbar {
       background-color: #575757;
@@ -135,142 +135,129 @@
         .btn:hover {
             background: #1a252f;
         }
-=======
+/* Form Homestay */
+#homestayForm {
+    max-width: 480px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    padding: 32px 28px;
+}
 
-.navbar {
-      background-color: #575757;
-      display: flex;
-      list-style: none;
-      gap: 25px;
-      
-    }
-    
-.navbar a{
-          background-color: #575757;
-          font-size: large;
-           color: darkorange;
-           text-align: center;
-           width: 14px;
-        } */
-.navbar a:hover{
-  color: chartreuse;
+#homestayForm h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 24px;
 }
-.luachon{
-  margin-left:30% ;
-  display: flex;
-  list-style: none;
-   gap: 25px;
-  text-align: center;
+
+#homestayForm .mb-3 {
+    margin-bottom: 18px;
 }
-.khung{
-  display: block;
-  margin: 0%;
-  margin-left: 30%;
+
+#homestayForm label {
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 6px;
+    display: block;
 }
-.form{
-  display: flexbox;
-  background-color: aqua;
+
+#homestayForm input[type="text"],
+#homestayForm input[type="number"],
+#homestayForm input[type="file"],
+#homestayForm textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dbe2e8;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border 0.2s;
 }
-/* trangADmin */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-        }
-.sidebar {
-    width: 220px;
+
+#homestayForm input:focus,
+#homestayForm textarea:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+#homestayForm .btn {
+    width: 48%;
+    margin: 8px 1%;
     background: #2c3e50;
     color: #fff;
-    min-height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding: 30px 0 0 0;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
-}
-
-.sidebar h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    margin: 18px 0;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 30px;
-    display: block;
+    border: none;
+    padding: 10px 0;
     border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
     transition: background 0.2s;
-    font-size: 1.05rem;
 }
 
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
+#homestayForm .btn:hover {
     background: #34495e;
-    color: #ffd700;
 }
-        .main {
-            margin-left: 220px;
-            padding: 30px;
-        }
-        .header {
-            background: #fff;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #2d3e50;
-        }
-        .table-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px 8px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-        }
-        th {
-            background: #f4f6f8;
-        }
-        tr:hover {
-            background: #f9fafb;
-        }
-        .btn {
-            padding: 6px 14px;
-            background: #2d3e50;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #1a252f;
-        }
->>>>>>> d8a08ec0431c8ad4e9fcd143dd1212b4462ff856
- 
+/* Form thêm/sửa booking */
+#bookingForm {
+    max-width: 480px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    padding: 32px 28px;
+}
+
+#bookingForm h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 24px;
+}
+
+#bookingForm .mb-3 {
+    margin-bottom: 18px;
+}
+
+#bookingForm label {
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 6px;
+    display: block;
+}
+
+#bookingForm input[type="text"],
+#bookingForm input[type="date"],
+#bookingForm select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dbe2e8;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border 0.2s;
+}
+
+#bookingForm input:focus,
+#bookingForm select:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+#bookingForm .btn {
+    width: 48%;
+    margin: 8px 1%;
+    display: inline-block;
+    background: #2c3e50;
+    color: #fff;
+    border: none;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#bookingForm .btn:hover {
+    background: #34495e;
+}

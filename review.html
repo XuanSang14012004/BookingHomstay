@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phản hồi đánh giá</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>HomeStay</h2>
+        <ul>
+            <li><a href="admin.html"> ADMIN</a></li>
+            <li><a href="adminDashboard.html"> Dashboard</a></li>
+            <li><a href="adminBooking.html" class="active"> Quản lý Booking</a></li>
+            <li><a href="adminUser.html"> Quản lý Người dùng</a></li>
+            <li><a href="rooms.html"> Quản lý phòng</a></li>
+            <li><a href="payment.html"> Quản lý thanh toán</a></li>
+            <li><a href="review.html"> Phản hồi đánh giá</a></li>
+            <li><a href="support.html"> Hỗ trợ khách hàng</a></li>
+            <li><a href="login.html"> Đăng xuất</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="header">
+            <h1>Phản hồi đánh giá từ khách hàng</h1>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Khách hàng</th>
+                        <th>Homestay</th>
+                        <th>Đánh giá</th>
+                        <th>Ngày gửi</th>
+                        <th>Phản hồi của admin</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>Sunshine Villa</td>
+                        <td>Phòng sạch sẽ, dịch vụ tốt!</td>
+                        <td>2025-08-28</td>
+                        <td>Xin cảm ơn bạn đã đánh giá!</td>
+                        <td>
+                            <button class="btn" onclick="showReplyForm(1)">Phản hồi</button>
+                            <button class="btn" onclick="deleteReview(1)">Xóa</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Trần Thị B</td>
+                        <td>Green House</td>
+                        <td>Nhân viên thân thiện, phòng hơi nhỏ.</td>
+                        <td>2025-08-27</td>
+                        <td></td>
+                        <td>
+                            <button class="btn" onclick="showReplyForm(2)">Phản hồi</button>
+                            <button class="btn" onclick="deleteReview(2)">Xóa</button>
+                        </td>
+                    </tr>
+                    <!-- Thêm các dòng đánh giá khác tại đây -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Form phản hồi đánh giá -->
+        <div id="replyForm" style="display:none; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-top:20px;">
+            <h3 id="replyTitle">Phản hồi đánh giá</h3>
+            <form id="formReply" onsubmit="saveReply(event)">
+                <input type="hidden" id="reviewId">
+                <div class="mb-3">
+                    <label>Nội dung phản hồi</label>
+                    <textarea class="form-control" id="replyContent" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn">Gửi phản hồi</button>
+                <button type="button" class="btn" onclick="hideReplyForm()">Hủy</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function showReplyForm(id) {
+            document.getElementById('replyTitle').innerText = 'Phản hồi đánh giá #' + id;
+            document.getElementById('replyForm').style.display = 'block';
+            document.getElementById('formReply').reset();
+            document.getElementById('reviewId').value = id;
+        }
+        function hideReplyForm() {
+            document.getElementById('replyForm').style.display = 'none';
+        }
+        function deleteReview(id) {
+            if (confirm('Bạn có chắc muốn xóa đánh giá #' + id + '?')) {
+                // TODO: Xử lý xóa đánh giá ở backend
+            }
+        }
+        function saveReply(event) {
+            event.preventDefault();
+            // TODO: Xử lý lưu phản hồi ở backend
+            hideReplyForm();
+        }
+    </script>
+</body>
+</html>
