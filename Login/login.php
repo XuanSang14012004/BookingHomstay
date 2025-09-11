@@ -45,12 +45,12 @@ if ( isset($_POST['password']) && isset($_POST['email'])) {
     <link rel="stylesheet" href="../Css/Login.css">
     <link rel="icon" href="../images/logo.jpg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>HUMG.com | Đăng nhập</title>
+    <title>BookingHomestay.com | Đăng nhập</title>
 </head>
 <body>
     <form action="" method="post" autocomplete="off">
         <h2>ĐĂNG NHẬP</h2>
-        <h3>Đăng nhập vào HUMG.com để sử dụng các dịch vụ tốt nhất của chúng tôi</h3>
+        <h3>Đăng nhập vào BookingHomestay.com để sử dụng các dịch vụ tốt nhất của chúng tôi</h3>
         <?php if(isset($_GET['error'])){ ?>
             <p class="error"><?php echo $_GET['error']; ?></p>
         <?php } ?>
