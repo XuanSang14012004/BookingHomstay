@@ -74,13 +74,3 @@ tr:nth-child(even) {
 button {
     margin-right: 5px;
 }
-/* Quản lý Thanh toán - Giao diện hiện đại */
-body { font-family: Arial, sans-serif; background: #f7f7f7; }
-.payment-header { background: #e67e22; color: #fff; padding: 18px 0; text-align: center; font-size: 24px; }
-.payment-list { background: #fff; margin: 30px auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); max-width: 900px; }
-.payment-list table { width: 100%; border-collapse: collapse; }
-.payment-list th, .payment-list td { border: 1px solid #e1e1e1; padding: 10px; text-align: left; }
-.payment-list th { background: #ecf0f1; color: #2c3e50; }
-.payment-list tr:nth-child(even) { background: #f9f9f9; }
-.payment-action button { background: #e67e22; color: #fff; border: none; padding: 7px 14px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
-.payment-action button:hover { background: #ca6f1e; }

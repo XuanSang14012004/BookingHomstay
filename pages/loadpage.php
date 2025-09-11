@@ -16,22 +16,22 @@ if(isset($_GET['page'])){
                 include("admin/account_admin.php");
 
         }elseif($page == 'manage_homestay'){
-            include("admin/manage_homestay.php");
+            include("admin/homestay.php");
 
         }else if($page == 'manage_booking'){
-            include("admin/manage_booking.php");
+            include("admin/booking.php");
 
         }elseif($page == 'manage_payment'){
-            include("admin/manage_payment.php");
+            include("admin/payment.php");
 
         }elseif($page == 'baocao'){
             include("admin/baocao.php");
 
         }elseif($page == 'manage_comment'){
-            include("admin/manager_comment.php");
+            include("admin/review.php");
 
         }elseif($page == 'manage_support'){
-            include("admin/manager_support.php");
+            include("admin/support.php");
             // ------------------------------page user--------------------------
 
         }elseif($page == 'user_home'){
