@@ -15,7 +15,7 @@
             <li><a href="about.php">Về chúng tôi</a></li>
             <li><a href="contact.html">Liên hệ</a></li>
             <li><a href="review.html">Đánh giá</a></li>
-            <li><a href="list.html">Danh sách các HomeStay</a></li>
+            <li><a href="#explore-location">Danh sách các HomeStay</a></li>
              <li><a href="login.php">Đăng nhập</a></li>
              <li><a href="signup.php">Đăng ký</a></li>
         </ul>
@@ -189,7 +189,7 @@
 
 
 <!------------------------------------Tìm kiếm theo địa điểm---------------------------------------------------------------->
-<section class="explore-location">
+<section id="explore-location" class="explore-location">
   <h2>Khám phá Homestay theo địa điểm</h2>
   <div class="location-grid">
     <div class="location-item">
@@ -232,21 +232,21 @@
 
       <!-- Bài viết 1 -->
       <div class="blog-card">
-        <img src="../ANH/1.jpg" alt="Kinh nghiệm du lịch Đà Lạt">
+        <img src="../ANH/BV.jpg" alt="Kinh nghiệm du lịch Đà Lạt">
         <div class="blog-info">
-          <h3>Kinh nghiệm du lịch Đà Lạt 3 ngày 2 đêm</h3>
+          <h3>Kinh nghiệm du lịch Ba Vì 3 ngày 2 đêm</h3>
           <p>Chia sẻ lịch trình du lịch Đà Lạt tiết kiệm, homestay đẹp, các điểm check-in nổi tiếng.</p>
-          <a href="#" class="btn-read">Đọc thêm</a>
+          <a href="blog1.html" class="btn-read">Đọc thêm</a>
         </div>
       </div>
 
       <!-- Bài viết 2 -->
       <div class="blog-card">
-        <img src="../ANH/BV.jpg" alt="Mẹo đặt homestay giá rẻ">
+        <img src="../ANH/3.jpg" alt="Mẹo đặt homestay giá rẻ">
         <div class="blog-info">
           <h3>Mẹo đặt homestay giá rẻ mùa cao điểm</h3>
           <p>Bí quyết săn homestay với giá tốt, tránh tình trạng hết phòng vào mùa lễ hội.</p>
-          <a href="#" class="btn-read">Đọc thêm</a>
+          <a href="blog2.html" class="btn-read">Đọc thêm</a>
         </div>
       </div>
 
@@ -256,7 +256,7 @@
         <div class="blog-info">
           <h3>Khám phá Sapa: Đi đâu, ăn gì, ở đâu?</h3>
           <p>Gợi ý các homestay view núi rừng đẹp, trải nghiệm ẩm thực và văn hóa địa phương.</p>
-          <a href="#" class="btn-read">Đọc thêm</a>
+          <a href="blog3.html" class="btn-read">Đọc thêm</a>
         </div>
       </div>
 
