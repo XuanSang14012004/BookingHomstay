@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
     <link rel="stylesheet" href="../CSS/css.css">
-    <script src="https://kit.fontawesome.com/54f0cb7e4a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
     <!-- Thanh menu -->
@@ -18,6 +18,7 @@
             <li><a href="#explore-location">Danh sách các HomeStay</a></li>
              <li><a href="login.php">Đăng nhập</a></li>
              <li><a href="signup.php">Đăng ký</a></li>
+             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
         </ul>
     </div>
 
@@ -89,7 +90,7 @@
     </section>
 
     <!-- Form đặt phòng -->
-    <section>
+    <!-- <section>
         <form action="" class="form-list">
             <table border="1" cellspacing=0 cellpadding=5>
                  <caption style="color: red;" >Đặt phòng tại đây</caption><br>
@@ -146,7 +147,7 @@
             </tr>
             </table>
         </form>
-    </section>
+    </section> -->
 
 <!---------------------------------------------Giảm giá-------------------------------------------------------------------------->
     <section>
@@ -195,25 +196,25 @@
     <div class="location-item">
       <img src="../ANH/1.jpg" alt="Sóc Sơn">
       <div class="overlay">Sóc Sơn
-      <button class="btn">Xem chi tiết</button>
+     <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
       <img src="../ANH/HK.jpg" alt="Hồ Gươm">
       <div class="overlay">Hoàn Kiếm
-      <button class="btn">Xem chi tiết</button>
+      <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
       <img src="../ANH/HT.jpg" alt="Hồ Tây">
       <div class="overlay">Hồ Tây
-      <button class="btn">Xem chi tiết</button>
+    <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
       </div>
     </div>
     <div class="location-item">
       <img src="../ANH/BV.jpg" alt="Ba Vì">
       <div class="overlay">Ba Vì
-      <button class="btn">Xem chi tiết</button>
+     <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
     </div>
     </div>
   </div>
