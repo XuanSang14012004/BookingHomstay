@@ -32,10 +32,6 @@ ul {
     background-color: #f44336;
     color: aqua;
 }
-.header-top ul li a .fa-thin  {
-    font-size: 25px;
-    color: white;
-}
 
 .video-container {
     display: flex;
@@ -47,7 +43,7 @@ ul {
 }
 .slideshow {
   position: relative;
-  width: 1150px;   
+  width: 100%;   
   height: 550px;
   margin: auto;
   overflow: hidden;
@@ -110,157 +106,170 @@ ul {
 /* --------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 
-/*---------------------------------------------------------Các HomeStay nổi bật -------------------------------------------------------------------------------------------*/
-.nice-place {
-  padding: 100px 0;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-}
-
-.h1-style {
-  text-align: center;
-  margin-bottom: 50px;
-  color: black;
+/* ------------------------------------------------------------------------------------------------------------------------------ */
+.slideshow-container {
   position: relative;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch; /* Các item bằng chiều cao */
-  flex-wrap: nowrap; /* Không xuống hàng */
-  gap: 20px; /* Khoảng cách giữa các item */
-}
-
-.nice-place-item {
-  flex: 1;
-  max-width: 25%; /* 4 item = 25% */
-  height: 450px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
-}
-
-.nice-place-item:hover {
-  transform: translateY(-10px);
-}
-
-.nice-place-item img {
   width: 100%;
-  height: 450px;
+  height: 450px; /* chiều cao banner */
+  overflow: hidden;
+}
+
+.slideshow-container img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-.nice-place-text {
+/* Form nổi trên slideshow */
+.search-overlay {
   position: absolute;
-  width: 100%;
-  height:auto;
-  bottom: 0;
-  padding: 12px;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  transform: translateY(100%);
-  transition: transform 0.3s;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-.nice-place-item:hover .nice-place-text {
-  transform: translateY(0%);
+.search-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* để label và input thẳng hàng dưới */
+  gap: 20px;
+  flex-wrap: nowrap; /* luôn ngang */
 }
-.h1-style{
+
+.form-group {
+  flex: 1; /* các ô co giãn đều nhau */
+  min-width: 160px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.search-form select,
+.search-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-search {
+  padding: 12px 24px;
+  background: #0071c2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap; /* không xuống dòng */
+  transition: 0.3s;
+}
+
+.btn-search:hover {
+  background: #0056b3;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------DANH SÁCH CÁC HOMESTAY------------------------------------------------------------------------------------------ */
+.homestay-section {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  overflow: hidden;
+}
+.homestay-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
   color: #f44336;
+  margin-top: 50px;
+  font-size: 28px;
 }
-.nice-place-text h2 {
-  color: #ff9800;
+.homestay-container {
+  overflow: hidden;
+}
+
+.homestay-list {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.homestay-card {
+  min-width: 250px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.homestay-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.homestay-card .info {
+  padding: 10px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.arrow.left { 
+  left: 10px;
+}
+.arrow.right { 
+  right: 10px; 
 }
 .btn{
   color:white;
-  background-color:Blue;
+  background-color:red;
   margin-left: 35%;
   border: 10px;
   border-radius: 5px;
   padding:11px;
 }
-.btn:hover{
-  background-color: yellow;
-  color: aquamarine;
+.show-more {
+  display: inline-block;
+  margin: 20px auto;
+  text-align: center;
+  padding: 10px 20px;
+  background: #0071c2;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
 }
-/* ------------------------------------------------------------------------------------------------------------------------------------------------------ */
-
-
-
-
-/* -------------------------------------------------------Form đặt phòng------------------------------------------------------------------------------------ */
-/* 
-.form-list {
-    background: #fff;
-    margin: 40px auto;
-    padding: 24px 32px;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
-    max-width: 500px;
-    display: block;
-}
-.form-list caption {
-    font-size: 1.3rem;
-    color: #2d4059;
-    font-weight: 600;
-    margin-bottom: 16px;
-    display: block;
-    text-align: center;
-}
-.form-list table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.form-list th, .form-list td {
-    padding: 10px 8px;
-    font-size: 16px;
-    color: #444;
-    text-align: left;
-    background: #f9f9f9;
-}
-.form-list input[type="submit"]:hover,
-.form-list input[type="reset"]:hover {
-    background: #2d4059;
-}
-.btn-form {
-    padding: 10px 20px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px 45px;
-} */
-
-/* Responsive */
-/* @media (max-width: 900px) {
-    .nice-place-content {
-        flex-direction: column;
-        align-items: center;
-    }
-    .nice-place-item {
-        width: 95%;
-    }
-    .container {
-        width: 98%;
-    }
-    .form-list {
-        padding: 16px 8px;
-    }
-} */ 
-
-
-
-
 
 
 /*----------------------------------------------------------------------------------------------------------Giảm giá----------------------------------------------*/
+.h1-style {
+  text-align: center;
+  margin-bottom: 50px;
+  color: red ;
+  position: relative;
+}
 .deals {
   padding: 80px 0;
   background: #fefefe;
@@ -407,16 +416,15 @@ ul {
   gap: 10px;             
   border-radius: 0 0 12px 12px;
 }
-
-.location-item .btn {
+.btn-location{
   padding: 6px 14px;
-  background: #f44336;
+  background:fixed #f44336;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-right: 35%;
+  margin-right:3%;
 }
 
 /* Responsive */
@@ -563,3 +571,356 @@ ul {
   font-size: 14px;
 }
 
+
+
+
+
+
+
+/* ----------------------TRANG HOMESTAY THEO ĐỊA ĐIỂM------------------------ */
+ header {
+      background:#2c3e50;
+      color:#fff;
+      padding:15px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+header h1 {
+      font-size:22px;
+    }
+nav ul {
+      list-style:none; 
+      display:flex; 
+      gap:20px;
+}
+nav a {
+  color:white;
+  text-decoration:none;
+  transition:.3s;
+}
+nav a:hover {
+      color:#f39c12;
+}
+.container {
+      width:90%; 
+      margin:30px auto;
+}
+h2 {
+      margin-bottom:20px;
+      color:#2c3e50;
+  }
+
+    /* Bộ lọc */
+.filter-bar {
+      background:#fff;
+      padding:15px;
+      border-radius:8px;
+      margin-bottom:20px;
+      box-shadow:0 2px 8px rgba(0,0,0,.1);
+      display:flex;
+      flex-wrap:wrap;
+      gap:15px;
+      align-items:center;
+}
+    .filter-bar input, .filter-bar select {
+      padding:8px 10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      font-size:14px;
+}
+
+.room-list {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:20px;
+}
+.card {
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 4px 10px rgba(0,0,0,.1);
+      transition:.3s;
+}
+.card:hover {
+  transform:scale(1.02);
+}
+.card img {
+  width:100%;
+  height:200px; 
+  object-fit:cover;
+}
+.card-content {
+  padding:15px;
+}
+.card-content h3 {
+  margin-bottom:8px;
+}
+.info {
+  font-size:14px; 
+  margin:4px 0; 
+  color:#555;
+}
+.stars {
+  color:#f1c40f;
+  margin:5px 0;
+}
+.btn-group {
+  margin-top:10px; 
+  display:flex; 
+  gap:10px;
+}
+.btn-place {
+      flex:1;
+      text-align:center;
+      padding:8px;
+      border-radius:6px;
+      text-decoration:none;
+      color:#fff;
+      font-size:14px;
+}
+.btn-detail {
+  background:#3498db;
+}
+.btn-detail:hover {
+  background:#2980b9;
+}
+.btn-book {
+  background:#27ae60;
+}
+.btn-book:hover {
+  background:#2ecc71;
+}
+.card-content .price {
+      font-size:16px;
+      color:#e74c3c;
+      font-weight:bold;
+      margin-top:8px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------- */
+
+
+/* --------------------------------------------ABOUT US--------------------------------------------------------------------------------- */
+.header-about {
+      background: #0077b6;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+}
+.header-about h1 {
+      font-size: 36px;
+}
+.header-about p {
+      font-size: 18px;
+      margin-top: 10px;
+      margin-right:9%;
+}
+.back-home {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 18px;
+  background: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.back-home i {
+  margin-right: 6px;
+}
+
+.back-home:hover {
+  background: #0056b3;
+}
+.about {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      text-align: center;
+}
+.about h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #0077b6;
+}
+.about p {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 20px;
+}
+.values {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 40px;
+}
+.value-box {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      width: 280px;
+      margin: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: 0.3s;
+}
+.value-box:hover {
+      transform: translateY(-5px);
+}
+.value-box i {
+      font-size: 40px;
+      color: #0077b6;
+      margin-bottom: 15px;
+}
+.value-box h3 {
+      margin-bottom: 10px;
+      color: #0077b6;
+}
+.team {
+      margin-top: 60px;
+}
+.team h2 {
+      margin-bottom: 20px;
+      color: #0077b6;
+}
+.team-members {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+}
+.member {
+      width: 220px;
+      text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.member img {
+      width: 100%;
+      border-radius: 50%;
+      margin-bottom: 10px;
+}
+
+/* --------------------------------------CHI TIẾT CÁC PHÒNG----------------------------------- */
+.container-place {
+      max-width: 1100px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  .container-place  h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .address {
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .description {
+      margin-bottom: 20px;
+      font-size: 15px;
+      color: #444;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .utilities {
+      margin: 20px 0;
+    }
+    .utilities h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .utilities ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .utilities li {
+      font-size: 15px;
+      color: #333;
+    }
+    .utilities li i {
+      margin-right: 6px;
+      color: #2a8cff;
+    }
+    .checkin-checkout {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f2f6ff;
+      border-radius: 8px;
+    }
+    .checkin-checkout h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .checkin-checkout p {
+      font-size: 15px;
+      margin: 5px 0;
+      color: #333;
+    }
+    .checkin-checkout i {
+      margin-right: 8px;
+      color: #2a8cff;
+    }
+    .reviews {
+      margin: 25px 0;
+    }
+    .reviews h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .rating {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #e6b800;
+    }
+    .review {
+      background: #f8f8f8;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .review strong {
+      color: #333;
+    }
+    .price {
+      font-size: 22px;
+      font-weight: bold;
+      color: #e63946;
+      margin: 15px 0;
+    }
+    .btn-price {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #2a8cff;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn-price:hover {
+      background: #1d6ed8;
+    } 

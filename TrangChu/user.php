@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
-    <link rel="stylesheet" href="../CSS/css.css">
+    <link rel="stylesheet" href="../CSS/css.css?v=1.7">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
@@ -13,12 +13,13 @@
         <ul>
             <li><a href="user.php">Trang chủ</a></li>
             <li><a href="about.php">Về chúng tôi</a></li>
-            <li><a href="contact.html">Liên hệ</a></li>
+            <li><a href="contact.html">&#9742;Liên hệ</a></li>
             <li><a href="review.html">Đánh giá</a></li>
             <li><a href="#explore-location">Danh sách các HomeStay</a></li>
              <li><a href="login.php">Đăng nhập</a></li>
              <li><a href="signup.php">Đăng ký</a></li>
              <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
+             <li><a><i class="fa-solid fa-cart-shopping"></i></a></li>
         </ul>
     </div>
 
@@ -27,130 +28,252 @@
     <div class="video-container slideshow">
         <img class="img" alt="HomeStay ở Sóc Sơn" src="../ANH/5.jpg">
         <img class="img" alt="HomeStay ở Sóc Sơn" src="../ANH/6.webp">
-        <img class="img" alt="HomeStay ở Sóc Sơn" src="../ANH/7.webp">
-     </div>
-        <div class="social-sidebar">
+        <img class="img" alt="HomeStay ở Sóc Sơn" src="../ANH/7.webp">          
+    <div class="search-overlay">
+    <form action="" method="GET" class="search-form">
+      <!-- Địa điểm -->
+      <div class="form-group">
+        <label for="location">Địa điểm</label>
+        <select id="location" name="location" required>
+          <option value="">-- Chọn --</option>
+          <option value="BaVi">Ba Vì</option>
+          <option value="SocSon">Sóc Sơn</option>
+          <option value="TamDao">Tam Đảo</option>
+          <option value="MocChau">Mộc Châu</option>
+        </select>
+      </div>
+
+      <!-- Ngày đi -->
+      <div class="form-group">
+        <label for="checkin">Ngày đi</label>
+        <input type="date" id="checkin" name="checkin" required>
+      </div>
+
+      <!-- Ngày về -->
+      <div class="form-group">
+        <label for="checkout">Ngày về</label>
+        <input type="date" id="checkout" name="checkout" required>
+      </div>
+
+      <!-- Số người -->
+      <div class="form-group">
+        <label for="guests">Số người</label>
+        <input type="number" id="guests" name="guests" min="1" value="1" required>
+      </div>
+
+      <!-- Nút -->
+      <button type="submit" class="btn-search">Tìm kiếm</button>
+    </form>
+    </div>
+     </section>
+   
+     <section>
+      <div class="social-sidebar">
             <a href="#" target="_blank"><img src="../ANH/zalo.jpg" alt="Zalo"></a>
             <a href="#" target="_blank"><img src="../ANH/MES.jpg" alt="Messenger"></a>
             <a href="#" target="_blank"><img src="../ANH/FB.jpg" alt="Facebook"></a>
             <a href="#" target="_blank"><img src="../ANH/IG.jpg" alt="Instagram"></a>
         </div>
      </section>
-    <!-- Phần danh sách Homestay -->
-    <section class="nice-place">
-        <div class="container">
-            <h1 class="h1-style">Top Homestay Sóc Sơn View Đẹp, Phòng Giá Rẻ</h1>
-            <div class="nice-place-content row">
-                <div class="nice-place-item">
-                    <div class="nice-place-img">
-                        <img src="../ANH/1.jpg" alt="Amaya Home">
-                    </div>
-                    <div class="nice-place-text">
-                        <h2>Amaya Home</h2>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <p>Amaya Home được biết đến là khu nghỉ dưỡng 5 sao cung cấp nhiều dịch vụ tiện nghi nhất trong các homestay Sóc Sơn. Bao gồm dịch vụ nhà hàng ăn uống sang trọng, hồ bơi ngoài trời, dịch vụ spa và lưu trú tiện ích. Phòng lễ tân của homestay luôn phục vụ 24/7 nên du khách có thể liên hệ vào số hotline: 087 969 8886 để được tư vấn chi tiết nhất.</p>
-                        <button class="btn">Đặt phòng</button>
-                    </div>
-                </div>
-                <div class="nice-place-item">
-                    <div class="nice-place-img">
-                        <img src="../ANH/2.jpg" alt="Cerf Volant Accommodation & Event">
-                    </div>
-                    <div class="nice-place-text">
-                        <h2>Cerf Volant Accommodation & Event</h2>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <p>Cerf Volant Accommodation & Event là một trong những địa điểm nghỉ dưỡng chuyên tổ chức sự hiện hàng đầu trong các homestay Sóc Sơn. Cerf Volant còn thu hút du khách bằng các tour du lịch kết hợp với những hoạt động trải nghiệm rất thú vị như: chèo kayak, tham quan các khu du lịch,…</p>
-                    <button class="btn">Đặt phòng</button>
-                    </div>
-                </div>
-                   <div class="nice-place-item">
-                    <div class="nice-place-img">
-                        <img src="../ANH/3.jpg" alt="De’bay Villa Sóc Sơn">
-                    </div>
-                    <div class="nice-place-text">
-                        <h2>De’bay Villa Sóc Sơn</h2>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <p>De’bay Villa Sóc Sơn có tổng diện tích khoảng 1600m2. Căn villa này chỉ cách Thủ đô Hà Nội khoảng 40 km. Du khách chỉ mất 30 – 45 phút để di chuyển đến home. Khi lưu tú tại đây, du khách có thể tham quan các khu di tích lịch sử và các địa điểm du lịch nổi tiếng rất gần như: Biệt Phủ Thành Chương, Hồ Đồng Quan, Hồ Đồng Đò, Hồ Hàm Lợn, Đền Thánh Gióng…</p>
-                    <button class="btn">Đặt phòng</button>
-                    </div>
-                </div>
-                   <div class="nice-place-item">
-                    <div class="nice-place-img">
-                        <img src="../ANH/4.jpg" alt="Amaya Retreat Sóc Sơn">
-                    </div>
-                    <div class="nice-place-text">
-                        <h2>Amaya Retreat Sóc Sơn</h2>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <p>Homestay Sóc Sơn – Amaya Retreat tọa lạc tại Thôn Lâm Trường, xã Minh Phú, Sóc Sơn. Là homestay có diện tích lên đến 10ha cách sân bay Nội Bài chỉ khoảng 13km nên rất thuận tiện cho du khách di chuyển. Từ trung tâm thành phố Hà Nội di chuyển đến Amaya cũng rất dễ dàng chỉ mất khoảng 30km bằng 48 phút lái xe.</p>
-                   <button class="btn">Đặt phòng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!---------------------------------------------------------- Danh sách các HomeStay-------------------------------------------->
+<section class="homestay-section">
+  <h2>Danh Sách Các HomeStay</h2>
 
-    <!-- Form đặt phòng -->
-    <!-- <section>
-        <form action="" class="form-list">
-            <table border="1" cellspacing=0 cellpadding=5>
-                 <caption style="color: red;" >Đặt phòng tại đây</caption><br>
-                <tr>
-                <th>Họ và tên</th>
-               <td><input name="txtName" rows="1" cols="30" placeholder="Nhập họ và tên" style="size: 36;"></input></td>
-                </tr>
-                <tr>
-                  <th>Số điện thoại</th>
-                 <td><input type = 'tel' name = 'txtTel' placeholder = 'Số điện thoại' size = 36><br></td>
-                </tr>
-                <tr>
-                  <th>Email</th>
-                  <td><input type = 'text' placeholder = 'Email' size = 36></td>
-                </tr>
-               <tr width=250>
-                <th>Lựa chọn địa điểm đi HomeStay</th>
-                <td>
-                <input type="text" name="txtClass" list='lstClasses'>
-            <datalist id="lstClasses">
-                <option value="Sóc Sơn"></option>
-                <option value="Hoàn Kiếm"></option>
-                <option value="Hồ Tây"></option>
-                 <option value="Ba Đình"></option>
-                 <option value="Ba Vì"></option>
-                 <option value="Cầu Giấy"></option>
-                 <option value="Đống Đa"></option>
-                 <option value="Hai Bà Trưng"></option>
-            </datalist>
-            </td>
-             </tr>
-             <tr>
-                <th>Số người tham gia</th>
-                <td>
-                    <input type="number" name="quantity" min="1" max="20">
-             </tr>
-            <tr>
-                <th>Ngày nhận phòng</th>
-                <td width=250>
-                    <input type="date" name="txtDOB">
-                </td>
-             </tr>
-             <tr>
-                <th>Ngày trả phòng</th>
-                <td width=250>
-                    <input type="date" name="txtDOB">
-                </td>
-             </tr>
-             <tr>
-                <td colspan="2" align="center">
-                    <button class="btn-form">Đặt ngay</button>
-                    <button class="btn-form">Nhập lại</button>
-                </td>   
-            </tr>
-            </table>
-        </form>
-    </section> -->
+  <!-- Nút điều hướng -->
+  <button class="arrow left" onclick="scrollHomestay(-1)">&#10094;</button>
+  <button class="arrow right" onclick="scrollHomestay(1)">&#10095;</button>
+
+  <div class="homestay-container">
+    <div class="homestay-list">
+      <!-- 16 Homestay Card -->
+      <div class="homestay-card">
+        <img src="../ANH/BV1.jpg" alt="Homestay 1">
+        <div class="info">
+          <h3>Mely Farm</h3>
+          <p>Giá: 800.000đ / đêm</p>
+          <p>Sức chứa: 6 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/BV2.jpg" alt="Homestay 2">
+        <div class="info">
+          <h3>Family Homestay</h3>
+          <p>Giá: 850.000đ / đêm</p>
+          <p>Sức chứa: 5 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/BV3.jpg" alt="Homestay 3">
+        <div class="info">
+          <h3>Melia Bavi Mountain Retreat</h3>
+          <p>Giá: 900.000đ / đêm</p>
+          <p>Sức chứa: 8 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/BV4.jpg" alt="Homestay 4">
+        <div class="info">
+          <h3>BaVi Padme </h3>
+          <p>Giá: 750.000đ / đêm</p>
+          <p>Sức chứa: 4 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/MC1.webp" alt="Homestay 5">
+        <div class="info">
+          <h3>Phoenix Mộc Châu Bungalow</h3>
+          <p>Giá: 1.000.000đ / đêm</p>
+          <p>Sức chứa: 10 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/MC2.webp" alt="Homestay 6">
+        <div class="info">
+          <h3>Mộc Châu Eco-garden</h3>
+          <p>Giá: 950.000đ / đêm</p>
+          <p>Sức chứa: 7 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/MC3.webp" alt="Homestay 7">
+        <div class="info">
+          <h3>Mama’s House</h3>
+          <p>Giá: 800.000đ / đêm</p>
+          <p>Sức chứa: 6 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div> 
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/MC4.webp" alt="Homestay 8">
+        <div class="info">
+          <h3>Mộc Homestay</h3>
+          <p>Giá: 850.000đ / đêm</p>
+          <p>Sức chứa: 5 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div> 
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/SS1.jpg" alt="Homestay 9">
+        <div class="info">
+          <h3>Amaya Home</h3>
+          <p>Giá: 900.000đ / đêm</p>
+          <p>Sức chứa: 8 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/SS2.jpg" alt="Homestay 10">
+        <div class="info">
+          <h3>Cerf Volant Soc Son Resort</h3>
+          <p>Giá: 750.000đ / đêm</p>
+          <p>Sức chứa: 4 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/SS3.jpg" alt="Homestay 11">
+        <div class="info">
+          <h3>De'bay Retreat</h3>
+          <p>Giá: 1.000.000đ / đêm</p>
+          <p>Sức chứa: 10 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/SS5.jpg" alt="Homestay 12">
+        <div class="info">
+          <h3>Amaya Retreat</h3>
+          <p>Giá: 950.000đ / đêm</p>
+          <p>Sức chứa: 7 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/TD1.jpg" alt="Homestay 13">
+        <div class="info">
+          <h3>Dream House</h3>
+          <p>Giá: 800.000đ / đêm</p>
+          <p>Sức chứa: 6 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/TD2.jpg" alt="Homestay 14">
+        <div class="info">
+          <h3>Le Bleu Floating Cloud</h3>
+          <p>Giá: 850.000đ / đêm</p>
+          <p>Sức chứa: 5 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/TD3.jpg" alt="Homestay 15">
+        <div class="info">
+          <h3>Up In The Air Homestay</h3>
+          <p>Giá: 900.000đ / đêm</p>
+          <p>Sức chứa: 8 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+      <div class="homestay-card">
+        <img src="../ANH/TD4.jpg" alt="Homestay 16">
+        <div class="info">
+          <h3>Cloudy Garden</h3>
+          <p>Giá: 750.000đ / đêm</p>
+          <p>Sức chứa: 4 khách</p>
+          <button class="btn">Đặt phòng</button>
+        </div>
+      </div>
+
+
+      <!-- Thêm tiếp cho đủ 16 homestay -->
+      <!-- ... -->
+    </div>
+  </div>
+
+  <a href="homestay.php" class="show-more">Xem đầy đủ các HomeStay</a>
+</section>
+<script>
+let currentScroll = 0;
+
+function scrollHomestay(direction) {
+  const list = document.querySelector('.homestay-list');
+  const cardWidth = document.querySelector('.homestay-card').offsetWidth + 20; // 20 = margin
+  const visibleCards = Math.floor(document.querySelector('.homestay-container').offsetWidth / cardWidth);
+
+  currentScroll += direction * cardWidth * visibleCards;
+
+  const maxScroll = (list.children.length - visibleCards) * cardWidth;
+  if (currentScroll < 0) currentScroll = 0;
+  if (currentScroll > maxScroll) currentScroll = maxScroll;
+
+  list.style.transform = `translateX(-${currentScroll}px)`;
+}
+</script>
+
 
 <!---------------------------------------------Giảm giá-------------------------------------------------------------------------->
-    <section>
          <!-- ƯU ĐÃI / DEALS -->
 <section class="deals">
   <div class="container">
@@ -194,27 +317,27 @@
   <h2>Khám phá Homestay theo địa điểm</h2>
   <div class="location-grid">
     <div class="location-item">
-      <img src="../ANH/1.jpg" alt="Sóc Sơn">
+      <img src="../ANH/SS5.jpg" alt="Sóc Sơn">
       <div class="overlay">Sóc Sơn
-     <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
+     <a href="placesocson.php"> <button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
-      <img src="../ANH/HK.jpg" alt="Hồ Gươm">
-      <div class="overlay">Hoàn Kiếm
-      <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
+      <img src="../ANH/TD1.jpg" alt="Hồ Gươm">
+      <div class="overlay">Tam đảo
+      <a href="placetamdao.php"> <button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
-      <img src="../ANH/HT.jpg" alt="Hồ Tây">
-      <div class="overlay">Hồ Tây
-    <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
+      <img src="../ANH/MC1.webp" alt="Hồ Tây">
+      <div class="overlay">Mộc Châu
+    <a href="placemocchau.php"> <button class="btn-location">Xem chi tiết</button></a>
       </div>
     </div>
     <div class="location-item">
-      <img src="../ANH/BV.jpg" alt="Ba Vì">
+      <img src="../ANH/BV2.jpg" alt="Ba Vì">
       <div class="overlay">Ba Vì
-     <a href="placesocson.php"> <button class="btn">Xem chi tiết</button></a>
+     <a href="placebavi.php"> <button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
   </div>
@@ -233,17 +356,17 @@
 
       <!-- Bài viết 1 -->
       <div class="blog-card">
-        <img src="../ANH/BV.jpg" alt="Kinh nghiệm du lịch Đà Lạt">
+        <img src="../ANH/TT1.webp" alt="Kinh nghiệm du lịch Đà Lạt">
         <div class="blog-info">
           <h3>Kinh nghiệm du lịch Ba Vì 3 ngày 2 đêm</h3>
-          <p>Chia sẻ lịch trình du lịch Đà Lạt tiết kiệm, homestay đẹp, các điểm check-in nổi tiếng.</p>
+          <p>Chia sẻ lịch trình du lịch Ba Vì tiết kiệm, homestay đẹp, các điểm check-in nổi tiếng.</p>
           <a href="blog1.html" class="btn-read">Đọc thêm</a>
         </div>
       </div>
 
       <!-- Bài viết 2 -->
       <div class="blog-card">
-        <img src="../ANH/3.jpg" alt="Mẹo đặt homestay giá rẻ">
+        <img src="../ANH/TT2.jpg" alt="Mẹo đặt homestay giá rẻ">
         <div class="blog-info">
           <h3>Mẹo đặt homestay giá rẻ mùa cao điểm</h3>
           <p>Bí quyết săn homestay với giá tốt, tránh tình trạng hết phòng vào mùa lễ hội.</p>
@@ -253,7 +376,7 @@
 
       <!-- Bài viết 3 -->
       <div class="blog-card">
-        <img src="../ANH/3.jpg" alt="Khám phá Sapa">
+        <img src="../ANH/TT3.webp" alt="Khám phá Sapa">
         <div class="blog-info">
           <h3>Khám phá Sapa: Đi đâu, ăn gì, ở đâu?</h3>
           <p>Gợi ý các homestay view núi rừng đẹp, trải nghiệm ẩm thực và văn hóa địa phương.</p>

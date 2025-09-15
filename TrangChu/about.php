@@ -4,15 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Về Chúng Tôi - Booking Homestay</title>
-  <link rel="stylesheet" href="../CSS/css.css">
+  <link rel="stylesheet" href="../CSS/css.css?v=3.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body class="body">
-  <header class="header">
+  <header class="header-about">
     <h1>Booking Homestay</h1>
     <p>Trải nghiệm không gian nghỉ dưỡng thoải mái & đáng nhớ</p>
+     <a href="user.php" class="back-home">
+    <i class="fas fa-arrow-left"></i> Quay về Trang chủ
+  </a>
   </header>
-
   <section class="about">
     <h2>Về Chúng Tôi</h2>
     <p><strong>Booking Homestay</strong> là nền tảng đặt phòng homestay trực tuyến, giúp kết nối du khách với những không gian nghỉ dưỡng độc đáo và tiện nghi trên khắp Việt Nam. Với hệ thống tìm kiếm thông minh, thông tin minh bạch và đa dạng lựa chọn, chúng tôi cam kết mang đến trải nghiệm đặt phòng nhanh chóng, an toàn và giá cả hợp lý. Booking Homestay không chỉ là nơi bạn tìm được chỗ ở ưng ý, mà còn là người bạn đồng hành trên mỗi hành trình khám phá, mang lại những khoảnh khắc nghỉ dưỡng thoải mái và đáng nhớ.</p>
@@ -71,116 +73,39 @@
     </div>
   </section>
 
-  <footer>
-    <p>© 2025 Booking Homestay. All rights reserved.</p>
-    <div class="social">
-      <i class="fab fa-facebook"></i>
-      <i class="fab fa-instagram"></i>
-      <i class="fab fa-twitter"></i>
+ <footer class="footer">
+  <div class="footer-container">
+    <!-- Cột 1: Logo + giới thiệu -->
+    <div class="footer-col">
+      <h2>BookingHomeStay</h2>
+      <p>Đặt homestay nhanh chóng, dễ dàng và tiện lợi.  
+      Mang đến trải nghiệm nghỉ dưỡng tuyệt vời cho bạn.</p>
     </div>
-  </footer>
 
-  <style>
-.body {
-      font-family: "Roboto", sans-serif;
-      line-height: 1.6;
-      background: #fafafa;
-      color: #333;
-  }
-.header {
-      background: #0077b6;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-}
-.header h1 {
-      font-size: 36px;
-}
-.about {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 50px 20px;
-      text-align: center;
-}
-.about h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-      color: #0077b6;
-}
-.about p {
-      font-size: 18px;
-      color: #444;
-      margin-bottom: 20px;
-}
-.values {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin-top: 40px;
-}
-.value-box {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      width: 280px;
-      margin: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transition: 0.3s;
-}
-.value-box:hover {
-      transform: translateY(-5px);
-}
-.value-box i {
-      font-size: 40px;
-      color: #0077b6;
-      margin-bottom: 15px;
-}
-.value-box h3 {
-      margin-bottom: 10px;
-      color: #0077b6;
-}
-.team {
-      margin-top: 60px;
-}
-.team h2 {
-      margin-bottom: 20px;
-      color: #0077b6;
-}
-.team-members {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-}
-.member {
-      width: 220px;
-      text-align: center;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.member img {
-      width: 100%;
-      border-radius: 50%;
-      margin-bottom: 10px;
-}
-footer {
-      background: #0077b6;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 50px;
-}
-footer .social i {
-      margin: 0 10px;
-      font-size: 22px;
-      cursor: pointer;
-      transition: 0.3s;
-}
-footer .social i:hover {
-      color: #ffdd00;
-}
-  </style>
+    <!-- Cột 2: Thông tin liên hệ -->
+    <div class="footer-col">
+      <h3>Liên hệ</h3>
+      <p>📍 Hà Nội, Việt Nam</p>
+      <p>📞 0123 456 789</p>
+      <p>✉️ bookinghomestay@gmail.com</p>
+    </div>
+
+    <!-- Cột 3: Mạng xã hội -->
+    <div class="footer-col">
+      <h3>Kết nối với chúng tôi</h3>
+      <div class="social-links">
+        <a href="#"><img src="../ANH/FB.jpg" alt="Facebook"></a>
+        <a href="#"><img src="../ANH/IG.jpg" alt="Instagram"></a>
+        <a href="#"><img src="../ANH/zalo.jpg" alt="Zalo"></a>
+        <a href="#"><img src="../ANH/MES.jpg" alt="TikTok"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 BookingHomeStay. All rights reserved.</p>
+  </div>
+</footer>
+
 </body>
 </html>
