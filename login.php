@@ -10,7 +10,7 @@ if ($conn->connect_error) {
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 
-// Kiểm tra tài khoản (giả sử bảng users có trường username, password)
+// Kiểm tra tài khoản ( bảng users có trường username, password)
 $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $username, $password);

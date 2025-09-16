@@ -32,9 +32,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Tên Homestay</th>
-                        <th>Địa chỉ</th>
+                        <th>Loại phòng</th>
                         <th>Số phòng</th>
-                        <th>Giá trung bình (VNĐ)</th>
+                        <th>Tình trạng</th>
+                        <th>Giá (VNĐ)</th>
                         <th>Hình Ảnh</th>
                         <th>Mô tả</th>
                         <th>Hành động</th>
@@ -44,8 +45,9 @@
                     <tr>
                         <td>1</td>
                         <td>Sunshine Villa</td>
-                        <td>123 Đường ABC, Đà Lạt</td>
+                        <td>Phòng đôi</td>
                         <td>5</td>
+                        <td>Còn phòng</td>
                         <td>900,000</td>
                         <td><img src="sunshine_villa.jpg" alt="Sunshine Villa" width="100"></td>
                         <td>Homestay sang trọng với view đẹp.</td>
@@ -57,8 +59,9 @@
                     <tr>
                         <td>2</td>
                         <td>Green House</td>
-                        <td>45 Đường XYZ, Đà Nẵng</td>
+                        <td>Phòng đơn</td>
                         <td>8</td>
+                        <td>Hết phòng</td>
                         <td>750,000</td>
                         <td><img src="sunshine_villa.jpg" alt="Sunshine Villa" width="100"></td>
                         <td>Homestay sang trọng với view đẹp.</td>
@@ -81,15 +84,19 @@
                     <input type="text" class="form-control" id="homestayName" required>
                 </div>
                 <div class="mb-3">
-                    <label>Địa chỉ</label>
-                    <input type="text" class="form-control" id="homestayAddress" required>
+                    <label>Loại phòng</label>
+                    <input type="text" class="form-control" id="homestayType" required>
                 </div>
                 <div class="mb-3">
                     <label>Số phòng</label>
                     <input type="number" class="form-control" id="homestayRooms" required>
                 </div>
                 <div class="mb-3">
-                    <label>Giá trung bình (VNĐ)</label>
+                    <label>Tình trạng</label>
+                    <input type="number" class="form-control" id="homestayStatus" required>
+                </div>
+                <div class="mb-3">
+                    <label>Giá (VNĐ)</label>
                     <input type="number" class="form-control" id="homestayPrice" required>
                 </div>
                 <div class="mb-3">

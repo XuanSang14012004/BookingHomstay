@@ -10,7 +10,7 @@
     <div class="sidebar">
         <h2>HomeStay</h2>
         <ul>
-             <li><a href="admin.html"> Admin</a></li>
+             <li><a href="admin.html"> ADMIN</a></li>
             <li><a href="adminDashboard.html"> Dashboard</a></li>
             <li><a href="adminBooking.html"> Quản lý Booking</a></li>
             <li><a href="adminUser.html"> Quản lý Người dùng</a></li>
@@ -33,8 +33,8 @@
                         <th>ID</th>
                         <th>Tên phòng</th>
                         <th>Giá (VNĐ)</th>
-                        <th>Số lượng trống</th>
-                        <th>Số lượng đã thuê</th>
+                        <th>Số lượng khách</th>
+                        <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -44,7 +44,7 @@
                         <td>Phòng A101</td>
                         <td>800,000</td>
                         <td>2</td>
-                        <td>3</td>
+                        <td>Đang ở</td>
                         <td>
                             <button class="btn" onclick="showEditRoomForm(101)">Sửa</button>
                             <button class="btn" onclick="deleteRoom(101)">Xóa</button>
@@ -55,7 +55,7 @@
                         <td>Phòng B102</td>
                         <td>650,000</td>
                         <td>1</td>
-                        <td>4</td>
+                        <td>Đã trả phòng</td>
                         <td>
                             <button class="btn" onclick="showEditRoomForm(102)">Sửa</button>
                             <button class="btn" onclick="deleteRoom(102)">Xóa</button>
@@ -79,11 +79,11 @@
                     <input type="number" class="form-control" id="roomPrice" required>
                 </div>
                 <div class="mb-3">
-                    <label>Số lượng trống</label>
+                    <label>Số lượng khách</label>
                     <input type="number" class="form-control" id="roomAvailable" required>
                 </div>
                 <div class="mb-3">
-                    <label>Số lượng đã thuê</label>
+                    <label>Trạng Thái</label>
                     <input type="number" class="form-control" id="roomRented" required>
                 </div>
                 <button type="submit" class="btn">Lưu</button>
