@@ -19,7 +19,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $_SESSION['username'] = $username;
-    header("Location: admin.html");
+    header("Location: admin.php");
     exit();
 } else {
     echo "<script>alert('Sai tài khoản hoặc mật khẩu!'); window.location='login.html';</script>";
