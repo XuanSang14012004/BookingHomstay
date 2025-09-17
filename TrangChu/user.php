@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
-    <link rel="stylesheet" href="../CSS/css.css?v=1.7">
+    <link rel="stylesheet" href="../CSS/css.css?v=1.8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <script src="../JS/JS_TRANGCHU.js"></script>
 </head>
 <body>
     <!-- Thanh menu -->
@@ -245,33 +246,11 @@
           <button class="btn">Đặt phòng</button>
         </div>
       </div>
-
-
-      <!-- Thêm tiếp cho đủ 16 homestay -->
-      <!-- ... -->
     </div>
   </div>
 
   <a href="homestay.php" class="show-more">Xem đầy đủ các HomeStay</a>
 </section>
-<script>
-let currentScroll = 0;
-
-function scrollHomestay(direction) {
-  const list = document.querySelector('.homestay-list');
-  const cardWidth = document.querySelector('.homestay-card').offsetWidth + 20; // 20 = margin
-  const visibleCards = Math.floor(document.querySelector('.homestay-container').offsetWidth / cardWidth);
-
-  currentScroll += direction * cardWidth * visibleCards;
-
-  const maxScroll = (list.children.length - visibleCards) * cardWidth;
-  if (currentScroll < 0) currentScroll = 0;
-  if (currentScroll > maxScroll) currentScroll = maxScroll;
-
-  list.style.transform = `translateX(-${currentScroll}px)`;
-}
-</script>
-
 
 <!---------------------------------------------Giảm giá-------------------------------------------------------------------------->
          <!-- ƯU ĐÃI / DEALS -->
@@ -318,26 +297,26 @@ function scrollHomestay(direction) {
   <div class="location-grid">
     <div class="location-item">
       <img src="../ANH/SS5.jpg" alt="Sóc Sơn">
-      <div class="overlay">Sóc Sơn
-     <a href="placesocson.php"> <button class="btn-location">Xem chi tiết</button></a>
+      <div class="overlay"> <p>Sóc Sơn</p>
+    <a href="../PLACE/place.php?location=Sóc Sơn"><button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
-      <img src="../ANH/TD1.jpg" alt="Hồ Gươm">
-      <div class="overlay">Tam đảo
-      <a href="placetamdao.php"> <button class="btn-location">Xem chi tiết</button></a>
+      <img src="../ANH/TD1.jpg" alt="Tam Đảo">
+      <div class="overlay"><p>Tam đảo</p>
+      <a href="../PLACE/place.php?location=Tam Đảo"><button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
     <div class="location-item">
-      <img src="../ANH/MC1.webp" alt="Hồ Tây">
-      <div class="overlay">Mộc Châu
-    <a href="placemocchau.php"> <button class="btn-location">Xem chi tiết</button></a>
+      <img src="../ANH/MC1.webp" alt="Mộc Châu">
+      <div class="overlay"><p>Mộc Châu</p>
+    <a href="../PLACE/place.php?location=Mộc Châu"><button class="btn-location">Xem chi tiết</button></a>
       </div>
     </div>
     <div class="location-item">
       <img src="../ANH/BV2.jpg" alt="Ba Vì">
-      <div class="overlay">Ba Vì
-     <a href="placebavi.php"> <button class="btn-location">Xem chi tiết</button></a>
+      <div class="overlay"><p>Ba Vì</p>
+     <a href="../PLACE/place.php?location=Ba Vì"><button class="btn-location">Xem chi tiết</button></a>
     </div>
     </div>
   </div>

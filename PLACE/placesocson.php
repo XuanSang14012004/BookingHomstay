@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đặt Homestay Tam Đảo</title>
-  <link rel="stylesheet" href="../CSS/css.css?v=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <title>Đặt Homestay Sóc Sơn</title>
+ <link rel="stylesheet" href="../CSS/css.css?v=2.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  
   </head>
 <body>
   <!-- Header -->
   <header>
-    <h1>Homestay Tam Đảo</h1>
+    <h1>Homestay Sóc Sơn</h1>
     <nav>
       <ul>
-        <li><a href="user.php">Trang chủ</a></li>
+        <li><a href="../TrangChu/user.php">Trang chủ</a></li>
         <li><a href="#">Liên hệ</a></li>
         <li><a href="#"><i class="fa-solid fa-user"></i> Tài khoản</a></li>
       </ul>
@@ -43,51 +44,51 @@
 
       <!-- Phòng 1 -->
       <div class="card" data-type="Deluxe" data-stars="5">
-        <img src="../ANH/TD1.jpg" alt="Phòng Deluxe">
+        <img src="../ANH/SS1.jpg" alt="Phòng Deluxe">
         <div class="card-content">
-          <h3>Dream House</h3>
-          <p class="info">Số phòng: 2</p>
+          <h3>Amaya Home</h3>
+          <p class="info">Số phòng:5</p>
           <p class="info">Loại phòng: Deluxe</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-           <p class="info">Giá phòng <b style="color:red">2.000.000VND</b></p>
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
+          <p class="price">Giá: 3.000.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/amayahomedeluxe.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
       </div>
 
       <div class="card" data-type="Deluxe" data-stars="5">
-        <img src="../ANH/TD2.jpg" alt="Phòng Deluxe">
+        <img src="../ANH/SS2.jpg" alt="Phòng Deluxe">
         <div class="card-content">
-          <h3>Le Bleu Floating Cloud</h3>
-          <p class="info">Số phòng:3</p>
+          <h3>Cerf Volant Soc Son Resort</h3>
+          <p class="info">Số phòng: 7</p>
           <p class="info">Loại phòng: Deluxe</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Giá phòng <b style="color:red">2.500.000VND</b></p>
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
-          <div class="stars">⭐⭐⭐⭐</div>
+          <p class="price">Giá: 2.500.000đ / đêm</p> 
+          <div class="stars">⭐⭐⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/CerfVolantSocSonResortdeluxe.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
       </div>
 
  <div class="card" data-type="Deluxe" data-stars="5">
-        <img src="../ANH/TD3.jpg" alt="Phòng Deluxe">
+        <img src="../ANH/SS3.jpg" alt="Phòng Deluxe">
         <div class="card-content">
-          <h3>Up In The Air Homestay</h3>
-          <p class="info">Số phòng:5</p>
+          <h3>De'bay Retreat</h3>
+          <p class="info">Số phòng: 3</p>
           <p class="info">Loại phòng: Deluxe</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Giá phòng <b style="color:red">2.900.000VND</b></p>
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
-          <div class="stars">⭐⭐⭐</div>
+          <p class="price">Giá: 2.700.000đ / đêm</p>
+          <div class="stars">⭐⭐⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/De'bayRetreatdeluxe.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
@@ -96,34 +97,34 @@
 
       <!-- Phòng 2 -->
       <div class="card" data-type="Family" data-stars="4">
-        <img src="../ANH/TD4.jpg" alt="Phòng Family">
+        <img src="../ANH/SS5.jpg" alt="Phòng Family">
         <div class="card-content">
-          <h3>Cloudy Garden</h3>
-          <p class="info">Số phòng:6</p>
+          <h3>Amaya Retreat</h3>
+          <p class="info">Số phòng: 4</p>
           <p class="info">Loại phòng: Family</p>
           <p class="info">Tình trạng: <b style="color:red">Đã đặt</b></p>
-          <p class="info">Giá phòng <b style="color:red">1.450.000VND</b></p>
           <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
-          <div class="stars">⭐⭐⭐</div>
+          <p class="price">Giá: 2.000.000đ / đêm</p> 
+          <div class="stars">⭐⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/Amaya Retreat-family.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
       </div>
 
  <div class="card" data-type="Family" data-stars="4">
-        <img src="../ANH/TD1.jpg" alt="Phòng Family">
+        <img src="../ANH/SS1.jpg" alt="Phòng Family">
         <div class="card-content">
-          <h3>Dream House</h3>
-          <p class="info">Số phòng:2</p>
+          <h3>Amaya Home</h3>
+          <p class="info">Số phòng: 2</p>
           <p class="info">Loại phòng: Family</p>
           <p class="info">Tình trạng: <b style="color:red">Đã đặt</b></p>
-          <p class="info">Giá phòng <b style="color:red">1.200.000VND</b></p>
           <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
+          <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/amayahomefamily.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
@@ -132,17 +133,17 @@
 
       <!-- Phòng 3 -->
       <div class="card" data-type="Standard" data-stars="3">
-        <img src="../ANH/TD2.jpg" alt="Phòng Standard">
+        <img src="../ANH/SS2.jpg" alt="Phòng Standard">
         <div class="card-content">
-          <h3>Le Bleu Floating Cloud</h3>
-          <p class="info">Số phòng:4</p>
+          <h3>Cerf Volant Soc Son Resort</h3>
+          <p class="info">Số phòng:3</p>
           <p class="info">Loại phòng: Standard</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Giá phòng <b style="color:red">2.300.000VND</b></p>
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
+          <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/CerfVolantSocSonResortstandard.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
@@ -150,34 +151,34 @@
 
 
 <div class="card" data-type="Standard" data-stars="3">
-        <img src="../ANH/TD3.jpg" alt="Phòng Standard">
+        <img src="../ANH/SS3.jpg" alt="Phòng Standard">
         <div class="card-content">
-          <h3>Up In The Air Homestay</h3>
-          <p class="info">Số phòng:4</p>
+          <h3>De'bay Retreat</h3>
+          <p class="info">Số phòng:3</p>
           <p class="info">Loại phòng: Standard</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Giá phòng <b style="color:red">900.000VND</b></p>
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
+          <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/De'bayRetreatstandrad.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
       </div>
 
       <div class="card" data-type="Standard" data-stars="3">
-        <img src="../ANH/TD4.jpg" alt="Phòng Standard">
+        <img src="../ANH/SS5.jpg" alt="Phòng Standard">
         <div class="card-content">
-          <h3>Cloudy Garden</h3>
-          <p class="info">Số phòng:5</p>
+          <h3>Amaya Retreat</h3>
+          <p class="info">Số phòng:4</p>
           <p class="info">Loại phòng: Standard</p>
           <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Giá phòng <b style="color:red">700.000VND</b></p>
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <div class="stars">⭐</div>
+          <p class="price">Giá: 1.000.000đ / đêm</p>
+          <div class="stars">⭐⭐⭐</div>
           <div class="btn-group">
-            <a href="#" class="btn-place btn-detail">Xem chi tiết</a>
+            <a href="../PLACE/Amaya Retreat-standard.php" class="btn-place btn-detail">Xem chi tiết</a>
             <a href="#" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
@@ -188,7 +189,7 @@
 
 
   <!-- Footer -->
- <footer class="footer">
+  <footer class="footer">
   <div class="footer-container">
     <!-- Cột 1: Logo + giới thiệu -->
     <div class="footer-col">
@@ -221,49 +222,6 @@
     <p>© 2025 BookingHomeStay. All rights reserved.</p>
   </div>
 </footer>
-
-  <!-- JS Lọc - Sắp xếp -->
-  <script>
-    const searchInput = document.getElementById("searchInput");
-    const filterType = document.getElementById("filterType");
-    const sortStars = document.getElementById("sortStars");
-    const roomList = document.getElementById("roomList");
-    let cards = Array.from(roomList.getElementsByClassName("card"));
-
-    function filterRooms() {
-      let searchText = searchInput.value.toLowerCase();
-      let type = filterType.value;
-
-      cards.forEach(card => {
-        let name = card.querySelector("h3").innerText.toLowerCase();
-        let roomType = card.dataset.type;
-
-        let match = true;
-        if (searchText && !name.includes(searchText)) match = false;
-        if (type && roomType !== type) match = false;
-
-        card.style.display = match ? "block" : "none";
-      });
-    }
-
-    function sortRooms() {
-      let order = sortStars.value;
-      if (!order) return;
-
-      cards.sort((a,b) => {
-        let starsA = parseInt(a.dataset.stars);
-        let starsB = parseInt(b.dataset.stars);
-        return order === "desc" ? starsB - starsA : starsA - starsB;
-      });
-
-      // Sắp xếp lại DOM
-      cards.forEach(card => roomList.appendChild(card));
-    }
-
-    searchInput.addEventListener("input", filterRooms);
-    filterType.addEventListener("change", filterRooms);
-    sortStars.addEventListener("change", sortRooms);
-  </script>
-
+ <script src="../JS/JS_TRANGCHU.js"></script>
 </body>
 </html>
