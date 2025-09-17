@@ -1,85 +1,105 @@
 <?php
-session_start();
-require_once('../../config/connect.php');
-
-if ( isset($_POST['password']) && isset($_POST['email'])) {
-    function validate($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-
-    $password = validate($_POST['password']);
-    $email = validate($_POST['email']);
+include "../../Config/connect.php";
 
 
-    $sql = "SELECT * FROM db_account WHERE email='$email'";
-    $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        if ( $row['password'] === $password && $row['email'] === $email ) {
-            $_SESSION['password'] = $row['password'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['role'] = $row['role'];
-            if ($row['role'] == 'user') {
-                header("Location: ../user/user_dashboard.php");
-                exit();
-            } elseif ($row['role'] == 'admin') {
-                header("Location: ../admin/admin_dashboard.php");
-                exit();
-            } else {
-                header("Location: login.php?error=Tài khoản của bạn chưa được phân quyền!");
-                exit();
-            }
-        } else {
-            header("Location: login.php?error=Thông tin chưa chính xác. Vui lòng nhập!");
-            exit();
-        }
-}
 ?>
+
+<!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/style_login.css">
-    <link rel="icon" href="../../images/logo.jpg">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>BookingHomestay.com | Đăng nhập</title>
+    <link rel="stylesheet" href="../../Css/style_login.css">
+    <title>Login</title>
 </head>
-<body>
-    <form action="" method="post" autocomplete="off">
-        <h2>ĐĂNG NHẬP</h2>
-        <h3>Đăng nhập vào BookingHomestay.com để sử dụng các dịch vụ tốt nhất của chúng tôi</h3>
-        <?php if(isset($_GET['error'])){ ?>
-            <p class="error"><?php echo $_GET['error']; ?></p>
-        <?php } ?>
-        <div>
-            <label for="email"></label>
-            <input type="text" id="email" name="email" placeholder="Nhập email hoặc số điện thoại" required >
-        </div>
-        <div>
-            <label for="password"></label>
-            <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
-        </div>
-        <button type="submit">Đăng nhập</button>
-        <div class="login-bottom-row">
-            <a href="signup.php" class="login-create-link">Bạn chưa có tài khoản?</a>
-            <a href="#" class="forgot-link">Quên mật khẩu?</a>
-        </div>
-        <h3>Hoặc</h3>
-        <div class="social_options">
-            <a href="#" class="social-btn facebook">
-                <i class='bx bxl-facebook'></i> Facebook
-            </a>
-            <a href="#" class="social-btn google">
-                <i class='bx bxl-google'></i> Google
-            </a>
-            <a href="#" class="social-btn apple">
-                <i class='bx bxl-apple'></i> Apple
-            </a>
-        </div>
-    </form>
-</body>
-</html>
 
+<body>
+    <section>
+        <div class="container" id="signup" style="display:none;">
+            <h1 class="form-title">Đăng Kí</h1>
+            <?php if (isset($_GET['error'])) { ?>
+                <p class="error"><?php echo $_GET['error']; ?></p>
+            <?php } ?>
+            <?php if (isset($_GET['success'])) { ?>
+                <p class="success"><?php echo $_GET['success']; ?></p>
+            <?php } ?>
+            <form method="post" action="index.php">
+                <div class="input-group">
+                    <i class='bx bx-user'></i>
+                    <input type="text" placeholder="Họ và tên" name="fullname" id="fullname" required>
+                </div>
+                <div class="input-group">
+                    <i class='bx bx-envelope'></i>
+                    <input type="email" placeholder="Email" name="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <i class='bx bx-phone'></i>
+                    <input type="phone" placeholder="Số điện thoại" name="phone" id="phone" required>
+                </div>
+                <div class="input-group">
+                    <i class='bx bx-lock-alt'></i>
+                    <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
+                </div>
+                <input type="submit" class="btn" value="Đăng kí" name="signUp">
+            </form>
+            <p class="or">Hoặc</p>
+            <div class="icons">
+                <a href="#" class="social-google">
+                    <i class='bx bxl-google'></i>
+                </a>
+                <a href="#" class="social-facebook">
+                    <i class='bx bxl-facebook'></i>
+                </a>
+            </div>
+            <div class="links">
+                <p>Bạn đã có tài khoản ?</p>
+                <button id="signInButton">Đăng nhập</button>
+            </div>
+        </div>
+
+        <div class="container" id="signIn">
+            <h1 class="form-title">Đăng Nhập</h1>
+            <?php if (isset($_GET['error'])) { ?>
+                <p class="error"><?php echo $_GET['error']; ?></p>
+            <?php } ?>
+            <?php if (isset($_GET['success'])) { ?>
+                <p class="success"><?php echo $_GET['success']; ?></p>
+            <?php } ?>
+            <form method="post" action="index.php">
+                <div class="input-group">
+                    <i class='bx bx-envelope'></i>
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class='bx bx-lock-alt'></i>
+                    <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
+                </div>
+                <p class="recover">
+                    <a href="#">Quên mật khẩu</a>
+                </p>
+                <input type="submit" class="btn" value="Đăng nhập" name="signIn">
+            </form>
+            <p class="or">Hoặc</p>
+
+            <div class="icons">
+                <a href="#" class="social-google">
+                    <i class='bx bxl-google'></i>
+                </a>
+                <a href="#" class="social-facebook">
+                    <i class='bx bxl-facebook'></i>
+                </a>
+            </div>
+
+            <div class="links">
+                <p>Bạn chưa có tài khoản?</p>
+                <button id="signUpButton">Đăng kí</button>
+            </div>
+        </div>
+    </section>
+    <script src="../../Js/login.js"></script>
+</body>
+
+</html>

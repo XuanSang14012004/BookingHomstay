@@ -1,12 +1,11 @@
-<?php 
-  $severname = "localhost";
-  $username = "root";
-  $password = "";
-  $db = "db_bookinghomestay";
-  $conn = mysqli_connect($severname,$username,$password,$db);
-  if($conn){
-    //echo "Kết nối thành công ";
-  }else{
-    echo " Kết nối không thành công ";
-  }
-?>
+<?php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "db_bookinghomestay";
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    echo 'Fail to connect DB ' . $conn->connect_error;
+} else {
+    // echo 'Connect successful';
+}
