@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     detailButtons.forEach(button => {
         button.addEventListener('click', function() {
             // Lấy ID từ thuộc tính data-id của button
-            const recordId = this.dataset.id; 
+            const recordId = this.dataset.id;
             
             // Chuyển hướng đến trang chi tiết với ID trong URL
             window.location.href = `detail_report.php?id=${recordId}`;
@@ -42,34 +42,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Lấy tất cả các nút 'Xem thêm'
-    const readMoreToggles = document.querySelectorAll('.read-more-toggle');
-
-    // Lặp qua từng nút và thêm sự kiện lắng nghe
-    readMoreToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(event) {
-            event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
-
-            // Tìm phần tử cha gần nhất có class 'expandable-cell'
-            const parentCell = this.closest('.expandable-cell');
-            
-            // Tìm các phần tử chứa nội dung
-            const shortText = parentCell.querySelector('.short-text');
-            const fullText = parentCell.querySelector('.full-text');
-
-            // Chuyển đổi trạng thái hiển thị của văn bản
-            if (fullText.style.display === 'none') {
-                // Nếu đang ẩn, thì hiển thị nội dung đầy đủ và ẩn bản tóm tắt
-                fullText.style.display = 'inline';
-                shortText.style.display = 'none';
-                this.textContent = 'Thu gọn';
-            } else {
-                // Nếu đang hiển thị, thì ẩn nội dung đầy đủ và hiển thị bản tóm tắt
-                fullText.style.display = 'none';
-                shortText.style.display = 'inline';
-                this.textContent = 'Xem thêm';
-            }
-        });
-    });
-});

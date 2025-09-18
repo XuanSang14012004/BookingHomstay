@@ -1,6 +1,6 @@
 <div class="head-title">
     <div class="left">
-        <h1>Dashboard</h1>
+        <h1>Management</h1>
         <ul class="breadcrumb">
             <li>
                 <a href="#">Admin Dashboard</a>
@@ -29,37 +29,39 @@
         <table class="data-table">
             <thead>
                 <tr>
+                    <th>STT</th>
                     <th>Mã Phòng</th>
                     <th>Tên Phòng</th>
-                    <th>Homestay</th>
-                    <th>Giá/Đêm</th>
+                    <th>Loại phòng</th>
+                    <th>Mô tả chi tiết</th>
+                    <th>Số người tối đa</th>
+                    <th>Giá phòng(/Đêm)</th>
                     <th>Trạng thái</th>
+                    <th>Hình ảnh</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>P001</td>
-                    <td>Phòng đơn</td>
-                    <td>Homestay Vọng Nguyệt</td>
-                    <td>500.000 VNĐ</td>
-                    <td>Còn trống</td>
-                    <td class="actions">
-                        <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
-                        <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
-                    </td>
+                    <?php
+                    $result = $conn->query("SELECT * FROM db_phong");
+                    $i = 1;
+                    while ($row = mysqli_fetch_assoc($result)) { ?>
+                        <td><?php echo $i++; ?></td>
+                        <td><?php echo $row['maphong'] ?></td>
+                        <td><?php echo $row['tenphong'] ?></td>
+                        <td><?php echo $row['loaiphong'] ?></td>
+                        <td class="truncate-text"><?php echo $row['mota'] ?></td>
+                        <td><?php echo $row['succhua'] ?></td>
+                        <td><?php echo $row['gia'] ?></td>
+                        <td><?php echo $row['trangthai'] ?></td>
+                        <td><?php echo $row['hinhanh'] ?></td>
+                        <td class="actions">
+                            <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
+                            <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
+                        </td>
                 </tr>
-                <tr>
-                    <td>P002</td>
-                    <td>Phòng đôi</td>
-                    <td>Homestay Vọng Nguyệt</td>
-                    <td>800.000 VNĐ</td>
-                    <td>Đã đặt</td>
-                    <td class="actions">
-                        <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
-                        <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
-                    </td>
-                </tr>
+            <?php } ?>
             </tbody>
         </table>
     </div>

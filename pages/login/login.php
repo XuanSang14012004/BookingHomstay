@@ -1,7 +1,5 @@
 <?php
 include "../../Config/connect.php";
-
-
 ?>
 
 <!-- HTML -->

@@ -1,6 +1,6 @@
 <div class="head-title">
     <div class="left">
-        <h1>Dashboard</h1>
+        <h1>Management</h1>
         <ul class="breadcrumb">
             <li>
                 <a href="#">Admin Dashboard</a>
@@ -28,35 +28,45 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Mã Đặt phòng</th>
-                    <th>Khách hàng</th>
-                    <th>Homestay</th>
-                    <th>Phòng</th>
-                    <th>Ngày đặt</th>
+                    <th>STT</th>
+                    <th>Mã đơn đặt phòng</th>
+                    <th>Mã khách hàng</th>
+                    <th>Tên khách hàng</th>
+                    <th>Mã phòng</th>
+                    <th>Ngày đặt phòng</th>
+                    <th>Ngày nhận phòng</th>
+                    <th>Ngày trả phòng</th>
+                    <th>Số người</th>
+                    <th>Tổng tiền</th>
                     <th>Trạng thái</th>
+                    <th>Chú thích của khách hàng</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <?php
-                    $result = $conn->query("SELECT * FROM db_khachhang");
+                    $result = $conn->query("SELECT * FROM db_booking");
                     $i = 1;
                     while ($row = mysqli_fetch_assoc($result)) { ?>
-                    <td><?php echo $i++; ?></td>
-                    <td><?php echo $row['makhachhang'] ?></td>
-                    <td><?php echo $row['tenkhachhang'] ?></td>
-                    <td><?php echo $row['ngaysinh'] ?></td>
-                    <td><?php echo $row['gioitinh'] ?></td>
-                    <td><?php echo $row['email'] ?></td>
-                    <td><?php echo $row['sodienthoai'] ?></td>
-                    <td><?php echo $row['diachi'] ?></td>
-                    <td class="actions">
-                        <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
-                        <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
-                    </td>
+                        <td><?php echo $i++; ?></td>
+                        <td><?php echo $row['madondatphong'] ?></td>
+                        <td><?php echo $row['makhachhang'] ?></td>
+                        <td><?php echo $row['tenkhachhang'] ?></td>
+                        <td><?php echo $row['maphong'] ?></td>
+                        <td><?php echo $row['ngaydatphong'] ?></td>
+                        <td><?php echo $row['ngaynhanphong'] ?></td>
+                        <td><?php echo $row['ngaytraphong'] ?></td>
+                        <td><?php echo $row['songuoi'] ?></td>
+                        <td><?php echo $row['tongtien'] ?></td>
+                        <td><?php echo $row['trangthai'] ?></td>
+                        <td class="truncate-text"><?php echo $row['chuthich'] ?></td>
+                        <td class="actions">
+                            <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
+                            <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
+                        </td>
                 </tr>
-                <?php } ?>
+            <?php } ?>
             </tbody>
         </table>
     </div>

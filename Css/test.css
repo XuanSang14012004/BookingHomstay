@@ -1,8 +1,6 @@
-/* Container chính cho mỗi chức năng quản lý */
 :root {
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;
-
 	--light: #F9F9F9;
 	--blue: #3C91E6;
     --dark-blue: #035cb4;
@@ -16,179 +14,7 @@
 	--orange: #FD7238;
 	--light-orange: #FFE0D3;
 }
-.management-container,
-.detail-container {
-    background-color: var(--light);
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 25px;
-    margin-top: 36px;
-}
 
-h2 {
-    color: var(--dark);
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Thanh công cụ, nút và ô tìm kiếm */
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap; /* Giúp responsive */
-}
-
-.add-btn {
-    background-color: var(--blue);
-    color: var(--light);
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.add-btn:hover {
-    background-color: var(--dark-blue);
-}
-
-.add-btn i {
-    margin-right: 5px;
-}
-
-.search-box {
-    display: flex;
-    align-items: center;
-}
-
-.search-box input {
-    border: 1px solid var(--light);
-    border-radius: 4px;
-    padding: 9px 12px;
-    font-size: 14px;
-    outline: none;
-    width: 250px;
-    transition: border-color 0.3s ease;
-}
-
-.search-box input:focus {
-    border-color: var(--blue);
-}
-
-.search-btn {
-    background-color: var(--blue);
-    color: var(--light);
-    border: none;
-    border-radius: 4px;
-    padding: 10px 12px;
-    margin-left: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-btn:hover {
-    background-color: var(--dark-blue);
-}
-
-/* Bảng dữ liệu */
-.table-responsive {
-    overflow-x: auto; /* Giúp bảng cuộn ngang trên thiết bị nhỏ */
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.data-table th, .data-table td {
-    padding: 12px 15px;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.data-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #6c757d;
-    font-size: 13px;
-    
-    /* Thuộc tính mới để giữ tiêu đề trên một hàng */
-    white-space: nowrap; /* Ngăn văn bản xuống dòng */
-}
-
-.data-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.data-table tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Điều chỉnh cho các ô td có nội dung dài */
-.data-table td.truncate-text {
-    /* Ngăn văn bản xuống dòng */
-    white-space: nowrap;
-    
-    /* Ẩn nội dung tràn ra khỏi ô */
-    overflow: hidden;
-    
-    /* Thêm dấu ba chấm (...) vào cuối */
-    text-overflow: ellipsis;
-    
-    /* Đảm bảo ô có chiều rộng tối thiểu để hiệu ứng hoạt động */
-    max-width: 250px; /* Điều chỉnh giá trị này để phù hợp với giao diện của bạn */
-}
-
-/* Nút thao tác trong bảng */
-.actions {
-    white-space: nowrap; /* Ngăn các nút xuống dòng */
-}
-
-.actions button {
-    background: none;
-    border: 1px solid #d4d4d4;
-    border-radius: 4px;
-    padding: 6px 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-right: 5px;
-    color: #6c757d;
-}
-
-.actions button:hover {
-    background-color: #e9ecef;
-    border-color: #adb5bd;
-}
-
-.edit-btn {
-    color: #007bff;
-    border-color: #007bff;
-}
-.edit-btn:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.delete-btn {
-    color: #dc3545;
-    border-color: #dc3545;
-}
-.delete-btn:hover {
-    background-color: #dc3545;
-    color: #fff;
-}
 
 /* Thẻ thống kê */
 .card-container {
@@ -234,7 +60,7 @@ h2 {
 /* Phần biểu đồ */
 .chart-section {
     position: relative;
-    height: 400px; /* Đặt chiều cao mong muốn cho biểu đồ */
+    height: 400px; 
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -247,7 +73,7 @@ h2 {
     height: 100% !important;
 }
 
-/* Các lớp cho form chi tiết */
+/* Các form chi tiết */
 .detail-form {
     display: flex;
     flex-direction: column;
@@ -334,4 +160,103 @@ h2 {
     .search-box input {
         width: 100%;
     }
+}
+
+
+/* Container của form */
+.form-container {
+    max-width: 800px;
+    margin: 36px auto;
+    padding: 30px;
+}
+
+/* Các phần của form (Thông tin cơ bản, liên hệ...) */
+.form-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 25px;
+}
+
+.form-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #34495e;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Nhóm label và input */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"] {
+    padding: 5px 0;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(60, 145, 230, 0.2);
+}
+
+/* Các nút hành động */
+.form-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-actions .add-btn {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.form-actions .add-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.form-actions .cancel-btn {
+    background-color: #e0e0e0;
+    color: #555;
+    margin-left: 10px;
+}
+
+.form-actions .cancel-btn:hover {
+    background-color: #ccc;
 }

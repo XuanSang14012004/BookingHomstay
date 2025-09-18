@@ -1,6 +1,6 @@
 <div class="head-title">
     <div class="left">
-        <h1>Dashboard</h1>
+        <h1>Management</h1>
         <ul class="breadcrumb">
             <li>
                 <a href="#">Admin Dashboard</a>
@@ -34,7 +34,7 @@
                     <th>Tên Homestay</th>
                     <th>Loại hình</th>
                     <th>Trạng thái hoạt động</th>
-                    <th>Mô tả</th>
+                    <th>Mô tả chi tiêt</th>
                     <th>Số phòng</th>
                     <th>Tiện nghi</th>
                     <th>Địa chỉ</th>
@@ -43,7 +43,7 @@
                     <th>Giá thuê</th>
                     <th>Chính sách</th>
                     <th>Hình ảnh</th>
-                    <th>Điểm đánh giá trung bình</th>
+                    <th>Điểm đánh giá trung bình(/5)</th>
                     <th>Số lượt đánh giá đã nhận</th>
                     <th>Thao tác</th>
                 </tr>
@@ -71,7 +71,7 @@
                         <td><?php echo $row['diemdanhgia'] ?></td>
                         <td><?php echo $row['soluotdanhgia'] ?></td>
                         <td class="actions">
-                            <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
+                            <button class="edit-btn" title="Sửa" data-id=""><i class='bx bx-edit-alt'></i></button>
                             <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>
                         </td>
                 </tr>

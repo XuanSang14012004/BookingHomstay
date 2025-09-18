@@ -310,9 +310,8 @@ body {
 }
 
 .side-menu-user li a:hover {
-    background: var(--light);
+	color: var(--blue);
 }
-
 .side-menu-user.active {
     display: block;
 }
@@ -360,7 +359,7 @@ body {
 	grid-gap: 16px;
 	flex-wrap: wrap;
 }
-#content main .head-title .left h1 {
+#content main .head-title .left h1 { 
 	font-size: 36px;
 	font-weight: 600;
 	margin-bottom: 10px;
@@ -375,7 +374,7 @@ body {
 	color: var(--dark);
 }
 #content main .head-title .left .breadcrumb li a {
-	color: var(--dark-grey);
+	color: var(--dark);
 	pointer-events: none;
 }
 #content main .head-title .left .breadcrumb li a.active {
@@ -555,6 +554,161 @@ body {
 }
 #content main .table-data .todo .todo-list li:last-child {
 	margin-bottom: 0;
+}
+
+/* Container chính cho mỗi chức năng quản lý */
+.management-container,
+.detail-container {
+    background-color: var(--light);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow:0 20px 35px rgba(0,0,1,0.4);
+    margin-bottom: 25px;
+    margin-top: 36px;
+}
+
+h2 {
+    color: var(--dark);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Thanh công cụ, nút và ô tìm kiếm */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Giúp responsive */
+}
+
+.add-btn {
+    background-color: var(--blue);
+    color: var(--light);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.add-btn i {
+    margin-right: 5px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    border: 1px solid var(--light);
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-size: 14px;
+    outline: none;
+    width: 250px;
+    transition: border-color 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: var(--blue);
+}
+
+.search-btn {
+    background-color: var(--blue);
+    color: var(--light);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+/* Bảng dữ liệu */
+.table-responsive {
+    overflow-x: auto; /* Giúp bảng cuộn ngang trên thiết bị nhỏ */
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--light);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--dark);
+    box-shadow:var(--dark-grey);
+} 
+
+.data-table th {
+    background-color: var(--blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--light);
+    font-size: 13px;
+    white-space: nowrap; /* Ngăn văn bản xuống dòng */
+}
+/* Điều chỉnh cho các ô td có nội dung dài */
+.data-table td.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm dấu ba chấm (...) vào cuối */
+    max-width: 250px; /* Điều chỉnh giá trị này để phù hợp với giao diện*/
+}
+
+
+.data-table tbody tr:nth-child(even) {
+    background-color: var(--light);
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--grey);
+}
+
+
+/* Nút thao tác trong bảng */
+.actions {
+    white-space: nowrap; 
+}
+
+.actions button {
+    background: none;
+    border: 1px solid var(--dark-grey);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 5px;
+    color: var(--dark);
+}
+
+
+.edit-btn:hover {
+    background-color: var(--blue);
+    color: var(--light);
+}
+
+.delete-btn:hover {
+    background-color: var(--red);
+    color: var(--light);
 }
 /* MAIN */
 /* CONTENT */

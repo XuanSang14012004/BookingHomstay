@@ -7,7 +7,7 @@
             </li>
             <li><i class='bx bx-chevron-right'></i></li>
             <li>
-                <a class="active" href="#">Quản lí thanh toán</a>
+                <a class="active" href="#">Quản lí khách hàng</a>
             </li>
         </ul>
     </div>
@@ -16,12 +16,19 @@
         <span class="text">Download PDF</span>
     </a>
 </div>
+
 <div class="management-container">
-    <h2>Quản lý Thanh toán</h2>
+    <h2>Quản lý Khách hàng</h2>
     <div class="toolbar">
+        <button class="add-btn">
+            <i class='bx bx-plus'></i> Thêm mới
+        </button>
         <div class="search-box">
-            <input type="text" placeholder="Tìm kiếm giao dịch...">
-            <button class="search-btn"><i class='bx bx-search'></i></button>
+            <input type="text" placeholder="Tìm kiếm khách hàng...">
+            <button class="search-btn">
+                <i class='bx bx-search'>
+
+                </i></button>
         </div>
     </div>
     <div class="table-responsive">
@@ -29,28 +36,30 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã thanh toán</th>
-                    <th>Mã đơn đặt phòng</th>
-                    <th>Phương thức thanh toán</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày thanh toán</th>
-                    <th>Trạng thái</th>
+                    <th>Mã Khách hàng</th>
+                    <th>Tên Khách hàng</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <?php
-                    $result = $conn->query("SELECT * FROM db_thanhtoan");
+                    $result = $conn->query("SELECT * FROM db_khachhang");
                     $i = 1;
                     while ($row = mysqli_fetch_assoc($result)) { ?>
                         <td><?php echo $i++; ?></td>
-                        <td><?php echo $row['mathanhtoan'] ?></td>
-                        <td><?php echo $row['madondatphong'] ?></td>
-                        <td><?php echo $row['hinhthucthanhtoan'] ?></td>
-                        <td><?php echo $row['sotien'] ?></td>
-                        <td><?php echo $row['ngaythanhtoan'] ?></td>
-                        <td><?php echo $row['trangthai'] ?></td>
+                        <td><?php echo $row['makhachhang'] ?></td>
+                        <td><?php echo $row['tenkhachhang'] ?></td>
+                        <td><?php echo $row['ngaysinh'] ?></td>
+                        <td><?php echo $row['gioitinh'] ?></td>
+                        <td><?php echo $row['email'] ?></td>
+                        <td><?php echo $row['sodienthoai'] ?></td>
+                        <td class="truncate-text"><?php echo $row['diachi'] ?></td>
                         <td class="actions">
                             <button class="edit-btn" title="Sửa"><i class='bx bx-edit-alt'></i></button>
                             <button class="delete-btn" title="Xóa"><i class='bx bx-trash'></i></button>

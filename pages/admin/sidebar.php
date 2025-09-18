@@ -11,8 +11,8 @@
                 <span class="text">Dashboard</span>
             </a>
         </li>
-        <li class="<?= ($page == 'profile') ? 'active' : '' ?>">
-            <a href="home.php?page=profile">
+        <li class="<?= ($page == 'user') ? 'active' : '' ?>">
+            <a href="home.php?page=user">
                 <i class='bx bx-user'></i>
                 <span class="text">Quản lí khách hàng</span>
             </a>
@@ -41,8 +41,8 @@
                 <span class="text">Quản lí thanh toán</span>
             </a>
         </li>
-        <li class="<?= ($page == 'feedback') ? 'active' : '' ?>">
-            <a href="home.php?page=feedback">
+        <li class="<?= ($page == 'reviews') ? 'active' : '' ?>">
+            <a href="home.php?page=reviews">
                 <i class='bx bx-table'></i>
                 <span class="text">Quản lí đánh giá</span>
             </a>
