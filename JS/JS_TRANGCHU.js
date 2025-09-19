@@ -17,44 +17,62 @@ function scrollHomestay(direction) {
   list.style.transform = `translateX(-${currentScroll}px)`;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------------------------
-// Lọc và sắp xếp phòng(place)
-const searchInput = document.getElementById("searchInput");
-    const filterType = document.getElementById("filterType");
-    const sortStars = document.getElementById("sortStars");
-    const roomList = document.getElementById("roomList");
-    let cards = Array.from(roomList.getElementsByClassName("card"));
 
-    function filterRooms() {
-      let searchText = searchInput.value.toLowerCase();
-      let type = filterType.value;
+// FILE HOMESTAY.PHP(THƯ MỤC TRANG CHỦ)
+// Bộ lọc Homestay
+document.addEventListener("DOMContentLoaded", function () {
+  const filters = document.querySelectorAll(".filter");
+  const cards = document.querySelectorAll(".list-homecard-card");
 
-      cards.forEach(card => {
-        let name = card.querySelector("h3").innerText.toLowerCase();
-        let roomType = card.dataset.type;
+  filters.forEach(f => {
+    f.addEventListener("change", filterCards);
+  });
 
-        let match = true;
-        if (searchText && !name.includes(searchText)) match = false;
-        if (type && roomType !== type) match = false;
+  function filterCards() {
+    // Gom filter theo nhóm
+    let selectedStars = [];
+    let selectedStatus = [];
+    let selectedTypes = [];
 
-        card.style.display = match ? "block" : "none";
-      });
+    filters.forEach(f => {
+      if (f.checked) {
+        if (f.value.includes("sao")) selectedStars.push(f.value);
+        else if (f.value === "còn phòng" || f.value === "hết phòng") selectedStatus.push(f.value);
+        else selectedTypes.push(f.value);
+      }
+    });
+
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      let star = card.dataset.star;
+      let status = card.dataset.status;
+      let type = card.dataset.type;
+
+      // Kiểm tra từng nhóm filter
+      let starMatch = selectedStars.length === 0 || selectedStars.includes(star);
+      let statusMatch = selectedStatus.length === 0 || selectedStatus.includes(status);
+      let typeMatch = selectedTypes.length === 0 || selectedTypes.includes(type);
+
+      if (starMatch && statusMatch && typeMatch) {
+        card.style.display = "block";
+        visibleCount++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    // Nếu không có kết quả, hiển thị thông báo
+    let noResultMsg = document.getElementById("no-result");
+    if (!noResultMsg) {
+      noResultMsg = document.createElement("p");
+      noResultMsg.id = "no-result";
+      noResultMsg.textContent = "Không tìm thấy homestay phù hợp.";
+      noResultMsg.style.textAlign = "center";
+      noResultMsg.style.color = "red";
+      noResultMsg.style.marginTop = "20px";
+      document.querySelector(".list-homestay").appendChild(noResultMsg);
     }
-
-    function sortRooms() {
-      let order = sortStars.value;
-      if (!order) return;
-
-      cards.sort((a,b) => {
-        let starsA = parseInt(a.dataset.stars);
-        let starsB = parseInt(b.dataset.stars);
-        return order === "desc" ? starsB - starsA : starsA - starsB;
-      });
-
-      // Sắp xếp lại DOM
-      cards.forEach(card => roomList.appendChild(card));
-    }
-
-    searchInput.addEventListener("input", filterRooms);
-    filterType.addEventListener("change", filterRooms);
-    sortStars.addEventListener("change", sortRooms);
+    noResultMsg.style.display = visibleCount === 0 ? "block" : "none";
+  }
+});

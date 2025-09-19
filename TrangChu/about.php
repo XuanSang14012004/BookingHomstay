@@ -4,17 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Về Chúng Tôi - Booking Homestay</title>
-  <link rel="stylesheet" href="../CSS/css.css?v=3.0">
+  <link rel="stylesheet" href="../CSS/style_user.css?v=4.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body class="body">
-  <header class="header-about">
-    <h1>Booking Homestay</h1>
-    <p>Trải nghiệm không gian nghỉ dưỡng thoải mái & đáng nhớ</p>
-     <a href="user.php" class="back-home">
-    <i class="fas fa-arrow-left"></i> Quay về Trang chủ
-  </a>
-  </header>
+   <div class="header-top">
+        <ul>
+            <li><a href="user.php">Trang chủ</a></li>
+            <li><a href="about.php">Về chúng tôi</a></li>
+            <li><a href="contact.html">&#9742;Liên hệ</a></li>
+            <li><a href="#review.html">Đánh giá</a></li>
+            <li><a href="#explore-location">Danh sách các HomeStay</a></li>
+             <li><a href="login.php">Đăng nhập</a></li>
+             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
+             <li><a><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+    </div>
   <section class="about">
     <h2>Về Chúng Tôi</h2>
     <p><strong>Booking Homestay</strong> là nền tảng đặt phòng homestay trực tuyến, giúp kết nối du khách với những không gian nghỉ dưỡng độc đáo và tiện nghi trên khắp Việt Nam. Với hệ thống tìm kiếm thông minh, thông tin minh bạch và đa dạng lựa chọn, chúng tôi cam kết mang đến trải nghiệm đặt phòng nhanh chóng, an toàn và giá cả hợp lý. Booking Homestay không chỉ là nơi bạn tìm được chỗ ở ưng ý, mà còn là người bạn đồng hành trên mỗi hành trình khám phá, mang lại những khoảnh khắc nghỉ dưỡng thoải mái và đáng nhớ.</p>
@@ -43,29 +48,29 @@
       <h2>Đội Ngũ</h2>
       <div class="team-members">
         <div class="member">
-          <img src="../ANH/10.jpg" alt="Thành viên 1">
+          <img src="../images/10.jpg" alt="Thành viên 1">
           <h4>Nguyễn Văn A</h4>
           <p>Founder & CEO</p>
         </div>
         <div class="member">
-          <img src="../ANH/10.jpg" alt="Thành viên 2">
+          <img src="../images/10.jpg" alt="Thành viên 2">
           <h4>Trần Thị B</h4>
           <p>Marketing</p>
         </div>
         <div class="member">
-          <img src="../ANH/10.jpg" alt="Thành viên 3">
+          <img src="../images/10.jpg" alt="Thành viên 3">
           <h4>Lê Văn C</h4>
           <p>Developer</p>
         </div>
         <div class="team-members">
         <div class="member">
-          <img src="../ANH/10.jpg" alt="Thành viên 1">
+          <img src="../images/10.jpg" alt="Thành viên 1">
           <h4>Nguyễn Văn A</h4>
           <p>Founder & CEO</p>
         </div>
          <div class="team-members">
         <div class="member">
-          <img src="../ANH/10.jpg" alt="Thành viên 1">
+          <img src="../images/10.jpg" alt="Thành viên 1">
           <h4>Nguyễn Văn A</h4>
           <p>Founder & CEO</p>
         </div>
@@ -94,10 +99,10 @@
     <div class="footer-col">
       <h3>Kết nối với chúng tôi</h3>
       <div class="social-links">
-        <a href="#"><img src="../ANH/FB.jpg" alt="Facebook"></a>
-        <a href="#"><img src="../ANH/IG.jpg" alt="Instagram"></a>
-        <a href="#"><img src="../ANH/zalo.jpg" alt="Zalo"></a>
-        <a href="#"><img src="../ANH/MES.jpg" alt="TikTok"></a>
+        <a href="#"><img src="../images/FB.jpg" alt="Facebook"></a>
+        <a href="#"><img src="../images/IG.jpg" alt="Instagram"></a>
+        <a href="#"><img src="../images/zalo.jpg" alt="Zalo"></a>
+        <a href="#"><img src="../images/MES.jpg" alt="TikTok"></a>
       </div>
     </div>
   </div>

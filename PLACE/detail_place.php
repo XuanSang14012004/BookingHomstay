@@ -17,7 +17,7 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <title><?php echo $homestay ? $homestay['name'] : 'Chi tiết Homestay'; ?></title>
-  <link rel="stylesheet" href="../CSS/css.css?v=1.7">
+  <link rel="stylesheet" href="../CSS/style_user.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
@@ -112,10 +112,10 @@ $conn->close();
     <div class="footer-col">
       <h3>Kết nối với chúng tôi</h3>
       <div class="social-links">
-        <a href="#"><img src="../ANH/FB.jpg" alt="Facebook"></a>
-        <a href="#"><img src="../ANH/IG.jpg" alt="Instagram"></a>
-        <a href="#"><img src="../ANH/zalo.jpg" alt="Zalo"></a>
-        <a href="#"><img src="../ANH/MES.jpg" alt="TikTok"></a>
+        <a href="#"><img src="../images/FB.jpg" alt="Facebook"></a>
+        <a href="#"><img src="../images/IG.jpg" alt="Instagram"></a>
+        <a href="#"><img src="../images/zalo.jpg" alt="Zalo"></a>
+        <a href="#"><img src="../images/MES.jpg" alt="TikTok"></a>
       </div>
     </div>
   </div>
