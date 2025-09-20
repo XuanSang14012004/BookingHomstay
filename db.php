@@ -11,7 +11,6 @@ mysqli_set_charset($conn, "utf8mb4");
 if ($conn->connect_error) {
     die("Kết nối thất bại: " . $conn->connect_error);
 }
-
 // -------------------- PHẦN THÊM --------------------
 
 // Bật báo lỗi cho MySQLi (dùng để debug dễ hơn)

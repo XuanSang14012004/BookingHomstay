@@ -76,3 +76,26 @@ document.addEventListener("DOMContentLoaded", function () {
     noResultMsg.style.display = visibleCount === 0 ? "block" : "none";
   }
 });
+
+
+// LỌC CỦA FILE TRANG CHỦ ̣PHẦN HEADER ĐẦU
+document.getElementById("filterForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const location = document.getElementById("location").value.trim();
+  const type = document.getElementById("type").value.trim();
+
+  const cards = document.querySelectorAll(".homestay-card");
+
+  cards.forEach(card => {
+    const text = card.innerText; // lấy toàn bộ text của card
+    const matchLocation = location === "" || text.includes(location);
+    const matchType = type === "" || text.includes(type);
+
+    if (matchLocation && matchType) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});

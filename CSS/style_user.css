@@ -467,6 +467,13 @@ ul {
 
 
 /* ------------------------------------REVIEW(ĐÁNH GIÁ KHÁCH HÀNG--------------------------------------------------------- */
+ .feedback.list{
+      margin-top: 30px;
+      padding-top: 20px;
+      display: contents;
+      text-align: center;
+      }
+    /* Vùng feedback */
 .feedback {
   padding: 60px 20px;
   background: #f9fafb;
@@ -478,6 +485,15 @@ ul {
   margin: auto;
   text-align: center;
 }
+
+.feedback h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Khung nhập đánh giá */
 .feedback-cmt {
   display: flex;
   justify-content: center;
@@ -548,7 +564,7 @@ ul {
   font-weight: 500;
   text-align: right;
 }
-
+/* ------------------------------------------------------------------------------------------------------------------------------- */
 /*---------------------------------------------------------Footer-------------------------------------------------------------------------------*/
 .footer {
   background: #2d4059;

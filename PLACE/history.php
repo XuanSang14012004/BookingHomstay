@@ -31,6 +31,7 @@
           <h3>Amaya Home Deluxe</h3>
           <p>Ngày đến: 2025-09-20</p>
           <p>Ngày đi: 2025-09-22</p>
+          <b style="color:red; font-size=32px">Đánh giá</b>
         </div>
       </div>
       <div class="card-history" onclick="showDetail(1)">
@@ -47,6 +48,17 @@
           <h3>Sunset Villa</h3>
           <p>Ngày đến: 2025-09-25</p>
           <p>Ngày đi: 2025-09-28</p>
+        </div>
+      </div>
+
+      <div class="card-history" onclick="showDetail(3)">
+        <img src="https://picsum.photos/id/1020/200/150" alt="">
+        <div class="card-info">
+          <h3>Sunset Villa</h3>
+          <p>Ngày đến: 2025-09-25</p>
+          <p>Ngày đi: 2025-09-28</p>
+          <b style="color:green; font-size=32px">Chờ xác nhận</b>
+          
         </div>
       </div>
     </div>
@@ -73,6 +85,13 @@
         img: "https://picsum.photos/id/1015/600/400",
         desc: "Không gian gia đình ấm cúng, gần trung tâm."
       },
+      {
+        name: "Sunset Villa",
+        price: 1500000,
+        nights: 3,
+        img: "https://picsum.photos/id/1020/600/400",
+        desc: "View hoàng hôn tuyệt đẹp, hồ bơi ngoài trời."
+      }
       {
         name: "Sunset Villa",
         price: 1500000,
