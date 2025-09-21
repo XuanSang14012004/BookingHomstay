@@ -11,7 +11,7 @@ $result = $conn->query($sql);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-  <link rel="stylesheet" href="../CSS/style_user.css?v=4.1">
+  <link rel="stylesheet" href="../CSS/style_user.css?v=6">
   <title>Danh sách Homestay</title>
 </head>
 <body>
@@ -78,7 +78,7 @@ $result = $conn->query($sql);
                 <?php echo ucfirst($status); ?>
               </div>
               <span class="room-type"><?php echo $row['room_type']; ?></span>
-              <a href="#" class="btn-place-homestay btn-book">Đặt phòng</a>
+              <a href="../PAY/booking.php?id=<?php echo $row['id']; ?>" class="btn-place-homestay btn-book">Đặt phòng</a>
             </div>
           </div>
         <?php endwhile; ?>

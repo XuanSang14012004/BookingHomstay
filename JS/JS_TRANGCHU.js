@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Nếu không có kết quả, hiển thị thông báo
+    //Nếu không có kết quả, hiển thị thông báo
     let noResultMsg = document.getElementById("no-result");
     if (!noResultMsg) {
       noResultMsg = document.createElement("p");
@@ -99,3 +99,27 @@ document.getElementById("filterForm").addEventListener("submit", function(e) {
     }
   });
 });
+
+//THƯ MỤC TRANG CHỦ (FILE USER.PHP)
+// PHẦN ẤN HÌNH GIAO DIỆN NGƯỜI DÙNG
+document.addEventListener("DOMContentLoaded", function () {
+  const userIcon = document.getElementById("userIcon");
+  const userDropdown = document.getElementById("userDropdown");
+
+  if (userIcon && userDropdown) {
+    // Khi click vào icon
+    userIcon.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      userDropdown.classList.toggle("show");
+    });
+
+    // Khi click ra ngoài
+    document.addEventListener("click", function (e) {
+      if (!userDropdown.contains(e.target) && e.target !== userIcon) {
+        userDropdown.classList.remove("show");
+      }
+    });
+  }
+});
+

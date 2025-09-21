@@ -16,26 +16,45 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
-    <link rel="stylesheet" href="../CSS/style_user.css?v=4.0">
+    <link rel="stylesheet" href="../CSS/style_user.css?v=6">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <script src="../JS/JS_TRANGCHU.js"></script>
 </head>
 <body>
     <!-- Thanh menu -->
-    <div class="header-top">
-        <ul>
-            <li><a href="user.php">Trang chủ</a></li>
-            <li><a href="about.php">Về chúng tôi</a></li>
-            <li><a href="contact.html">&#9742;Liên hệ</a></li>
-            <li><a href="#feedback">Đánh giá</a></li>
-            <li><a href="../TrangChu/homestay.php">Danh sách các HomeStay</a></li>
-             <li><a href="login.php">Đăng nhập</a></li>
-             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
-             <ul class="menu">
-             <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
-          </ul>
-        </ul>
-    </div>
+   <div class="header-top">
+  <ul>
+    <li><a href="user.php">Trang chủ</a></li>
+    <li><a href="about.php">Về chúng tôi</a></li>
+    <li><a href="contact.html">&#9742; Liên hệ</a></li>
+    <li><a href="#feedback">Đánh giá</a></li>
+    <li><a href="../TrangChu/homestay.php">Danh sách các HomeStay</a></li>
+    <li><a href="login.php">Đăng nhập</a></li>
+
+    <!-- User -->
+    <li class="user-menu">
+      <a href="javascript:void(0);" id="userIcon">
+        <i class="fa-solid fa-user"></i> User
+      </a>
+      <!-- Menu ẩn -->
+      <div class="dropdown-menu" id="userDropdown">
+        <div class="user-info">
+          <img src="../images/10.jpg" alt="Avatar" class="avatar">
+          <span>Trường Giang</span>
+        </div>
+        <hr>
+        <a href="">Cài đặt & quyền riêng tư</a>
+        <a href="../TrangChu/profile.php">Profile</a>
+        <a href="#">Trợ giúp & hỗ trợ</a>
+        <a href="#">Màn hình & trợ năng</a>
+        <a href="#">Đóng góp ý kiến</a>
+        <a href="#">Đăng xuất</a>
+      </div>
+    </li>
+    <!-- Giỏ hàng -->
+    <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a></li>
+  </ul>
+</div>
+
     <!-- Video + Sidebar -->
     <section>
   <div class="video-container slideshow">
@@ -159,7 +178,7 @@ $conn->close();
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 3.000.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=1" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -174,7 +193,7 @@ $conn->close();
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 2.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=2" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -189,7 +208,7 @@ $conn->close();
           <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 2.700.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=3" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -204,7 +223,7 @@ $conn->close();
           <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
           <p class="price">Giá: 2.000.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐</div>
-<button class="btn">Đặt phòng</button>
+         <a href="../PAY/booking.php?id=4" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -219,7 +238,7 @@ $conn->close();
           <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
           <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=5" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -234,7 +253,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=6" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -249,7 +268,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 1.500.000đ / đêm</p> 
           <div class="stars">⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=7" class="btn">Đặt phòng</a>
         </div> 
       </div>
 
@@ -264,7 +283,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 1.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=8" class="btn">Đặt phòng</a>
         </div> 
       </div>
 
@@ -279,7 +298,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 1.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=2" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -294,7 +313,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 1.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=3" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -309,7 +328,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=11" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -324,7 +343,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=12" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -339,7 +358,7 @@ $conn->close();
 <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=13" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -354,7 +373,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=14" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -369,7 +388,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=15" class="btn">Đặt phòng</a>
         </div>
       </div>
 
@@ -384,7 +403,7 @@ $conn->close();
           <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
           <p class="price">Giá: 5.000.000đ / đêm</p>
           <div class="stars">⭐⭐⭐⭐</div>
-          <button class="btn">Đặt phòng</button>
+          <a href="../PAY/booking.php?id=16" class="btn">Đặt phòng</a>
         </div>
       </div>
     </div>
@@ -568,5 +587,6 @@ $conn->close();
     <p>© 2025 BookingHomeStay. All rights reserved.</p>
   </div>
 </footer>
+<script src="../JS/JS_TRANGCHU.js?v=6.1"></script>
 </body>
 </html>

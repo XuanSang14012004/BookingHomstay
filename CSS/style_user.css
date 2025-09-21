@@ -9,28 +9,82 @@ ul {
     list-style: none;
 }
 
+/* ===== Thanh menu chính ===== */
 .header-top {
-    background-color: black;
-    padding: 25px;
+   background-color: black;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+   padding: 10px;
 }
 
 .header-top ul {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); /* 8 mục chia đều */
+  text-align: center;
+}
+
+.header-top ul li {
+  position: relative;
 }
 
 .header-top ul li a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: 0.3s;
+  display: block;
+  padding: 14px 0;
+ color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
 }
 
 .header-top ul li a:hover {
-    background-color: #f44336;
-    color: aqua;
+  background-color: #f44336;
+  border-radius: 5px;
+}
+
+/* Icon user */
+.user-menu > a {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Dropdown user */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0; /* Để menu lệch phải như Facebook */
+  width: 240px;
+  background: black;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 1000;
+
+  /* Ẩn mặc định */
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  /* Hiệu ứng */
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.dropdown-menu.show {
+  max-height: 500px; 
+  opacity: 1;
+  visibility: visible;
+  animation: fadeIn 0.3s ease;
+}
+
+
+/* ===== Hiệu ứng mở menu ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .video-container {
@@ -1214,6 +1268,54 @@ article img {
   max-width: 1100px;
   margin: auto;
 }
+/* Nút đánh giá , hủy đánh giá */
+ .status { 
+      font-weight: bold; 
+      display: inline-block; 
+      margin-top: 5px; }
+    .status.pending { 
+      color: orange; 
+    }
+    .status.confirmed { 
+      color: green; 
+    }
+    .status.cancelled { 
+      color: red; 
+    }
+    .cancel-btn, .review-btn {
+      background: #ff6600;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+    .cancel-btn:hover, .review-btn:hover { 
+      background: #e65c00; 
+    }
+    .review-history { 
+      margin-top: 15px; 
+      padding: 10px; 
+      background: #f1f1f1; 
+      border-radius: 6px; 
+    }
+    .review { 
+      border-bottom: 1px solid #ccc; 
+      padding: 5px 0; 
+    }
+    .review:last-child { 
+      border-bottom: none; 
+    }
+    .rating { 
+      color: gold; 
+    }
+    textarea { 
+      width: 100%; 
+      min-height: 80px; 
+      margin-top: 10px; 
+    }
 /* Card lịch sử */
 .history {
   display: flex;
@@ -1318,14 +1420,6 @@ button {
 }
 button:hover {
   background: #1b5cb8;
-}
-.social-links img {
-  width: 30px;
-  margin-right: 10px;
-  transition: transform 0.3s;
-}
-.social-links img:hover {
-  transform: scale(1.1);
 }
 /* Responsive */
 @media (max-width: 900px) {
@@ -1717,4 +1811,226 @@ form.POST button i {
   .gallery {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* -------------------------------------------THƯ MỤC TRANG CHỦ-------------------------------------------------------------- */
+/* -------------------------------TRANG CÁ NHÂN(FILE PROFILE.PHP)------------------------------------------------------------- */
+/* ---chi tiết hồ sơ cá nhân */
+.profile {
+  list-style: none;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.profile li {
+  position: relative;
+}
+
+.profile a {
+  color: #fff;
+  font-size: 18px;
+}
+
+.profile-info {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 220px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  padding: 15px;
+  display: none;
+}
+
+.profile li:hover .profile-info {
+  display: block;
+}
+
+.profile-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.profile-info h3 {
+  margin: 10px 0 5px;
+  font-size: 16px;
+}
+
+.profile-info p {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* ===== PROFILE LAYOUT ===== */
+.profile-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Sidebar trái */
+.profile-left {
+  width: 25%;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+}
+
+.profile-left-img {
+  text-align: center;
+}
+
+.profile-left-img img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.profile-left-img h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.profile-left-img p {
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Danh sách menu bên trái */
+.profile-left-content h3 {
+  font-size: 16px;
+  margin: 20px 0 10px;
+}
+
+.content-list ul {
+  list-style: none;
+}
+
+.content-list ul li {
+  margin: 10px 0;
+}
+
+.content-list ul li a {
+  text-decoration: none;
+  color: #333;
+  padding: 5px 10px;
+  display: block;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.content-list ul li a:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+/* Nội dung bên phải */
+.profile-right {
+  flex: 1;
+  padding: 20px;
+}
+
+.profile-right h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.profile-right p {
+  margin-bottom: 10px;
+}
+
+/* Form chỉnh sửa */
+.profile-form {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-left {
+  width: 65%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Avatar bên phải */
+.avatar-box {
+  width: 30%;
+  text-align: center;
+}
+
+.avatar-box img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.avatar-box button {
+  padding: 8px 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.avatar-box button:hover {
+  background: #0056b3;
+}
+
+/* Nút chung */
+.btn {
+  padding: 10px 20px;
+  background: #28a745;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #218838;
+}
+
+.btn-edit {
+  background: #ffc107;
+  color: #000;
+}
+
+.btn-delete {
+  background: #dc3545;
+}
+
+.btn-edit:hover {
+  background: #e0a800;
+}
+
+.btn-delete:hover {
+  background: #c82333;
 }
