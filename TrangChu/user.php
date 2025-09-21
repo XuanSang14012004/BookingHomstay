@@ -30,10 +30,22 @@ $conn->close();
             <li><a href="#feedback">Đánh giá</a></li>
             <li><a href="../TrangChu/homestay.php">Danh sách các HomeStay</a></li>
              <li><a href="login.php">Đăng nhập</a></li>
-             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
              <ul class="menu">
              <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
           </ul>
+        </ul>
+        <ul class="profile">
+        <li> 
+          <a href="#"><i class="fa-solid fa-user"></i></a>
+          <!-- Hộp thông tin cá nhân -->
+              <div class="profile-info">
+              <img src="../images/7.webp" alt="Avatar">
+              <h3>Nguyễn Văn A</h3>
+              <p><b>Email: nguyenvana@example.com</b></p>
+              <p><a href="profile.php">Thông tin cá nhân </a></p>
+              <p> <a href="#">Đăng Xuất </a></p>
+              </div>
+        </li>
         </ul>
     </div>
     <!-- Video + Sidebar -->
