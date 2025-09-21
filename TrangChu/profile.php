@@ -16,11 +16,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="../CSS/style_user.css?v=6">
-=======
-    <link rel="stylesheet" href="../CSS/style_user.css?v=4.0">
->>>>>>> 68a2dc10f5c119f0bba44b4dbc411b9d6994c0c0
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <script src="../JS/JS_TRANGCHU.js"></script>
 </head>

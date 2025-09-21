@@ -21,7 +21,6 @@ $conn->close();
 </head>
 <body>
     <!-- Thanh menu -->
-<<<<<<< HEAD
    <div class="header-top">
   <ul>
     <li><a href="user.php">Trang chủ</a></li>
@@ -55,35 +54,6 @@ $conn->close();
     <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a></li>
   </ul>
 </div>
-
-=======
-    <div class="header-top">
-        <ul>
-            <li><a href="user.php">Trang chủ</a></li>
-            <li><a href="about.php">Về chúng tôi</a></li>
-            <li><a href="contact.html">&#9742;Liên hệ</a></li>
-            <li><a href="#feedback">Đánh giá</a></li>
-            <li><a href="../TrangChu/homestay.php">Danh sách các HomeStay</a></li>
-             <li><a href="login.php">Đăng nhập</a></li>
-             <ul class="menu">
-             <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
-          </ul>
-        </ul>
-        <ul class="profile">
-        <li> 
-          <a href="#"><i class="fa-solid fa-user"></i></a>
-          <!-- Hộp thông tin cá nhân -->
-              <div class="profile-info">
-              <img src="../images/7.webp" alt="Avatar">
-              <h3>Nguyễn Văn A</h3>
-              <p><b>Email: nguyenvana@example.com</b></p>
-              <p><a href="profile.php">Thông tin cá nhân </a></p>
-              <p> <a href="#">Đăng Xuất </a></p>
-              </div>
-        </li>
-        </ul>
-    </div>
->>>>>>> 68a2dc10f5c119f0bba44b4dbc411b9d6994c0c0
     <!-- Video + Sidebar -->
     <section>
   <div class="video-container slideshow">
