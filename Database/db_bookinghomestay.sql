@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2025 at 05:15 AM
+-- Generation Time: Sep 22, 2025 at 01:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,6 +115,39 @@ INSERT INTO `db_danhgia` (`madanhgia`, `makhachhang`, `maphong`, `tieude`, `noid
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `db_feedback`
+--
+
+CREATE TABLE `db_feedback` (
+  `maphanhoi` varchar(255) NOT NULL,
+  `makhachhang` varchar(255) NOT NULL,
+  `tenkhachhang` varchar(255) NOT NULL,
+  `tieude` varchar(255) NOT NULL,
+  `noidung` int(255) NOT NULL,
+  `ngaygui` date NOT NULL,
+  `trangthai` varchar(255) NOT NULL,
+  `traloi` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `db_feedback`
+--
+
+INSERT INTO `db_feedback` (`maphanhoi`, `makhachhang`, `tenkhachhang`, `tieude`, `noidung`, `ngaygui`, `trangthai`, `traloi`) VALUES
+('PH_001', 'KH001', 'Nguyễn Văn An', 'Vấn đề Wifi', 0, '2024-10-23', 'Đã phản hồi', 'Chào anh/chị, chúng tôi rất tiếc về sự bất tiện này. Chúng tôi đã liên hệ với bộ phận kỹ thuật để kiểm tra và khắc phục ngay lập tức.'),
+('PH_002', 'KH002', 'Trần Thị Bình', 'Thiếu chăn', 0, '2024-11-07', 'Đã phản hồi', 'Chào anh/chị, chúng tôi đã yêu cầu nhân viên mang thêm chăn lên phòng. Cảm ơn phản hồi kịp thời của bạn.'),
+('PH_003', 'KH003', 'Lê Văn Cường', 'Dịch vụ tốt', 0, '2024-12-12', 'Đã phản hồi', 'Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi. Chúng tôi sẽ truyền đạt lời khen này đến đội ngũ nhân viên.'),
+('PH_004', 'KH004', 'Phạm Thị Dung', 'Bồn tắm bị tắc', 0, '2024-10-28', 'Chờ xử lí', 'Vui lòng chờ phản hồi từ chủ Homestay'),
+('PH_005', 'KH005', 'Hoàng Văn Giang', 'Phòng thiếu đồ', 0, '2024-11-18', 'Đã phản hồi', 'Chúng tôi xin lỗi về sự thiếu sót này và đã bổ sung khăn tắm cho phòng của bạn.'),
+('PH_006', 'KH006', 'Đỗ Thị Hương', 'Hủy phòng', 0, '2024-12-01', 'Đã phản hồi', 'Chúng tôi đã hỗ trợ hủy đơn đặt phòng của bạn. Vui lòng kiểm tra email để biết chi tiết về chính sách hoàn tiền.'),
+('PH_007', 'KH007', 'Vũ Văn Khang', 'Dịch vụ giặt ủi', 0, '2024-11-21', 'Chờ xử lí', 'Vui lòng chờ phản hồi từ chủ Homestay'),
+('PH_008', 'KH008', 'Bùi Thị Lan', 'Tiếng ồn ban đêm', 0, '2024-12-28', 'Đã phản hồi', 'Chúng tôi rất tiếc về sự bất tiện này. Chúng tôi sẽ có biện pháp để giảm thiểu tiếng ồn và đảm bảo sự thoải mái cho khách hàng.'),
+('PH_009', 'KH009', 'Lý Văn Minh', 'Hài lòng với dịch vụ', 0, '2024-11-05', 'Đã phản hồi', 'Chúng tôi rất vui khi bạn hài lòng với dịch vụ. Hy vọng được đón tiếp bạn lần tới.'),
+('PH_010', 'KH010', 'Ngô Thị Oanh', 'Vấn đề vệ sinh', 0, '2024-11-25', 'Chờ xử lí', 'Vui lòng chờ phản hồi từ chủ Homestay');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `db_homestay`
 --
 
@@ -194,6 +227,7 @@ CREATE TABLE `db_phong` (
   `maphong` varchar(10) NOT NULL,
   `tenphong` varchar(255) NOT NULL,
   `loaiphong` varchar(255) NOT NULL,
+  `tenhomestay` varchar(255) NOT NULL,
   `mota` varchar(255) NOT NULL,
   `succhua` int(10) NOT NULL,
   `trangthai` varchar(255) NOT NULL,
@@ -205,17 +239,17 @@ CREATE TABLE `db_phong` (
 -- Dumping data for table `db_phong`
 --
 
-INSERT INTO `db_phong` (`maphong`, `tenphong`, `loaiphong`, `mota`, `succhua`, `trangthai`, `gia`, `hinhanh`) VALUES
-('P_01', 'Phòng Đôi View Biển', 'Deluxe', 'Phòng rộng rãi với ban công hướng ra biển, đầy đủ tiện nghi, phù hợp cho cặp đôi.', 2, 'Đang trống', 1200000, 'https://example.com/images/phong-doi-bien-1.jpg, https://example.com/images/phong-doi-bien-2.jpg'),
-('P_02', 'Phòng Gia Đình', 'Standard', 'Phòng lớn có 2 giường đôi, phù hợp cho gia đình hoặc nhóm bạn.', 4, 'Đã đặt', 1500000, 'https://example.com/images/phong-gia-dinh-1.jpg, https://example.com/images/phong-gia-dinh-2.jpg'),
-('P_03', 'Phòng Đơn Hướng Vườn', 'Standard', 'Phòng nhỏ gọn, yên tĩnh, có cửa sổ nhìn ra khu vườn.', 1, 'Đang trống', 800000, 'https://example.com/images/phong-don-vuon-1.jpg'),
-('P_04', 'Suite Tầm Nhìn Thành Phố', 'VIP', 'Phòng suite cao cấp, có phòng khách riêng, tầm nhìn toàn cảnh thành phố.', 2, 'Đang dọn dẹp', 2500000, 'https://example.com/images/phong-suite-1.jpg, https://example.com/images/phong-suite-2.jpg'),
-('P_05', 'Bungalow Bể Bơi Riêng', 'VIP', 'Bungalow độc lập với bể bơi riêng, không gian riêng tư và sang trọng.', 2, 'Đang trống', 3000000, 'https://example.com/images/bungalow-be-boi-1.jpg'),
-('P_06', 'Phòng Dorm Thập', 'Standard', 'Phòng tập thể với giường tầng, phù hợp cho khách du lịch bụi.', 8, 'Đã đặt', 250000, 'https://example.com/images/phong-dorm-1.jpg'),
-('P_07', 'Phòng Ba Người', 'Standard', 'Phòng có một giường đôi và một giường đơn, phù hợp cho nhóm 3 người.', 3, 'Đang trống', 1000000, 'https://example.com/images/phong-ba-nguoi-1.jpg'),
-('P_08', 'Phòng Deluxe Sân Thượng', 'Deluxe', 'Phòng có sân thượng riêng, lý tưởng để thư giãn và ngắm sao.', 2, 'Đã đặt', 1800000, 'https://example.com/images/phong-deluxe-san-thuong-1.jpg'),
-('P_09', 'Căn Hộ Một Phòng Ngủ', 'Standard', 'Căn hộ đầy đủ tiện nghi với bếp, phòng khách, thích hợp cho lưu trú dài ngày.', 2, 'Đang trống', 1600000, 'https://example.com/images/can-ho-mot-phong-ngu-1.jpg, https://example.com/images/can-ho-mot-phong-ngu-2.jpg'),
-('P_10', 'Villa Tổng Thống', 'VIP', 'Villa có nhiều phòng ngủ, phòng khách rộng, bể bơi và khu vực ăn uống riêng.', 10, 'Đang bảo trì', 10000000, 'https://example.com/images/villa-tong-thong-1.jpg, https://example.com/images/villa-tong-thong-2.jpg');
+INSERT INTO `db_phong` (`maphong`, `tenphong`, `loaiphong`, `tenhomestay`, `mota`, `succhua`, `trangthai`, `gia`, `hinhanh`) VALUES
+('P_01', 'Phòng Đôi View Biển', 'Deluxe', 'Nhà của Bố', 'Phòng rộng rãi với ban công hướng ra biển, đầy đủ tiện nghi, phù hợp cho cặp đôi.', 2, 'Đang trống', 1200000, 'https://example.com/images/phong-doi-bien-1.jpg, https://example.com/images/phong-doi-bien-2.jpg'),
+('P_02', 'Phòng Gia Đình', 'Standard', 'Gác Mơ Đà Lạt', 'Phòng lớn có 2 giường đôi, phù hợp cho gia đình hoặc nhóm bạn.', 4, 'Đã đặt', 1500000, 'https://example.com/images/phong-gia-dinh-1.jpg, https://example.com/images/phong-gia-dinh-2.jpg'),
+('P_03', 'Phòng Đơn Hướng Vườn', 'Standard', 'Ngôi Nhà Biển', 'Phòng nhỏ gọn, yên tĩnh, có cửa sổ nhìn ra khu vườn.', 1, 'Đang trống', 800000, 'https://example.com/images/phong-don-vuon-1.jpg'),
+('P_04', 'Suite Tầm Nhìn Thành Phố', 'VIP', 'Bungalow Vườn Xanh', 'Phòng suite cao cấp, có phòng khách riêng, tầm nhìn toàn cảnh thành phố.', 2, 'Đang dọn dẹp', 2500000, 'https://example.com/images/phong-suite-1.jpg, https://example.com/images/phong-suite-2.jpg'),
+('P_05', 'Bungalow Bể Bơi Riêng', 'VIP', 'Sun View Villa', 'Bungalow độc lập với bể bơi riêng, không gian riêng tư và sang trọng.', 2, 'Đang trống', 3000000, 'https://example.com/images/bungalow-be-boi-1.jpg'),
+('P_06', 'Phòng Dorm Thập', 'Standard', 'The Forest House', 'Phòng tập thể với giường tầng, phù hợp cho khách du lịch bụi.', 8, 'Đã đặt', 250000, 'https://example.com/images/phong-dorm-1.jpg'),
+('P_07', 'Phòng Ba Người', 'Standard', 'Urban Escape', 'Phòng có một giường đôi và một giường đơn, phù hợp cho nhóm 3 người.', 3, 'Đang trống', 1000000, 'https://example.com/images/phong-ba-nguoi-1.jpg'),
+('P_08', 'Phòng Deluxe Sân Thượng', 'Deluxe', 'Tâm An Homestay', 'Phòng có sân thượng riêng, lý tưởng để thư giãn và ngắm sao.', 2, 'Đã đặt', 1800000, 'https://example.com/images/phong-deluxe-san-thuong-1.jpg'),
+('P_09', 'Căn Hộ Một Phòng Ngủ', 'Standard', 'Tropical Nest', 'Căn hộ đầy đủ tiện nghi với bếp, phòng khách, thích hợp cho lưu trú dài ngày.', 2, 'Đang trống', 1600000, 'https://example.com/images/can-ho-mot-phong-ngu-1.jpg, https://example.com/images/can-ho-mot-phong-ngu-2.jpg'),
+('P_10', 'Villa Tổng Thống', 'VIP', 'Hana\'s Tiny House', 'Villa có nhiều phòng ngủ, phòng khách rộng, bể bơi và khu vực ăn uống riêng.', 10, 'Đang bảo trì', 10000000, 'https://example.com/images/villa-tong-thong-1.jpg, https://example.com/images/villa-tong-thong-2.jpg');
 
 -- --------------------------------------------------------
 
