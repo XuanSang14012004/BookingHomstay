@@ -118,7 +118,7 @@
             document.getElementById('homestayId').value = '';
         }
         
-     // TODO: Load dữ liệu homestay theo id để sửa (hiện tại là mẫu tĩnh)
+     // TODO: Load dữ liệu homestay theo id để sửa 
         
         function showEditHomestayForm(id) {
     fetch("homestay_action.php?id=" + id)
