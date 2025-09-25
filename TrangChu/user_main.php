@@ -1,14 +1,12 @@
 <?php
-include '../db.php';
+include '../config/db.php';
 
-// Lấy danh sách homestay còn phòng
-$sql = "SELECT id, name, price, guests FROM homestays WHERE status='còn phòng' LIMIT 3";
+$sql = "SELECT * FROM db_homestay";
 $result = $conn->query($sql);
-$homestays = [];
-while($row = $result->fetch_assoc()){
-    $homestays[] = $row;
+
+if(!$result){
+    die("Lỗi truy vấn: " . $conn->error);
 }
-$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,19 +14,19 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking HomeStay</title>
-    <link rel="stylesheet" href="../CSS/style_user.css?v=6">
+    <link rel="stylesheet" href="../CSS/style_user.css?v=7">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
     <!-- Thanh menu -->
    <div class="header-top">
   <ul>
-    <li><a href="user.php">Trang chủ</a></li>
+    <li><a href="../TrangChu/user_main.php">Trang chủ</a></li>
     <li><a href="about.php">Về chúng tôi</a></li>
     <li><a href="contact.html">&#9742; Liên hệ</a></li>
     <li><a href="#feedback">Đánh giá</a></li>
-    <li><a href="../TrangChu/homestay.php">Danh sách các HomeStay</a></li>
-    <li><a href="login.php">Đăng nhập</a></li>
+    <li><a href="../TrangChu/user_homestay.php">Danh sách các HomeStay</a></li>
+    <li><a href="../pages/login/login.php">Đăng nhập</a></li>
 
     <!-- User -->
     <li class="user-menu">
@@ -165,251 +163,35 @@ $conn->close();
 
   <div class="homestay-container">
     <div class="homestay-list">
-      <!-- 16 Homestay Card -->
-      <div class="homestay-card">
-        <img src="../images/BV1.jpg" alt="Homestay 1">
-        <div class="info">
-          <h3>Mely Farm</h3>
-          <p class="info">Địa điểm:  <b style="color:green">Ba Vì</b></p>
-          <p class="info">Số phòng:5</p>
-          <p class="info">Loại phòng: Deluxe</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 3.000.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=1" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/BV2.jpg" alt="Homestay 2">
-        <div class="info">
-          <h3>Family Homestay</h3>
-          <p class="info">Địa điểm:  <b style="color:green">Ba Vì</b></p>
-          <p class="info">Số phòng: 7</p>
-          <p class="info">Loại phòng: Deluxe</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 2.500.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=2" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/BV3.jpg" alt="Homestay 3">
-        <div class="info">
-          <h3>Melia Bavi Mountain Retreat</h3>
-          <p class="info">Địa điểm:  <b style="color:green">Sóc Sơn</b></p>
-         <p class="info">Số phòng: 3</p>
-          <p class="info">Loại phòng: Deluxe</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 14:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 2.700.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=3" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/BV4.jpg" alt="Homestay 4">
-        <div class="info">
-          <h3>BaVi Padme </h3>
-          <p class="info">Địa điểm:  <b style="color:green">Tam Đảo</b></p>
-           <p class="info">Số phòng: 4</p>
-          <p class="info">Loại phòng: Family</p>
-          <p class="info">Tình trạng: <b style="color:red">Đã đặt</b></p>
-          <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
-          <p class="price">Giá: 2.000.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐⭐</div>
-         <a href="../PAY/booking.php?id=4" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/mcc.webp" alt="Homestay 5">
-        <div class="info">
-          <h3>Phoenix Mộc Châu Bungalow</h3>
-          <p class="info">Địa điểm:  <b style="color:green">Mộc Châu</b></p>
-          <p class="info">Số phòng: 2</p>
-          <p class="info">Loại phòng: Family</p>
-          <p class="info">Tình trạng: <b style="color:red">Đã đặt</b></p>
-          <p class="info">Nhận phòng: 13:00 | Trả phòng: 11:00</p>
-          <p class="price">Giá: 1.500.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=5" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/mcc1.webp" alt="Homestay 6">
-        <div class="info">
-          <h3>Mộc Châu Eco-garden</h3>
-          <p class="info">Địa điểm:  <b style="color:green">Mộc Châu</b></p>
-          <p class="info">Số phòng:3</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 1.500.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=6" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/MC3.webp" alt="Homestay 7">
-        <div class="info">
-          <h3>Mama’s House</h3>
-          <p class="info">Địa điểm: <b style="color:green">Ba Vì</b></p>
-          <p class="info">Số phòng:3</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 1.500.000đ / đêm</p> 
-          <div class="stars">⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=7" class="btn">Đặt phòng</a>
-        </div> 
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/MC4.webp" alt="Homestay 8">
-        <div class="info">
-          <h3>Mộc Homestay</h3>
-          <p class="info">Địa điểm: <b style="color:green">Sóc Sơn</b></p>
-          <p class="info">Số phòng:4</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 1.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=8" class="btn">Đặt phòng</a>
-        </div> 
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/SS1.jpg" alt="Homestay 9">
-        <div class="info">
-          <h3>Amaya Home</h3>
-<p class="info">Địa điểm: <b style="color:green">Tam Đảo</b></p>
-          <p class="info">Số phòng:7</p>
-          <p class="info">Loại phòng: Family</p>
-          <p class="info">Tình trạng: <b style="color:green">Đã đặt</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 1.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=2" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/SS2.jpg" alt="Homestay 10">
-        <div class="info">
-          <h3>Cerf Volant Soc Son Resort</h3>
-          <p class="info">Địa điểm: <b style="color:green">Tam Đảo</b></p>
-          <p class="info">Số phòng:5</p>
-          <p class="info">Loại phòng: Deluxe</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 1.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=3" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/SS3.jpg" alt="Homestay 11">
-        <div class="info">
-          <h3>De'bay Retreat</h3>
-          <p class="info">Địa điểm: <b style="color:green">Mộc Châu</b></p>
-          <p class="info">Số phòng:6</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=11" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/SS5.jpg" alt="Homestay 12">
-        <div class="info">
-          <h3>Amaya Retreat</h3>
-          <p class="info">Địa điểm: <b style="color:green">Sóc Sơn</b></p>
-         <p class="info">Số phòng:8</p>
-          <p class="info">Loại phòng: Family</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=12" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/TD1.jpg" alt="Homestay 13">
-        <div class="info">
-          <h3>Dream House</h3>
-          <p class="info">Địa điểm: <b style="color:green">Ba Vì</b></p>
-          <p class="info">Số phòng:6</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-<p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=13" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/TD2.jpg" alt="Homestay 14">
-        <div class="info">
-          <h3>Le Bleu Floating Cloud</h3>
-          <p class="info">Địa điểm: <b style="color:green">Tam Đảo</b></p>
-          <p class="info">Số phòng:6</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=14" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/TD3.jpg" alt="Homestay 15">
-        <div class="info">
-          <h3>Up In The Air Homestay</h3>
-          <p class="info">Địa điểm: <b style="color:green">Tam Đảo</b></p>
-          <p class="info">Số phòng:6</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=15" class="btn">Đặt phòng</a>
-        </div>
-      </div>
-
-      <div class="homestay-card">
-        <img src="../images/TD4.jpg" alt="Homestay 16">
-        <div class="info">
-          <h3>Cloudy Garden</h3>
-          <p class="info">Địa điểm: <b style="color:green">Sóc Sơn</b></p>
-          <p class="info">Số phòng:6</p>
-          <p class="info">Loại phòng: Standard</p>
-          <p class="info">Tình trạng: <b style="color:green">Còn trống</b></p>
-          <p class="info">Nhận phòng: 15:00 | Trả phòng: 12:00</p>
-          <p class="price">Giá: 5.000.000đ / đêm</p>
-          <div class="stars">⭐⭐⭐⭐</div>
-          <a href="../PAY/booking.php?id=16" class="btn">Đặt phòng</a>
-        </div>
-      </div>
+      <?php if ($result->num_rows > 0): ?>
+        <?php while($row = $result->fetch_assoc()): ?>
+          <div class="homestay-card">
+            <img src="<?php echo htmlspecialchars($row['hinhanh']); ?>" alt="<?php echo htmlspecialchars($row['tenhomestay']); ?>">
+            <div class="info">
+              <h3><?php echo htmlspecialchars($row['tenhomestay']); ?></h3>
+              <p class="info">Địa điểm: <b style="color:green"><?php echo htmlspecialchars($row['diachi']); ?></b></p>
+              <p class="info">Số phòng: <?php echo intval($row['sophong']); ?></p>
+              <p class="info">Loại phòng: <?php echo htmlspecialchars($row['loaiphong']); ?></p>
+              <p class="info">Tình trạng: 
+                <b style="color:<?php echo ($row['trangthai'] == 'Còn trống') ? 'green' : 'red'; ?>">
+                  <?php echo htmlspecialchars($row['trangthai']); ?>
+                </b>
+              </p>
+              <p class="price">Giá: <?php echo number_format($row['gia'], 0, ',', '.'); ?>đ / đêm</p>
+              <div class="stars"><?php echo str_repeat('⭐', intval($row['sosao'])); ?></div>
+           <a href="../PAY/user_booking.php?mahomestay=<?php echo $row['mahomestay']; ?>" class="btn">Đặt phòng</a>
+            </div>
+          </div>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <p>Chưa có homestay nào.</p>
+      <?php endif; ?>
     </div>
   </div>
 
-  <a href="homestay.php" class="show-more">Xem đầy đủ các HomeStay</a>
+  <a href="../TrangChu/user_homestay.php" class="show-more">Xem đầy đủ các HomeStay</a>
 </section>
+
 <!---------------------------------------------Giảm giá-------------------------------------------------------------------------->
          <!-- ƯU ĐÃI / DEALS -->
 <section class="deals">
@@ -586,6 +368,6 @@ $conn->close();
     <p>© 2025 BookingHomeStay. All rights reserved.</p>
   </div>
 </footer>
-<script src="../JS/JS_TRANGCHU.js?v=6.1"></script>
+<script src="../JS/JS_TRANGCHU.js?v=7"></script>
 </body>
 </html>
