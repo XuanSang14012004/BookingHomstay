@@ -9,10 +9,10 @@ function createMomoPayment($bookingId, $amount) {
     $orderId = "BOOK{$bookingId}_" . time();
     $orderInfo = "Thanh toán đặt phòng homestay #{$bookingId}";
 
-    $redirectUrl = "http://localhost/BookingHomstay/TrangChu/user.php"; 
-    $ipnUrl      = "http://localhost/booking/notify_momo.php"; 
-    //  $redirectUrl = "https://abcd-1234.ngrok-free.app/booking/return_momo.php";
-    //  $ipnUrl      = "https://abcd-1234.ngrok-free.app/booking/notify_momo.php";
+    // $redirectUrl = "http://localhost/BookingHomstay/PLACE/history.php"; 
+    // $ipnUrl      = "http://localhost/booking/notify_momo.php"; 
+      $redirectUrl = "http://localhost/BookingHomstay/PAY/return_momo.php";
+      $ipnUrl      = "http://localhost/BookingHomstay/PAY/notify_momo.php";
 
 
     $requestId   = time() . "";

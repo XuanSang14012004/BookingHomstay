@@ -1,20 +1,21 @@
-<!-- <?php
-include '../db.php';
+<?php
+include '../db.php'; // Kết nối CSDL
 
-$orderId = intval($_GET['orderId'] ?? 0);
-$resultCode = $_GET['resultCode'] ?? '';
-$amount = $_GET['amount'] ?? '';
+// MoMo sẽ trả về các tham số qua GET hoặc POST
+$booking_id = $_GET['orderId'] ?? null;
+$resultCode = $_GET['resultCode'] ?? null;
 
-if ($resultCode === '0' && $orderId > 0) {
+if ($booking_id && $resultCode == "0") { // 0 = Thanh toán thành công
     $sql = "UPDATE bookings SET status='paid' WHERE id=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $orderId);
-    $stmt->execute();
-
-   
-    echo "❌ Thanh toán MoMo thất bại. Mã trả về: $resultCode";
+    $stmt->bind_param("i", $booking_id);
+    if ($stmt->execute()) {
+        // Sau khi update thành công thì chuyển về history
+        header("Location: ../PLACE/history.php?msg=success");
+        exit;
+    }
 } else {
-    
-    echo "✅ Thanh toán MoMo thành công! Đơn hàng #$orderId, Số tiền: " . number_format(intval($amount),0,",",".") . "đ";
-    
-} 
+    header("Location: ../PLACE/history.php?msg=fail");
+    exit;
+}
+?>
