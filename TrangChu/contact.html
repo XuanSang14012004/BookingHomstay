@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liên hệ</title>
+<link rel="stylesheet" href="../CSS/style_user.css?v=4.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+     <div class="header-top">
+        <ul>
+            <li><a href="../TrangChu/user_main.php">Trang chủ</a></li>
+            <li><a href="../TrangChu/about.php">Về chúng tôi</a></li>
+            <li><a href="../TrangChu/contact.html">&#9742;Liên hệ</a></li>
+            <li><a href="##review">Đánh giá</a></li>
+            <li><a href="../PLACE/detail_place.php">Danh sách các HomeStay</a></li>
+             <li><a href="../pages/login/login.php">Đăng nhập</a></li>
+             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
+             <li><a><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+    </div>
+<div class="container-review">
+    <h2>Liên hệ với chúng tôi</h2>
+    <p class="description">Hãy liên hệ qua các kênh nhanh hoặc điền form để gửi thông tin trực tiếp đến chúng tôi.</p>
+
+    <!-- Thông tin nhanh -->
+    <div class="contact-info">
+        <div class="info-item">
+            <p><strong>Địa chỉ:</strong>Đại học Mỏ-Địa Chất,phường Đức Thắng,Hà Nội</p>
+        </div>
+        <div class="info-item">
+            <p><strong>Điện thoại:</strong>0328947360</p>
+        </div>
+        <div class="info-item">
+            <p><strong>Email:</strong> <a href="mailto:contact@homestay.com">khuctruonggiang58@gmail.com</a></p>
+        </div>
+    </div>
+
+    <!-- Mạng xã hội -->
+    <div class="social-links-contact">
+        <a href="https://zalo.me/0123456789" target="_blank"><i class="fa-brands fa-zalo"></i></a>
+        <a href="https://m.me/yourpage" target="_blank"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://web.facebook.com/?_rdc=1&_rdr#" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://www.instagram.com/yourpage" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="mailto:contact@homestay.com"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+
+    <!-- Form liên hệ -->
+    <form action="process_contact.php" method="POST" class="form">
+        <label for="name">Họ và tên:</label>
+        <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+
+        <label for="phone">Số điện thoại:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required pattern="[0-9]{9,12}">
+
+        <label for="subject">Tiêu đề:</label>
+        <input type="text" id="subject" name="subject" placeholder="Tiêu đề nội dung liên hệ" required>
+
+        <label for="message">Nội dung:</label>
+        <textarea id="message" name="message" rows="6" placeholder="Nhập nội dung liên hệ" required></textarea>
+
+        <button type="submit">Gửi liên hệ</button>
+    </form>
+</div>
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Cột 1: Logo + giới thiệu -->
+    <div class="footer-col">
+      <h2>BookingHomeStay</h2>
+      <p>Đặt homestay nhanh chóng, dễ dàng và tiện lợi.  
+      Mang đến trải nghiệm nghỉ dưỡng tuyệt vời cho bạn.</p>
+    </div>
+
+    <!-- Cột 2: Thông tin liên hệ -->
+    <div class="footer-col">
+      <h3>Liên hệ</h3>
+      <p>📍 Hà Nội, Việt Nam</p>
+      <p>📞 0123 456 789</p>
+      <p>✉️ bookinghomestay@gmail.com</p>
+    </div>
+
+    <!-- Cột 3: Mạng xã hội -->
+    <div class="footer-col">
+      <h3>Kết nối với chúng tôi</h3>
+      <div class="social-links">
+        <a href="#"><img src="../images/FB.jpg" alt="Facebook"></a>
+        <a href="#"><img src="../images/IG.jpg" alt="Instagram"></a>
+        <a href="#"><img src="../images/zalo.jpg" alt="Zalo"></a>
+        <a href="#"><img src="../images/MES.jpg" alt="TikTok"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 BookingHomeStay. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>
