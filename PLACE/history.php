@@ -19,10 +19,12 @@ $result = $conn->query($sql);
 <body>
 <div class="header-top">
   <ul>
-    <li><a href="../TrangChu/user.php">Trang chủ</a></li>
-    <li><a href="about.php">Về chúng tôi</a></li>
-    <li><a href="contact.html">&#9742;Liên hệ</a></li>
-    <li><a href="#review">Đánh giá</a></li>
+
+    <li><a href="../TrangChu/user_main.php">Trang chủ</a></li>
+    <li><a href="../TrangChu/about.php">Về chúng tôi</a></li>
+    <li><a href="../TrangChu/contact.html">&#9742;Liên hệ</a></li>
+    <li><a href="##review">Đánh giá</a></li>
+
     <li><a href="#explore-location">Danh sách các HomeStay</a></li>
     <li><a href="login.php">Đăng nhập</a></li>
     <li><a href="#"><i class="fa-solid fa-user"></i></a></li>

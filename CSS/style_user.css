@@ -316,27 +316,29 @@ ul {
 }
 .homestay-container {
   overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
 .homestay-list {
   display: flex;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
 }
 
 .homestay-card {
-  min-width: 250px;
-  margin: 10px;
+  flex: 0 0 260px; /* Cố định chiều rộng card */
+  margin: 0 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
-  overflow: hidden;
   background: #fff;
-  flex-shrink: 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 .homestay-card img {
   width: 100%;
-  height: 160px;
+  height: 180px;
   object-fit: cover;
 }
 
@@ -348,14 +350,21 @@ ul {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
-  padding: 10px;
+  padding: 12px;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
   z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.arrow:hover {
+  background: #ff4b2b;
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
 }
 
 .arrow.left { 
@@ -364,13 +373,29 @@ ul {
 .arrow.right { 
   right: 10px; 
 }
-.btn{
-  color:white;
-  background-color:red;
-  margin-left: 35%;
-  border: 10px;
-  border-radius: 5px;
-  padding:11px;
+
+.btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #e63946, #d62839);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.25);
 }
 .show-more {
   display: inline-block;
@@ -1201,123 +1226,188 @@ article img {
 /* ---------------------------------------------THƯ MỤC PLACE--------------------------------------------------------------------------- */
 /* --------------------------------------CHI TIẾT CÁC PHÒNG(FILE DETAIL_PLACE.PHP)------------------------------------------- */
 .container-place {
-      max-width: 1100px;
-      margin: 30px auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-  .container-place  h1 {
-      font-size: 26px;
-      margin-bottom: 10px;
-      color: #333;
-    }
-    .address {
-      color: #666;
-      margin-bottom: 15px;
-    }
-    .description {
-      margin-bottom: 20px;
-      font-size: 15px;
-      color: #444;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .gallery img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .utilities {
-      margin: 20px 0;
-    }
-    .utilities h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #444;
-    }
-    .utilities ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .utilities li {
-      font-size: 15px;
-      color: #333;
-    }
-    .utilities li i {
-      margin-right: 6px;
-      color: #2a8cff;
-    }
-    .checkin-checkout {
-      margin: 20px 0;
-      padding: 15px;
-      background: #f2f6ff;
-      border-radius: 8px;
-    }
-    .checkin-checkout h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #444;
-    }
-    .checkin-checkout p {
-      font-size: 15px;
-      margin: 5px 0;
-      color: #333;
-    }
-    .checkin-checkout i {
-      margin-right: 8px;
-      color: #2a8cff;
-    }
-    .reviews {
-      margin: 25px 0;
-    }
-    .reviews h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #444;
-    }
-    .rating {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #e6b800;
-    }
-    .review {
-      background: #f8f8f8;
-      padding: 12px 15px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
-    .review strong {
-      color: #333;
-    }
-    .price {
-      font-size: 22px;
-      font-weight: bold;
-      color: #e63946;
-      margin: 15px 0;
-    }
-    .btn-price {
-      display: inline-block;
-      padding: 12px 25px;
-      background: #2a8cff;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .btn-price:hover {
-      background: #1d6ed8;
-    } 
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container-place h1 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #222;
+  font-weight: bold;
+}
+
+.address {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.description {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Gallery */
+.gallery {
+  width: 100%;       /* Chiếm toàn bộ chiều ngang container */
+  margin-bottom: 25px;
+}
+
+.gallery img {
+  width: 100%;       /* Ảnh chiếm 100% container */
+  height: auto;      /* Giữ tỉ lệ gốc ảnh */
+  object-fit: cover; /* Nếu container cố định chiều cao */
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+
+/* Thông tin */
+.info p {
+  font-size: 15px;
+  color: #333;
+  margin: 6px 0;
+}
+
+.info i {
+  margin-right: 8px;
+  color: #2a8cff;
+}
+
+/* Tiện ích */
+.amenities {
+  margin: 25px 0;
+}
+
+.amenities h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.amenities ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.amenities li {
+  font-size: 15px;
+  color: #444;
+  background: #f7f9fc;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.amenities li:hover {
+  background: #e9f1ff;
+}
+
+.amenities li i {
+  margin-right: 6px;
+  color: #2a8cff;
+}
+
+/* Danh sách phòng */
+.rooms h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.rooms ul {
+  list-style: none;
+  padding: 0;
+}
+
+.rooms li {
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  border-left: 4px solid #2a8cff;
+}
+
+/* Đánh giá */
+.reviews {
+  margin: 30px 0;
+}
+
+.reviews h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.reviews p {
+  font-size: 15px;
+}
+
+.review-item {
+  background: #fafafa;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+}
+
+.review-item strong {
+  color: #222;
+}
+
+.review-item span {
+  font-weight: bold;
+}
+
+.review-item small {
+  color: #777;
+  display: block;
+  margin-top: 6px;
+}
+
+/* Giá & nút đặt phòng */
+.price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #e63946;
+  margin: 20px 0 15px 0;
+}
+
+.btn-price {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #2a8cff;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-price:hover {
+  background: #1d6ed8;
+  transform: translateY(-2px);
+}
 /*--------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -1618,6 +1708,7 @@ h2 {
 }
 
 /* Card homestay */
+/* Card homestay */
 .homestay-deluxe-card {
   border: 1px solid #ccc;
   padding: 15px;
@@ -1626,6 +1717,9 @@ h2 {
   text-align: center;
   background: #fff;
   transition: 0.3s;
+  display: flex;              /* Dùng flex để canh nút */
+  flex-direction: column;     /* Xếp dọc */
+  justify-content: space-between;
 }
 
 .homestay-deluxe-card:hover {
@@ -1666,8 +1760,8 @@ h2 {
   cursor: pointer;
   font-weight: bold;
   transition: background 0.3s, transform 0.2s;
+  margin-top: auto;          /* Đẩy nút xuống đáy */
 }
-
 .btn-booking:hover {
   background: #d32f2f;
   transform: scale(1.05);

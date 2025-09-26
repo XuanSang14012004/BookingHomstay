@@ -1,5 +1,5 @@
 <?php
-include '../db.php'; // kết nối database
+include '../config/db.php'; // kết nối database
 
 // Lấy dữ liệu từ GET
 $location = isset($_GET['location']) ? trim($_GET['location']) : '';
@@ -8,8 +8,9 @@ $price_range = isset($_GET['price_range']) ? $_GET['price_range'] : '';
 $sort_stars = isset($_GET['sort_stars']) ? $_GET['sort_stars'] : '';
 
 // Câu SQL cơ bản
-$sql = "SELECT * FROM homestays WHERE address LIKE ?";
+$sql = "SELECT * FROM db_homestay WHERE diachi LIKE ?";
 $search = "%$location%";
+
 
 // Thêm điều kiện loại phòng
 if (!empty($room_type)) {
@@ -69,12 +70,12 @@ $conn->close();
   <!-- Header -->
    <div class="header-top">
         <ul>
-            <li><a href="../TrangChu/user.php">Trang chủ</a></li>
+            <li><a href="../TrangChu/user_main.php">Trang chủ</a></li>
             <li><a href="../TrangChu/about.php">Về chúng tôi</a></li>
             <li><a href="../TrangChu/contact.html">&#9742;Liên hệ</a></li>
             <li><a href="##review">Đánh giá</a></li>
             <li><a href="#explore-location">Danh sách các HomeStay</a></li>
-             <li><a href="login.php">Đăng nhập</a></li>
+             <li><a href="../pages/login/login.php">Đăng nhập</a></li>
              <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
              <ul class="menu">
              <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
@@ -117,26 +118,26 @@ $conn->close();
   </div>
 
     <!-- Danh sách phòng -->
-   <div class="room-list">
+  <div class="room-list">
   <?php if (!empty($homestays)): ?>
     <?php foreach ($homestays as $h): ?>
       <div class="card">
-        <img src="<?php echo $h['img'] ?? '../ANH/default.jpg'; ?>" alt="<?php echo $h['name'] ?? 'Homestay'; ?>">
+        <img src="<?php echo $h['hinhanh'] ?? '../ANH/default.jpg'; ?>" alt="<?php echo htmlspecialchars($h['tenhomestay'] ?? 'Homestay'); ?>">
         <div class="card-content">
-          <h3><?php echo $h['name']; ?></h3>
-          <p class="info">Loại phòng: <?php echo $h['room_type']; ?></p>
+          <h3><?php echo htmlspecialchars($h['tenhomestay']); ?></h3>
+          <p class="info">Loại phòng: <?php echo htmlspecialchars($h['loaiphong']); ?></p>
           <p class="info">Tình trạng: 
-            <?php if ($h['status'] == 'còn phòng'): ?>
+            <?php if (isset($h['trangthai']) && strtolower($h['trangthai']) === 'còn trống'): ?>
               <b style="color:green">Còn phòng</b>
             <?php else: ?>
               <b style="color:red">Hết phòng</b>
             <?php endif; ?>
           </p>
-          <p class="price">Giá: <?php echo number_format($h['price'], 0, ',', '.'); ?>đ / đêm</p>
-          <div class="stars"><?php echo str_repeat("⭐", (int)($h['rating'] ?? 0)); ?></div>
+          <p class="price">Giá: <?php echo isset($h['gia']) ? number_format($h['gia'], 0, ',', '.') : '0'; ?>đ / đêm</p>
+          <div class="stars"><?php echo isset($h['sosao']) ? str_repeat("⭐", (int)$h['sosao']) : ''; ?></div>
           <div class="btn-group">
-            <a href="detail_place.php?id=<?php echo $h['id']; ?>" class="btn-place btn-detail">Xem chi tiết</a>
-            <a href="../PAY/booking.php?id=<?php echo $h['id']; ?>" class="btn-place btn-book">Đặt phòng</a>
+            <a href="detail_place.php?id=<?php echo urlencode($h['mahomestay']); ?>" class="btn-place btn-detail">Xem chi tiết</a>
+           <a href="../PAY/user_booking.php?mahomestay=<?php echo urlencode($h['mahomestay']); ?>" class="btn-place btn-book">Đặt phòng</a>
           </div>
         </div>
       </div>

@@ -1,9 +1,20 @@
 <?php
-include '../db.php'; // file kết nối CSDL
+include '../config/db.php'; // file kết nối CSDL
 
-// Lấy 16 homestay đầu tiên
-$sql = "SELECT * FROM homestays LIMIT 16";
-$result = $conn->query($sql);
+// Kiểm tra xem có filter theo địa điểm không
+$location = isset($_GET['location']) ? $_GET['location'] : '';
+
+// Nếu có filter thì thêm WHERE
+if($location !== ''){
+    $sql = "SELECT * FROM db_homestay WHERE diachi = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $location);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $sql = "SELECT * FROM db_homestay";
+    $result = $conn->query($sql);
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -17,12 +28,12 @@ $result = $conn->query($sql);
 <body>
    <div class="header-top">
         <ul>
-            <li><a href="user.php">Trang chủ</a></li>
-            <li><a href="about.php">Về chúng tôi</a></li>
-            <li><a href="contact.html">&#9742;Liên hệ</a></li>
+            <li><a href="../TrangChu/user_main.php">Trang chủ</a></li>
+            <li><a href="../TrangChu/about.php">Về chúng tôi</a></li>
+            <li><a href="../TrangChu/contact.html">&#9742;Liên hệ</a></li>
             <li><a href="##review">Đánh giá</a></li>
             <li><a href="#explore-location">Danh sách các HomeStay</a></li>
-             <li><a href="login.php">Đăng nhập</a></li>
+             <li><a href="../pages/login/login.php">Đăng nhập</a></li>
              <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
              <ul class="menu">
              <li><a href="../PLACE/history.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
@@ -58,36 +69,42 @@ $result = $conn->query($sql);
     </div>
 
     <!-- Danh sách homestay -->
-    <div class="list-homestay" id="list-homestay">
-      <?php if ($result && $result->num_rows > 0): ?>
-        <?php while($row = $result->fetch_assoc()): 
-          // Tạo data-* cho filter
-          $star = round($row['rating']); 
-          $star_text = str_repeat("★", $star) . str_repeat("☆", 5-$star);
-          $status = strtolower($row['status']) === 'còn phòng' ? 'còn phòng' : 'hết phòng';
-        ?>
-          <div class="list-homecard-card" 
-              data-star="<?php echo $star . 'sao'; ?>" 
-              data-status="<?php echo $status; ?>" 
-              data-type="<?php echo $row['room_type']; ?>">
-            <img src="<?php echo $row['img']; ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
-            <div class="info">
-              <h4><?php echo htmlspecialchars($row['name']); ?></h4>
-              <div class="star-homestay"><?php echo $star_text; ?></div>
-              <div class="status <?php echo $status === 'còn phòng' ? 'available' : 'full'; ?>">
-                <?php echo ucfirst($status); ?>
-              </div>
-              <span class="room-type"><?php echo $row['room_type']; ?></span>
-              <a href="../PAY/booking.php?id=<?php echo $row['id']; ?>" class="btn-place-homestay btn-book">Đặt phòng</a>
-            </div>
+   <div class="list-homestay" id="list-homestay">
+  <?php if ($result && $result->num_rows > 0): ?>
+    <?php while($row = $result->fetch_assoc()): 
+      // Kiểm tra các giá trị tồn tại
+      $star = isset($row['sosao']) ? round($row['sosao']) : 0;
+      $star_text = str_repeat("★", $star) . str_repeat("☆", 5-$star);
+      $status_raw = isset($row['trangthai']) ? strtolower($row['trangthai']) : 'hết phòng';
+      $status = ($status_raw === 'còn trống') ? 'còn phòng' : 'hết phòng';
+      $img = isset($row['hinhanh']) ? $row['hinhanh'] : '../images/default.jpg';
+      $mahomestay = isset($row['mahomestay']) ? $row['mahomestay'] : '';
+      $loaiphong = isset($row['loaiphong']) ? $row['loaiphong'] : '';
+      $tenhomestay = isset($row['tenhomestay']) ? $row['tenhomestay'] : 'Homestay';
+    ?>
+      <div class="list-homecard-card" 
+           data-star="<?php echo $star . 'sao'; ?>" 
+           data-status="<?php echo $status; ?>" 
+           data-type="<?php echo htmlspecialchars($loaiphong); ?>">
+        <img src="<?php echo htmlspecialchars($img); ?>" alt="<?php echo htmlspecialchars($tenhomestay); ?>">
+        <div class="info">
+          <h4><?php echo htmlspecialchars($tenhomestay); ?></h4>
+          <div class="star-homestay"><?php echo $star_text; ?></div>
+          <div class="status <?php echo $status === 'còn phòng' ? 'available' : 'full'; ?>">
+            <?php echo ucfirst($status); ?>
           </div>
-        <?php endwhile; ?>
-      <?php else: ?>
-        <p>Không có homestay nào.</p>
-      <?php endif; ?>
-    </div>
+          <span class="room-type"><?php echo htmlspecialchars($loaiphong); ?></span>
+         <a href="../PAY/user_booking.php?mahomestay=<?php echo urlencode($mahomestay); ?>" class="btn-place-homestay btn-book">
+    Đặt phòng
+</a>
+        </div>
+      </div>
+    <?php endwhile; ?>
+  <?php else: ?>
+    <p>Không có homestay nào.</p>
+  <?php endif; ?>
+</div>
   </div>
-  
 
   <footer class="footer">
   <div class="footer-container">

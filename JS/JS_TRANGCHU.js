@@ -1,21 +1,37 @@
 
 // JS_TRANGCHU.js
 // JAVASCRIPT CHO TRANG CHỦ => Danh sách các HomeStay
-let currentScroll = 0;
+console.log("✅ JS_TRANGCHU.js đã load");
 
-function scrollHomestay(direction) {
+ let currentIndex = 0;
   const list = document.querySelector('.homestay-list');
-  const cardWidth = document.querySelector('.homestay-card').offsetWidth + 20; // 20 = margin
-  const visibleCards = Math.floor(document.querySelector('.homestay-container').offsetWidth / cardWidth);
+  const cards = document.querySelectorAll('.homestay-card');
+  const cardWidth = cards[0].offsetWidth + 20; // gồm cả margin
+  const totalCards = cards.length;
+  const container = document.querySelector('.homestay-container');
+  const visibleCards = Math.floor(container.offsetWidth / cardWidth);
 
-  currentScroll += direction * cardWidth * visibleCards;
+  function scrollHomestay(direction) {
+    currentIndex += direction;
 
-  const maxScroll = (list.children.length - visibleCards) * cardWidth;
-  if (currentScroll < 0) currentScroll = 0;
-  if (currentScroll > maxScroll) currentScroll = maxScroll;
+    // Nếu sang phải quá → quay lại đầu
+    if (currentIndex > totalCards - visibleCards) {
+      currentIndex = 0;
+    }
 
-  list.style.transform = `translateX(-${currentScroll}px)`;
-}
+    // Nếu sang trái quá → về cuối
+    if (currentIndex < 0) {
+      currentIndex = totalCards - visibleCards;
+    }
+
+    list.style.transform = `translateX(${-currentIndex * cardWidth}px)`;
+  }
+
+  // Resize thì tính lại
+  window.addEventListener('resize', () => {
+    currentIndex = 0;
+    list.style.transform = 'translateX(0)';
+  });
 
 
 // FILE HOMESTAY.PHP(THƯ MỤC TRANG CHỦ)
@@ -123,3 +139,45 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// TÍNH TỔNG TIỀN (FILE USER_BOOKING.PHP)
+document.addEventListener("DOMContentLoaded", function() {
+    const bookingData = document.getElementById("booking-data");
+    if (!bookingData) return; // Chỉ chạy trên user_booking.php
+
+    const pricePerNight = parseInt(bookingData.dataset.price);
+    const discount = parseFloat(bookingData.dataset.discount);
+
+    const checkin = document.querySelector("input[name='checkin_date']");
+    const checkout = document.querySelector("input[name='checkout_date']");
+    const guests = document.querySelector("input[name='guests']");
+    const totalPriceEl = document.getElementById("total-price");
+
+    function calcTotal() {
+        if (!checkin.value || !checkout.value) return;
+        let start = new Date(checkin.value);
+        let end = new Date(checkout.value);
+
+        if (end <= start) {
+            totalPriceEl.textContent = "0";
+            return;
+        }
+
+        let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        if (days < 1) days = 1;
+
+        let total = days * pricePerNight;
+
+        if (discount > 0) {
+            total *= (1 - discount / 100);
+        }
+
+        totalPriceEl.textContent = total.toLocaleString("vi-VN");
+    }
+
+     checkin.addEventListener("change", calcTotal);
+    checkout.addEventListener("change", calcTotal);
+    guests.addEventListener("input", calcTotal);
+
+    // chạy 1 lần khi load trang
+    calcTotal();
+});
