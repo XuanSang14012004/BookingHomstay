@@ -99,7 +99,7 @@ $result = $conn->query($sql);
 </footer>
 
 <script>
-// Hiển thị chi tiết
+// Hiển thị chi tiêt
 // Hiển thị chi tiết
 function showDetail(id) {
   fetch("get_booking_detail.php?id=" + id)
