@@ -22,18 +22,17 @@ if ($action === 'add_payment') {
 
 }
 
-$mathanhtoan = isset($_GET['id']) ? $_GET['id'] : null;
+$payment_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $payment = null;
-if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
-    $result = $conn->query("SELECT * FROM db_thanhtoan WHERE mathanhtoan = '$mathanhtoan'");
+if (($is_edit_form || $is_detail_form) && $payment_id) {
+    $result = $conn->query("SELECT * FROM db_payment WHERE payment_id = '$payment_id'");
     if ($result && $result->num_rows > 0) {
         $payment = mysqli_fetch_assoc($result);
     }
 }
 ?>
 
-<!-------------------------------------------- Giao diện ----------------------------------->
 <div class="form-container" id="payment-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
 <div class="head-title">
     <div class="left">
@@ -79,20 +78,20 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
             <tbody>
                 <tr>
                     <?php
-                    $result = $conn->query("SELECT * FROM db_thanhtoan");
+                    $result = $conn->query("SELECT * FROM db_payment");
                     $i = 1;
                     while ($row = mysqli_fetch_assoc($result)) { ?>
                         <td><?php echo $i++; ?></td>
-                        <td><?php echo $row['mathanhtoan'] ?></td>
-                        <td><?php echo $row['madondatphong'] ?></td>
-                        <td><?php echo $row['hinhthucthanhtoan'] ?></td>
-                        <td><?php echo $row['sotien'] ?></td>
-                        <td><?php echo $row['ngaythanhtoan'] ?></td>
-                        <td><?php echo $row['trangthai'] ?></td>
+                        <td><?php echo $row['payment_id'] ?></td>
+                        <td><?php echo $row['booking_id'] ?></td>
+                        <td><?php echo $row['method'] ?></td>
+                        <td><?php echo $row['payment_price'] ?></td>
+                        <td><?php echo $row['date'] ?></td>
+                        <td><?php echo $row['payment_status'] ?></td>
                         <td class="actions">
-                            <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-detail'></i></button>
-                            <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                            <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-trash'></i></button>
+                            <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-detail'></i></button>
+                            <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                            <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['payment_id']; ?>')"><i class='bx bx-trash'></i></button>
                         </td>
                 </tr>
             <?php } ?>
@@ -102,7 +101,6 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
 </div>
 </div>
 
-<!---------------------------------------------- Thêm --------------------------------------->
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -124,23 +122,23 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=payment" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
             <h2>Thêm Hóa Đơn Mới</h2>
             <form action="../modules/Create/add_function.php" method="POST" enctype="multipart/form-data">
                 <div class="form-section">
                     <h3>Thông tin hóa đơn</h3>
                     <div class="form-group">
-                        <label for="mathanhtoan">Mã thanh toán:</label>
-                        <input type="text" id="mathanhtoan" name="mathanhtoan" required>
+                        <label for="payment_id">Mã thanh toán:</label>
+                        <input type="text" id="payment_id" name="payment_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="madondatphong">Mã đơn đặt phòng:</label>
-                        <input type="text" id="madondatphong" name="madondatphong" required>
+                        <label for="booking_id">Mã đơn đặt phòng:</label>
+                        <input type="text" id="booking_id" name="booking_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="hinhthucthanhtoan">Hình thức thanh toán:</label>
-                        <select id="hinhthucthanhtoan" name="hinhthucthanhtoan">
+                        <label for="method">Hình thức thanh toán:</label>
+                        <select id="method" name="method">
                             <option value="thetindung">Thẻ tín dụng</option>
                             <option value="chuyenkhoannganhang">Chuyển khoản ngân hàng</option>
                             <option value="tienmat">Tiền mặt</option>
@@ -148,16 +146,16 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="sotien">Số tiền (VNĐ):</label>
-                        <input type="number" id="sotien" name="sotien" required>
+                        <label for="payment_price">Số tiền (VNĐ):</label>
+                        <input type="number" id="payment_price" name="payment_price" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaythanhtoan">Ngày thanh toán:</label>
-                        <input type="date" id="ngaythanhtoan" name="ngaythanhtoan" required>
+                        <label for="date">Ngày thanh toán:</label>
+                        <input type="date" id="date" name="date" required>
                     </div>
                     <div class="form-group">
-                        <label for="trangthai">Trạng thái:</label>
-                        <select id="trangthai" name="trangthai">
+                        <label for="payment_status">Trạng thái:</label>
+                        <select id="payment_status" name="payment_status">
                             <option value="dathanhtoan">Đã thanh toán</option>
                             <option value="dangcho">Đang chờ</option>
                             <option value="chuathanhtoan">Chưa thanh toán</option>
@@ -172,7 +170,6 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
     </div>
 </div>
 
-<!-------------------------------------------- Tìm kiếm ----------------------------------->
 <div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
 <div class="head-title">
     <div class="left">
@@ -222,22 +219,22 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
                             $search_query = trim($_GET['content']);
                             $search = "%$search_query%";
 
-                            $sql = "SELECT * FROM db_thanhtoan WHERE mathanhtoan LIKE '$search' OR madondatphong LIKE '$search' OR hinhthucthanhtoan LIKE '$search' OR ngaythanhtoan LIKE '$search' 
-                            OR trangthai LIKE '$search'"; 
+                            $sql = "SELECT * FROM db_payment WHERE payment_id LIKE '$search' OR booking_id LIKE '$search' OR method LIKE '$search' OR date LIKE '$search' 
+                            OR payment_status LIKE '$search'"; 
                             $result = $conn->query($sql);} 
                             $i = 1;
                     while ($row = mysqli_fetch_assoc($result)) { ?>
                         <td><?php echo $i++; ?></td>
-                        <td><?php echo $row['mathanhtoan'] ?></td>
-                        <td><?php echo $row['madondatphong'] ?></td>
-                        <td><?php echo $row['hinhthucthanhtoan'] ?></td>
-                        <td><?php echo $row['sotien'] ?></td>
-                        <td><?php echo $row['ngaythanhtoan'] ?></td>
-                        <td><?php echo $row['trangthai'] ?></td>
+                        <td><?php echo $row['payment_id'] ?></td>
+                        <td><?php echo $row['booking_id'] ?></td>
+                        <td><?php echo $row['method'] ?></td>
+                        <td><?php echo $row['payment_price'] ?></td>
+                        <td><?php echo $row['date'] ?></td>
+                        <td><?php echo $row['payment_status'] ?></td>
                         <td class="actions">
-                            <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-detail'></i></button>
-                            <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                            <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['mathanhtoan']; ?>')"><i class='bx bx-trash'></i></button>
+                            <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-detail'></i></button>
+                            <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                            <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['payment_id']; ?>')"><i class='bx bx-trash'></i></button>
                         </td>
                 </tr>
             <?php } ?>
@@ -247,7 +244,6 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
 </div>
 </div>
 
-<!---------------------------------------------- Sửa --------------------------------------->
 <div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
     <div class="head-title">
@@ -270,62 +266,61 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=payment" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $payment['mathanhtoan']; ?>')"><i class='bx bx-detail'></i>Xem thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $payment['mathanhtoan']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+                <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $payment['payment_id']; ?>')"><i class='bx bx-detail'></i>Xem thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $payment['payment_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
             </div>
         </div>
         <h2>Sửa thông tin hóa đơn</h2>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="mathanhtoan" value="<?php echo $payment['mathanhtoan']; ?>">
+            <input type="hidden" name="payment_id" value="<?php echo $payment['payment_id']; ?>">
                 <div class="form-section">
                     <h3>Thông tin hóa đơn</h3>
                     <div class="form-group">
-                        <label for="mathanhtoan">Mã thanh toán:</label>
-                        <input type="text" id="mathanhtoan" name="mathanhtoan" value="<?php echo $payment['mathanhtoan']; ?>" required>
+                        <label for="payment_id">Mã thanh toán:</label>
+                        <input type="text" id="payment_id" name="payment_id" value="<?php echo $payment['payment_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="madondatphong">Mã đơn đặt phòng:</label>
-                        <input type="text" id="madondatphong" name="madondatphong" value="<?php echo $payment['madondatphong']; ?>" required>
+                        <label for="booking_id">Mã đơn đặt phòng:</label>
+                        <input type="text" id="booking_id" name="booking_id" value="<?php echo $payment['booking_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="hinhthucthanhtoan">Hình thức thanh toán:</label>
-                        <select id="hinhthucthanhtoan" name="hinhthucthanhtoan">
-                            <option value="thetindung" <?php echo ($payment['hinhthucthanhtoan'] == 'thetindung') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
-                            <option value="chuyenkhoannganhang" <?php echo ($payment['hinhthucthanhtoan'] == 'chuyenkhoannganhang') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
-                            <option value="tienmat" <?php echo ($payment['hinhthucthanhtoan'] == 'tienmat') ? 'selected' : ''; ?>>Tiền mặt</option>
-                            <option value="khac" <?php echo ($payment['hinhthucthanhtoan'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
+                        <label for="method">Hình thức thanh toán:</label>
+                        <select id="method" name="method">
+                            <option value="thetindung" <?php echo ($payment['method'] == 'thetindung') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
+                            <option value="chuyenkhoannganhang" <?php echo ($payment['method'] == 'chuyenkhoannganhang') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
+                            <option value="tienmat" <?php echo ($payment['method'] == 'tienmat') ? 'selected' : ''; ?>>Tiền mặt</option>
+                            <option value="khac" <?php echo ($payment['method'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="sotien">Số tiền (VNĐ):</label>
-                        <input type="number" id="sotien" name="sotien" value="<?php echo $payment['sotien']; ?>" required>
+                        <label for="payment_price">Số tiền (VNĐ):</label>
+                        <input type="number" id="payment_price" name="payment_price" value="<?php echo $payment['payment_price']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaythanhtoan">Ngày thanh toán:</label>
-                        <input type="date" id="ngaythanhtoan" name="ngaythanhtoan" value="<?php echo $payment['ngaythanhtoan']; ?>" required>
+                        <label for="date">Ngày thanh toán:</label>
+                        <input type="date" id="date" name="date" value="<?php echo $payment['date']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="trangthai">Trạng thái:</label>
-                        <select id="trangthai" name="trangthai">
-                            <option value="dathanhtoan"<?php echo ($payment['trangthai'] == 'dathanhtoan') ? 'selected' : ''; ?>>Đã thanh toán</option>
-                            <option value="dangcho"<?php echo ($payment['trangthai'] == 'dangcho') ? 'selected' : ''; ?>>Đang chờ</option>
-                            <option value="chuathanhtoan"<?php echo ($payment['trangthai'] == 'chuathanhtoan') ? 'selected' : ''; ?>>Chưa thanh toán</option>
+                        <label for="payment_status">Trạng thái:</label>
+                        <select id="payment_status" name="payment_status">
+                            <option value="dathanhtoan"<?php echo ($payment['payment_status'] == 'dathanhtoan') ? 'selected' : ''; ?>>Đã thanh toán</option>
+                            <option value="dangcho"<?php echo ($payment['payment_status'] == 'dangcho') ? 'selected' : ''; ?>>Đang chờ</option>
+                            <option value="chuathanhtoan"<?php echo ($payment['payment_status'] == 'chuathanhtoan') ? 'selected' : ''; ?>>Chưa thanh toán</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" name="submit_payment" class="edit-btn">Cập nhật thông tin</button>
                     <button type="reset" class="cancel-btn">Hủy</button>
-            </div>
+                </div>
         </form>
     </div>
     <?php } else if ($is_edit_form) { ?>
         <p>Không tìm thấy thông tin hóa đơn để sửa.</p>
     <?php } ?>
 </div>
-<!---------------------------------------------- Chi tiết --------------------------------------->
 <div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
     <div class="head-title">
@@ -348,10 +343,10 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=payment" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $payment['mathanhtoan']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $payment['mathanhtoan']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $payment['payment_id']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $payment['payment_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
             </div>
         </div>
         
@@ -361,27 +356,27 @@ if (($is_edit_form || $is_detail_form) && $mathanhtoan) {
             <div class="detail-section">
                 <h3>Thông tin hóa đơn</h3>
                 <div class="info-group">
-                    <label for="mathanhtoan">Mã thanh toán:</label>
-                    <p><?php echo $payment['mathanhtoan']; ?></p>
+                    <label for="payment_id">Mã thanh toán:</label>
+                    <p><?php echo $payment['payment_id']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="madondatphong">Mã đơn đặt phòng:</label>
-                    <p><?php echo $payment['madondatphong']; ?></p>
+                    <label for="booking_id">Mã đơn đặt phòng:</label>
+                    <p><?php echo $payment['booking_id']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="hinhthucthanhtoan">Hình thức thanh toán:</label>
-                    <p><?php echo $payment['hinhthucthanhtoan']; ?></p>
+                    <label for="method">Hình thức thanh toán:</label>
+                    <p><?php echo $payment['method']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="sotien">Số tiền (VNĐ):</label>
-                    <p><?php echo $payment['sotien']; ?></p>
+                    <label for="payment_price">Số tiền (VNĐ):</label>
+                    <p><?php echo $payment['payment_price']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="ngaythanhtoan">Ngày thanh toán:</label>
-                    <p><?php echo $payment['ngaythanhtoan']; ?></p>
+                    <label for="date">Ngày thanh toán:</label>
+                    <p><?php echo $payment['date']; ?></p>
                 <div class="info-group">
-                    <label for="trangthai">Trạng thái:</label>
-                    <p><?php echo $payment['trangthai']; ?></p>
+                    <label for="payment_status">Trạng thái:</label>
+                    <p><?php echo $payment['payment_status']; ?></p>
                 </div>
             </div>
         </div>

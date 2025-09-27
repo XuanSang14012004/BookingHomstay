@@ -2,7 +2,6 @@
 require_once "../../config/connect.php";
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'view';
-$content = isset($_GET['content']) ? $_GET['content'] :'';
 
 
 $is_view_form = false;
@@ -24,18 +23,17 @@ if ($action === 'add_homestay') {
 
 }
 
-$mahomestay = isset($_GET['id']) ? $_GET['id'] : null;
+$homestay_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $homestay = null;
-if (($is_edit_form || $is_detail_form) && $mahomestay) {
-    $result = $conn->query("SELECT * FROM db_homestay WHERE mahomestay = '$mahomestay'");
+if (($is_edit_form || $is_detail_form) && $homestay_id) {
+    $result = $conn->query("SELECT * FROM db_homestay WHERE homestay_id = '$homestay_id'");
     if ($result && $result->num_rows > 0) {
         $homestay = mysqli_fetch_assoc($result);
     }
 }
 ?>
-
-<!----------------------------------- Giao diện ----------------------->
+<!-------------------------------------------------- Giao diện chính --------------------------------------------->
 <div class="form-container" id="homestay-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -60,7 +58,7 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormHomestay('add-form')"><i class='bx bx-plus'></i> Thêm Homestay mới</button>
                 <div class="search-box">
-                    <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm homestay...">
+                    <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm homestay...">
                     <button type="submit" class="search-btn" onclick="showFormHomestay('search-form')"><i class='bx bx-search'></i></button>
                 </div>
         </div>
@@ -79,7 +77,7 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                         <th>Địa chỉ</th>
                         <th>Số điện thoại</th>
                         <th>Email liên hệ</th>
-                        <th>Giá thuê</th>
+                        <th>Giá thuê (VND)</th>
                         <th>Chính sách</th>
                         <th>Hình ảnh</th>
                         <th>Điểm đánh giá trung bình(/5)</th>
@@ -94,35 +92,35 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                         $i = 1;
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['mahomestay'] ?></td>
-                            <td><?php echo $row['tenhomestay'] ?></td>
-                            <td><?php echo $row['loaihinh'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['mota'] ?></td>
-                            <td><?php echo $row['sophong'] ?></td>
-                            <td class="truncate-text"><?php echo $row['tiennghi'] ?></td>
-                            <td class="truncate-text"><?php echo $row['diachi'] ?></td>
-                            <td><?php echo $row['sodienthoai'] ?></td>
+                            <td><?php echo $row['homestay_id'] ?></td>
+                            <td><?php echo $row['homestay_name'] ?></td>
+                            <td><?php echo $row['homestay_type'] ?></td>
+                            <td><?php echo $row['homestay_status'] ?></td>
+                            <td class="truncate-text"><?php echo $row['describe'] ?></td>
+                            <td><?php echo $row['room_number'] ?></td>
+                            <td class="truncate-text"><?php echo $row['amenities'] ?></td>
+                            <td class="truncate-text"><?php echo $row['homestay_address'] ?></td>
+                            <td><?php echo $row['phone_owner'] ?></td>
                             <td><?php echo $row['email'] ?></td>
-                            <td class="truncate-text"><?php echo $row['giathue'] ?></td>
-                            <td class="truncate-text"><?php echo $row['chinhsach'] ?></td>
-                            <td><?php echo "<img src='../../Images/" .$row['hinhanh']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
-                            <td><?php echo $row['diemdanhgia'] ?></td>
-                            <td><?php echo $row['soluotdanhgia'] ?></td>
+                            <td class="truncate-text"><?php echo $row['home_price'] ?></td>
+                            <td class="truncate-text"><?php echo $row['policy'] ?></td>
+                            <td><?php echo "<img src='../../Images/" .$row['image']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
+                            <td><?php echo $row['home_rating'] ?></td>
+                            <td><?php echo $row['rating_number'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $row['mahomestay']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['mahomestay']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $row['mahomestay']; ?>')"><i class='bx bx-trash'></i></button>
-                            </td>
-                    </tr>
-                <?php } ?>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $row['homestay_id']; ?>')"><i class='bx bx-trash'></i></button>
+                            </td>  
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-------------------------------------------- Thêm -------------------------------------->
+<!-------------------------------------------------- Giao diện thêm mới --------------------------------------------->
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -144,34 +142,34 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=homestay" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
             <h2>Thêm Homestay Mới</h2>
                 <?php 
-                    $lh_sql = "SELECT DISTINCT TRIM(loaihinh) as loaihinh FROM `db_homestay`";
+                    $lh_sql = "SELECT DISTINCT TRIM(homestay_type) as homestay_type FROM `db_homestay`";
                     $lh_result = mysqli_query($conn, $lh_sql);
-                    $th_sql = "SELECT DISTINCT TRIM(trangthai) as trangthai FROM `db_homestay`";
+                    $th_sql = "SELECT DISTINCT TRIM(homestay_status) as homestay_status FROM `db_homestay`";
                     $th_result = mysqli_query($conn, $th_sql);
                 ?>
             <form action="../modules/add_function.php" method="POST" enctype="multipart/form-data">
                 <div class="form-section">
                     <h3>Thông tin cơ bản</h3>
                     <div class="form-group">
-                        <label for="">Mã Homestay:</label>
-                        <input type="text" id="mahomestay" name="mahomestay" required>
+                        <label for="homestay_id">Mã Homestay:</label>
+                        <input type="text" id="homestay_id" name="homestay_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="">Tên Homestay:</label>
-                        <input type="text" id="tenhomestay" name="tenhomestay" required>
+                        <label for="homestay_name">Tên Homestay:</label>
+                        <input type="text" id="homestay_name" name="homestay_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="loaihinh">Loại hình:</label>
-                        <select id="loaihinh" name="loaihinh">
+                        <label for="homestay_type">Loại hình:</label>
+                        <select id="homestay_type" name="homestay_type">
                             <?php
                             if ($lh_result->num_rows > 0) {
                             while ($row = mysqli_fetch_assoc($lh_result)) {?>
-                                <option value="<?php echo $row['loaihinh']; ?>">
-                                    <?php echo $row['loaihinh']; ?>
+                                <option value="<?php echo $row['homestay_type']; ?>">
+                                    <?php echo $row['homestay_type']; ?>
                                 </option>
                             <?php } 
                             } else {
@@ -181,13 +179,13 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="">Trạng thái hoạt động:</label>
-                        <select id="trangthai" name="trangthai">
+                        <label for="homestay_status">Trạng thái hoạt động:</label>
+                        <select id="homestay_status" name="homestay_status">
                             <?php 
                         if ($th_result->num_rows > 0) {
                             while ($row = mysqli_fetch_assoc($th_result)) {?>
-                                <option value="<?php echo $row['trangthai'];?>">
-                                    <?php echo $row['trangthai'];?>
+                                <option value="<?php echo $row['homestay_status'];?>">
+                                    <?php echo $row['homestay_status'];?>
                                 </option>
                             <?php } 
                             } else {
@@ -197,57 +195,57 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="sophong">Số phòng:</label>
-                        <input type="number" id="sophong" name="sophong" min="1" required>
+                        <label for="room_number">Số phòng:</label>
+                        <input type="number" id="room_number" name="room_number" min="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="giathue">Giá thuê trung bình (VNĐ/đêm):</label>
-                        <input type="number" id="giathue" name="giathue" required>
+                        <label for="home_price">Giá thuê trung bình (VNĐ/đêm):</label>
+                        <input type="number" id="home_price" name="home_price" required>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3>Thông tin liên hệ & Địa chỉ</h3>
                     <div class="form-group">
-                        <label for="sodienthoai">Số điện thoại:</label>
-                        <input type="tel" id="sodienthoai" name="sodienthoai" required>
+                        <label for="phone_owner">Số điện thoại:</label>
+                        <input type="tel" id="phone_owner" name="phone_owner" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email liên hệ:</label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="diachi">Địa chỉ:</label>
-                        <textarea id="diachi" name="diachi" rows="3" required></textarea>
+                        <label for="homestay_address">Địa chỉ:</label>
+                        <textarea id="homestay_address" name="homestay_address" rows="3" required></textarea>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3>Chi tiết & Mô tả</h3>
                     <div class="form-group">
-                        <label for="mota">Mô tả:</label>
-                        <textarea id="mota" name="mota" rows="5"></textarea>
+                        <label for="describe">Mô tả:</label>
+                        <textarea id="describe" name="describe" rows="5"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="tiennghi">Tiện nghi:</label>
-                        <textarea id="tiennghi" name="tiennghi" rows="3"
+                        <label for="amenities">Tiện nghi:</label>
+                        <textarea id="amenities" name="amenities" rows="3"
                         placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="chinhsach">Chính sách:</label>
-                        <textarea id="chinhsach" name="chinhsach" rows="3"></textarea>
+                        <label for="policy">Chính sách:</label>
+                        <textarea id="policy" name="policy" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="hinhanh">Hình ảnh:</label>
-                        <input type="file" id="hinhanh" name="hinhanh" multiple accept="image/*">
+                        <label for="image">Hình ảnh:</label>
+                        <input type="file" id="image" name="image" multiple accept="image/*">
                     </div>
                     <div class="form-group">
-                        <label for="diemdanhgia">Điểm đánh giá trung bình(/10):</label>
-                        <input type="number" id="diemdanhgia" name="diemdanhgia" multiple accept="image/*">
+                        <label for="home_rating">Điểm đánh giá trung bình(/10):</label>
+                        <input type="number" id="home_rating" name="home_rating" multiple accept="image/*">
                     </div>
                     <div class="form-group">
-                        <label for="soluotdanhgia">Số lượt đánh giá đã nhận:</label>
-                        <input type="number" id="soluotdanhgia" name="soluotdanhgia" multiple accept="image/*">
+                        <label for="rating_number">Số lượt đánh giá đã nhận:</label>
+                        <input type="number" id="rating_number" name="rating_number" multiple accept="image/*">
                     </div>
                 </div>
 
@@ -260,8 +258,7 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
 </div>
 
 
-
-<!----------------------------------- Tìm kiếm ----------------------->
+<!-------------------------------------------------- Giao diện hiển thị kết quả tìm kiếm --------------------------------------------->
 <div class="form-container" id="search-homestay" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -286,11 +283,12 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormHomestay('add-form')"><i class='bx bx-plus'></i> Thêm Homestay mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm homestay...">
-                <button type="submit" class="search-btn" onclick="showFormAccount('search-form')"><i class='bx bx-search'></i></button>
+                <input type="text" class="search" id="research" name="timkiem" placeholder="Tìm kiếm homestay...">
+                <button type="submit" class="search-btn" onclick="showFormHomestay('research-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
-        <h3>Kết quả tìm kiếm</h3>
+        <big>Kết quả tìm kiếm theo" ... "</big>
+        <br>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -319,44 +317,53 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                         <?php
                         if( isset($_GET['content']) ? $_GET['content'] :'' ){
                             $search_query = trim($_GET['content']);
-                            $search = "%$search_query%";
+                            $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_homestay WHERE mahomestay LIKE '$search' OR tenhomestay LIKE '$search' OR loaihinh LIKE '$search' OR trangthai LIKE '$search' 
-                            OR sophong LIKE '$search' OR email LIKE '$search' OR sodienthoai LIKE '$search' OR giathue LIKE '$search' OR diachi LIKE '$search' OR diemdanhgia LIKE '$search' "; 
-                            $result = $conn->query($sql);} 
+                            $sql = "SELECT * FROM db_homestay WHERE homestay_id LIKE '$search' OR homestay_name LIKE '$search' OR homestay_type LIKE '$search' OR homestay_status LIKE '$search' 
+                            OR room_number LIKE '$search' OR email LIKE '$search' OR phone_owner LIKE '$search' OR home_price LIKE '$search' OR homestay_address LIKE '$search' OR home_rating LIKE '$search' "; 
+                            $result = $conn->query($sql);
                             $i = 1;
+
+                        } else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
+                            $search_query = trim($_GET['recontent']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_homestay WHERE homestay_id LIKE '$search' OR homestay_name LIKE '$search' OR homestay_type LIKE '$search' OR homestay_status LIKE '$search' 
+                            OR room_number LIKE '$search' OR email LIKE '$search' OR phone_owner LIKE '$search' OR home_price LIKE '$search' OR homestay_address LIKE '$search' OR home_rating LIKE '$search' ";
+                            $result = $conn->query($sql);
+                            $i = 1;
+                        }
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['mahomestay'] ?></td>
-                            <td><?php echo $row['tenhomestay'] ?></td>
-                            <td><?php echo $row['loaihinh'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['mota'] ?></td>
-                            <td><?php echo $row['sophong'] ?></td>
-                            <td class="truncate-text"><?php echo $row['tiennghi'] ?></td>
-                            <td class="truncate-text"><?php echo $row['diachi'] ?></td>
-                            <td><?php echo $row['sodienthoai'] ?></td>
+                            <td><?php echo $row['homestay_id'] ?></td>
+                            <td><?php echo $row['homestay_name'] ?></td>
+                            <td><?php echo $row['homestay_type'] ?></td>
+                            <td><?php echo $row['homestay_status'] ?></td>
+                            <td class="truncate-text"><?php echo $row['describe'] ?></td>
+                            <td><?php echo $row['room_number'] ?></td>
+                            <td class="truncate-text"><?php echo $row['amenities'] ?></td>
+                            <td class="truncate-text"><?php echo $row['homestay_address'] ?></td>
+                            <td><?php echo $row['phone_owner'] ?></td>
                             <td><?php echo $row['email'] ?></td>
-                            <td class="truncate-text"><?php echo $row['giathue'] ?></td>
-                            <td class="truncate-text"><?php echo $row['chinhsach'] ?></td>
-                            <td><?php echo "<img src='../../Images/" .$row['hinhanh']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
-                            <td><?php echo $row['diemdanhgia'] ?></td>
-                            <td><?php echo $row['soluotdanhgia'] ?></td>
+                            <td class="truncate-text"><?php echo $row['home_price'] ?></td>
+                            <td class="truncate-text"><?php echo $row['policy'] ?></td>
+                            <td><?php echo "<img src='../../Images/" .$row['image']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
+                            <td><?php echo $row['home_rating'] ?></td>
+                            <td><?php echo $row['rating_number'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $row['mahomestay']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['mahomestay']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $row['mahomestay']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $row['homestay_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
-                    </tr>
-                <?php } ?>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-
-<!--------------------------------------------- Sửa ------------------------------------>
+<!-------------------------------------------------- Giao diện cập nhật--------------------------------------------->
 <div class="form-container"id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($homestay) { ?>
     <div class="head-title">
@@ -379,84 +386,117 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=homestay" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $homestay['mahomestay']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $homestay['mahomestay']; ?>')"><i class='bx bx-trash'></i> Xóa thông tin</button>
+                <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $homestay['homestay_id']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $homestay['homestay_id']; ?>')"><i class='bx bx-trash'></i> Xóa thông tin</button>
             </div>
         </div>
-        <h2>Sửa Thông Tin Homestay</h2>
+        <h2>Cập nhật thông tin Homestay</h2>
+            <?php 
+                $lh_sql = "SELECT DISTINCT TRIM(homestay_type) as homestay_type FROM `db_homestay`";
+                $lh_result = mysqli_query($conn, $lh_sql);
+                $th_sql = "SELECT DISTINCT TRIM(homestay_status) as homestay_status FROM `db_homestay`";
+                $th_result = mysqli_query($conn, $th_sql);
+            ?>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="mahomestay" value="<?php echo $homestay['mahomestay']; ?>">
+            <input type="hidden" name="homestay_id" value="<?php echo $homestay['homestay_id']; ?>">
 
             <div class="form-section">
                 <h3>Thông tin cơ bản</h3>
                 <div class="form-group">
-                    <label for="mahomestay">Mã Homestay:</label>
-                    <input type="text" name="mahomestay" value="<?php echo $homestay['mahomestay']; ?>">
+                    <label for="homestay_id">Mã Homestay:</label>
+                    <input type="text" name="homestay_id" value="<?php echo $homestay['homestay_id']; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="tenhomestay">Tên Homestay:</label>
-                    <input type="text" id="tenhomestay" name="tenhomestay" value="<?php echo $homestay['tenhomestay']; ?>" required>
+                    <label for="homestay_name">Tên Homestay:</label>
+                    <input type="text" id="homestay_name" name="homestay_name" value="<?php echo $homestay['homestay_name']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="loaihinh">Loại hình:</label>
-                    <select id="loaihinh" name="loaihinh">
-                        <option value="homestay" <?php echo ($homestay['loaihinh'] == 'homestay') ? 'selected' : ''; ?>>Homestay</option>
-                        <option value="villa" <?php echo ($homestay['loaihinh'] == 'villa') ? 'selected' : ''; ?>>Villa</option>
-                        <option value="canho" <?php echo ($homestay['loaihinh'] == 'canho') ? 'selected' : ''; ?>>Căn hộ dịch vụ</option>
-                        <option value="khac" <?php echo ($homestay['loaihinh'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
+                    <label for="homestay_type">Loại hình:</label>
+                    <select id="homestay_type" name="homestay_type">
+                         <?php
+                            if ($lh_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($lh_result)) {?>
+                                <option value="<?php echo $row['homestay_type']; ?>">
+                                    <?php echo $row['homestay_type']; ?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="trangthai">Trạng thái hoạt động:</label>
-                    <select id="trangthai" name="trangthai">
-                        <option value="danghoatdong" <?php echo ($homestay['trangthaihoatdong'] == 'danghoatdong') ? 'selected' : ''; ?>>Đang hoạt động</option>
-                        <option value="dung" <?php echo ($homestay['trangthaihoatdong'] == 'dung') ? 'selected' : ''; ?>>Tạm dừng</option>
-                        <option value="choduyet" <?php echo ($homestay['trangthaihoatdong'] == 'choduyet') ? 'selected' : ''; ?>>Chờ duyệt</option>
+                    <label for="homestay_status">Trạng thái hoạt động:</label>
+                    <select id="homestay_status" name="homestay_status">
+                        <?php 
+                        if ($th_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($th_result)) {?>
+                                <option value="<?php echo $row['homestay_status'];?>">
+                                    <?php echo $row['homestay_status'];?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="sophong">Số phòng:</label>
-                    <input type="number" id="sophong" name="sophong" value="<?php echo $homestay['sophong']; ?>" min="1" required>
+                    <label for="room_number">Số phòng:</label>
+                    <input type="number" id="room_number" name="room_number" value="<?php echo $homestay['room_number']; ?>" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="home_price">Giá thuê:</label>
+                    <input type="number" id="home_price" name="home_price" value="<?php echo $homestay['home_price']; ?>" min="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="home_rating">Điểm đánh giá trung bình:</label>
+                    <input type="number" id="home_rating" name="home_rating" value="<?php echo $homestay['home_rating']; ?>" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="rating_number">Số lượt đánh giá đã nhận:</label>
+                    <input type="number" id="rating_number" name="rating_number" value="<?php echo $homestay['rating_number']; ?>" min="1" required>
                 </div>
             </div>
 
             <div class="form-section">
                 <h3>Thông tin liên hệ & Địa chỉ</h3>
                 <div class="form-group">
-                    <label for="sodienthoai">Số điện thoại:</label>
-                    <input type="tel" id="sodienthoai" name="sodienthoai" value="<?php echo $homestay['sodienthoai']; ?>" required>
+                    <label for="phone_owner">Số điện thoại chủ homestay:</label>
+                    <input type="tel" id="phone_owner" name="phone_owner" value="<?php echo $homestay['phone_owner']; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email liên hệ:</label>
                     <input type="email" id="email" name="email" value="<?php echo $homestay['email']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="diachi">Địa chỉ:</label>
-                    <textarea id="diachi" name="diachi" rows="3" required><?php echo $homestay['diachi']; ?></textarea>
+                    <label for="homestay_address">Địa chỉ:</label>
+                    <textarea id="homestay_address" name="homestay_address" rows="3" required><?php echo $homestay['homestay_address']; ?></textarea>
                 </div>
             </div>
 
             <div class="form-section">
                 <h3>Chi tiết & Mô tả</h3>
                 <div class="form-group">
-                    <label for="mota">Mô tả:</label>
-                    <textarea id="mota" name="mota" rows="5"><?php echo $homestay['mota']; ?></textarea>
+                    <label for="describe">Mô tả:</label>
+                    <textarea id="describe" name="describe" rows="5"><?php echo $homestay['describe']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="tiennghi">Tiện nghi:</label>
-                    <textarea id="tiennghi" name="tiennghi" rows="3" placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."><?php echo $homestay['tiennghi']; ?></textarea>
+                    <label for="amenities">Tiện nghi:</label>
+                    <textarea id="amenities" name="amenities" rows="3" placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."><?php echo $homestay['amenities']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="chinhsach">Chính sách:</label>
-                    <textarea id="chinhsach" name="chinhsach" rows="3"><?php echo $homestay['chinhsach']; ?></textarea>
+                    <label for="policy">Chính sách:</label>
+                    <textarea id="policy" name="policy" rows="3"><?php echo $homestay['policy']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="hinhanh">Hình ảnh hiện tại:</label>
-                    <img src="<?php echo $homestay['hinhanh']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
-                    <label for="hinhanh_new">Chọn ảnh mới để thay thế :</label>
-                    <input type="file" id="hinhanh_new" name="hinhanh_new[]" multiple accept="image/*">
+                    <label for="image">Hình ảnh hiện tại:</label>
+                    <img src="<?php echo $homestay['image']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="image_new">Chọn ảnh mới để thay thế :</label>
+                    <input type="file" id="image_new" name="image_new[]" multiple accept="image/*">
                 </div>
             </div>
 
@@ -470,7 +510,8 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
         <p>Không tìm thấy thông tin homestay để sửa.</p>
     <?php } ?>
 </div>
-<!--------------------------------------------- Chi tiết ------------------------------------>
+
+<!-------------------------------------------------- Giao diện thông tin chi tiết --------------------------------------------->
 <div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($homestay) { ?>
     <div class="head-title">
@@ -493,10 +534,10 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=homestay" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['mahomestay']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $row['mahomestay']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $homestay['homestay_id']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteHomestay('<?php echo $homestay['homestay_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
             </div>
         </div>
         
@@ -507,23 +548,23 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                 <h3>Thông tin cơ bản</h3>
                 <div class="info-group">
                     <label>Tên Homestay:</label>
-                    <p><?php echo $homestay['tenhomestay']; ?></p>
+                    <p><?php echo $homestay['homestay_name']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Mã Homestay:</label>
-                    <p><?php echo $homestay['mahomestay']; ?></p>
+                    <p><?php echo $homestay['homestay_id']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Loại hình:</label>
-                    <p><?php echo $homestay['loaihinh']; ?></p>
+                    <p><?php echo $homestay['homestay_type']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Số phòng:</label>
-                    <p><?php echo $homestay['sophong']; ?></p>
+                    <p><?php echo $homestay['room_number']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Trạng thái hoạt động:</label>
-                    <p class="status-active"><?php echo $homestay['trangthai']; ?></p>
+                    <p class="status-active"><?php echo $homestay['homestay_status']; ?></p>
                 </div>
             </div>
 
@@ -531,21 +572,21 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                 <h3>Mô tả & Tiện nghi</h3>
                 <div class="info-group">
                     <label>Mô tả:</label>
-                    <p><?php echo $homestay['mota']; ?></p>
+                    <p><?php echo $homestay['describe']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Tiện nghi:</label>
                     <span>
                         <?php 
-                        $temp = $homestay['tiennghi'];
-                        $tiennghi = str_replace(',', '<br>', $temp);
+                        $temp = $homestay['amenities'];
+                        $amenities = str_replace(',', '<br>', $temp);
                         ?>
-                        <p><?php echo $tiennghi;?> </p>
+                        <p><?php echo $amenities;?> </p>
                 </span>
                 </div>
                 <div class="info-group">
                     <label>Chính sách:</label>
-                    <p><?php echo $homestay['chinhsach']; ?></p>
+                    <p><?php echo $homestay['policy']; ?></p>
                 </div>
             </div>
 
@@ -553,11 +594,11 @@ if (($is_edit_form || $is_detail_form) && $mahomestay) {
                 <h3>Địa chỉ & Liên hệ</h3>
                 <div class="info-group">
                     <label>Địa chỉ:</label>
-                    <p><?php echo $homestay['diachi']; ?></p>
+                    <p><?php echo $homestay['homestay_address']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Số điện thoại:</label>
-                    <p><?php echo $homestay['sodienthoai']; ?></p>
+                    <p><?php echo $homestay['phone_owner']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Email liên hệ:</label>

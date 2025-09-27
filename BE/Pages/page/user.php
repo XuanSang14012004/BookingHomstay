@@ -18,22 +18,21 @@ if ($action === 'add_user') {
 } else if ($action === 'search_user') {
     $is_search_form = true;
 } else {
-    $is_view_form = true; // Trang chính
+    $is_view_form = true; 
 
 }
 
-$makhachhang = isset($_GET['id']) ? $_GET['id'] : null;
+$customer_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $user = null;
-if (($is_edit_form || $is_detail_form) && $makhachhang) {
-    $result = $conn->query("SELECT * FROM db_khachhang WHERE makhachhang = '$makhachhang '");
+if (($is_edit_form || $is_detail_form) && $customer_id) {
+    $result = $conn->query("SELECT * FROM db_customer WHERE customer_id = '$customer_id '");
     if ($result && $result->num_rows > 0) {
         $user = mysqli_fetch_assoc($result);
     }
 }
 ?>
-
-<!------------------------------------ Giao diện -------------------------->
+<!-------------------------------- Giao diện chính ------------------------------------>
 <div class="form-container" id="user-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;"> 
     <div class="head-title">
         <div class="left">
@@ -59,7 +58,7 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormUser('add-form')"><i class='bx bx-plus'></i> Thêm Khách hàng mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm khách hàng...">
+                <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm khách hàng...">
                 <button type="submit" class="search-btn" onclick="showFormUser('search-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
@@ -81,21 +80,21 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
                 <tbody>
                     <tr>
                         <?php
-                        $result = $conn->query("SELECT * FROM db_khachhang");
+                        $result = $conn->query("SELECT * FROM db_customer");
                         $i = 1;
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['ngaysinh'] ?></td>
-                            <td><?php echo $row['gioitinh'] ?></td>
+                            <td><?php echo $row['customer_id'] ?></td>
+                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php echo $row['birthday'] ?></td>
+                            <td><?php echo $row['gender'] ?></td>
                             <td><?php echo $row['email'] ?></td>
-                            <td><?php echo $row['sodienthoai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['diachi'] ?></td>
+                            <td><?php echo $row['customer_phone'] ?></td>
+                            <td class="truncate-text"><?php echo $row['address'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $row['makhachhang']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $row['makhachhang'] ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['makhachhang']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $row['customer_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $row['customer_id'] ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['customer_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                     </tr>
                 <?php } ?>
@@ -103,10 +102,9 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
             </table>
         </div>
     </div>
-</div>   
+</div>
 
-
-<!------------------------------------ Tìm kiếm-------------------------->
+<!------------------------------------------ Giao diện tìm kiếm ------------------------------------->
 <div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;"> 
     <div class="head-title">
         <div class="left">
@@ -132,10 +130,11 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormUser('add-form')"><i class='bx bx-plus'></i> Thêm Khách hàng mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm khách hàng...">
-                <button type="submit" class="search-btn" onclick="showFormUser('search-form')"><i class='bx bx-search'></i></button>
+                <input type="text" class="search" id="research" name="timkiem" placeholder="Tìm kiếm khách hàng...">
+                <button type="submit" class="search-btn" onclick="showFormUser('research-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
+        <big>Kết quả tìm kiếm theo" ... "</big>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -154,27 +153,36 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
                 <tbody>
                     <tr>
                         <?php
-                         if( isset($_GET['content']) ? $_GET['content'] :'' ){
-                            $search_query = trim($_GET['content']);
-                            $search = "%$search_query%";
+                            if( isset($_GET['content']) ? $_GET['content'] :'' ){
+                                $search_query = trim($_GET['content']);
+                                $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_khachhang WHERE makhachhang LIKE '$search' OR tenkhachhang LIKE '$search' OR ngaysinh LIKE '$search' OR gioitinh LIKE '$search' 
-                            OR email LIKE '$search' OR sodienthoai LIKE '$search' OR diachi LIKE '$search' "; 
-                            $result = $conn->query($sql);} 
-                            $i = 1;
+                                $sql = "SELECT * FROM db_customer WHERE customer_id LIKE '$search' OR customer_name LIKE '$search' OR birthday LIKE '$search' OR gender LIKE '$search' 
+                                OR email LIKE '$search' OR customer_phone LIKE '$search' OR address LIKE '$search' ";
+                                $result = $conn->query($sql); 
+                                $i = 1;
+                            }else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
+                                $search_query = trim($_GET['recontent']);
+                                $search = "%".$search_query."%";
+
+                                $sql = "SELECT * FROM db_customer WHERE customer_id LIKE '$search' OR customer_name LIKE '$search' OR birthday LIKE '$search' OR gender LIKE '$search' 
+                                OR email LIKE '$search' OR customer_phone LIKE '$search' OR address LIKE '$search' ";
+                                $result = $conn->query($sql); 
+                                $i = 1;
+                            }
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['ngaysinh'] ?></td>
-                            <td><?php echo $row['gioitinh'] ?></td>
+                            <td><?php echo $row['customer_id'] ?></td>
+                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php echo $row['birthday'] ?></td>
+                            <td><?php echo $row['gender'] ?></td>
                             <td><?php echo $row['email'] ?></td>
-                            <td><?php echo $row['sodienthoai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['diachi'] ?></td>
+                            <td><?php echo $row['customer_phone'] ?></td>
+                            <td class="truncate-text"><?php echo $row['address'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $row['makhachhang']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $row['makhachhang'] ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['makhachhang']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $row['customer_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $row['customer_id'] ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['customer_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                     </tr>
                 <?php } ?>
@@ -182,9 +190,9 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
             </table>
         </div>
     </div>
-</div>   
+</div>
 
-<!----------------------------------------- Thêm ---------------------------------->
+<!-------------------------------- Giao diện thêm mới ------------------------------------>
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
     <div class="left">
@@ -206,30 +214,42 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
 </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=user" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+           <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
         <h2>Thêm Khách Hàng Mới</h2>
+        <?php 
+            $gender_sql = "SELECT DISTINCT TRIM(gender) as gender FROM `db_customer`";
+            $gender_result = mysqli_query($conn, $gender_sql);
+        ?>
         <form action="../modules/add_function.php" method="POST">
             <div class="form-section">
                 <h3>Thông tin cá nhân</h3>
                 <div class="form-group">
-                    <label for="makhachhang">Mã Khách hàng:</label>
-                    <input type="text" id="makhachhang" name="makhachhang" required>
+                    <label for="customer_id">Mã Khách hàng:</label>
+                    <input type="text" id="customer_id" name="customer_id" required>
                 </div>
                 <div class="form-group">
-                    <label for="tenkhachhang">Họ và Tên:</label>
-                    <input type="text" id="tenkhachhang" name="tenkhachhang" required>
+                    <label for="customer_name">Họ và Tên:</label>
+                    <input type="text" id="customer_name" name="customer_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="ngaysinh">Ngày sinh:</label>
-                    <input type="date" id="ngaysinh" name="ngaysinh" required>
+                    <label for="birthday">Ngày sinh:</label>
+                    <input type="date" id="birthday" name="birthday" required>
                 </div>
                 <div class="form-group">
-                    <label for="gioitinh">Giới tính :</label>
-                    <select id="gioitinh" name="gioitinh" required>
-                        <option value="nam" <?php if(isset($_POST['gioitinh']) && $_POST['gioitinh']=='nam') echo 'selected'; ?>>Nam</option>
-                        <option value="nu" <?php if(isset($_POST['gioitinh']) && $_POST['gioitinh']=='nu') echo 'selected'; ?>>Nữ</option>
-                        <option value="khac" <?php if(isset($_POST['gioitinh']) && $_POST['gioitinh']=='khac') echo 'selected'; ?>>Khác</option>
+                    <label for="gender">Giới tính :</label>
+                    <select id="gender" name="gender" required>
+                         <?php
+                            if ($gender_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($gender_result)) {?>
+                                <option value="<?php echo $row['gender']; ?>">
+                                    <?php echo $row['gender']; ?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                     </select>
                 </div>
             </div>
@@ -240,24 +260,24 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="sodienthoai">Số điện thoại:</label>
-                    <input type="tel" id="sodienthoai" name="sodienthoai" required>
+                    <label for="customer_phone">Số điện thoại:</label>
+                    <input type="tel" id="customer_phone" name="customer_phone" required>
                 </div>
                 <div class="form-group">
-                    <label for="diachi">Địa chỉ:</label>
-                    <textarea id="diachi" name="diachi" rows="3" required></textarea>
+                    <label for="address">Địa chỉ:</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
                 </div>
             </div>
 
             <div class="form-actions">
                 <button type="submit" name="submit_user" class="add-btn">Thêm Khách Hàng</button>
-                <button type="reset"  class="cancel-btn">Hủy</button>
+                <button type="reset" class="cancel-btn">Hủy</button>
             </div>
         </form>
     </div>
 </div>
 
-<!----------------------------------------------- Sửa ----------------------------------------->
+<!-------------------------------- Giao diện cập nhật ------------------------------------>
 <div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($user) { ?>
     <div class="head-title">
@@ -282,33 +302,46 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
         <div class="toolbar">
             <a href="home.php?page=user" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $user['makhachhang']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['makhachhang']; ?>')"></i> Xóa thông tin</button>
+                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $user['customer_id']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $user['customer_id']; ?>')"></i> Xóa thông tin</button>
             </div>
         </div>
         <h2>Sửa Thông Tin Khác Hàng</h2>
+        <?php 
+            $gender_sql = "SELECT DISTINCT TRIM(gender) as gender FROM `db_customer`";
+            $gender_result = mysqli_query($conn, $gender_sql);
+        ?>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="makhachhang" value="<?php echo $user['makhachhang']; ?>">
+            <input type="hidden" name="customer_id" value="<?php echo $user['customer_id']; ?>">
 
             <div class="form-section">
                 <h3>Thông tin cá nhân</h3>
                 <div class="form-group">
-                    <label for="makhachhang">Mã Khách hàng:</label>
-                    <input type="text" id="makhachhang" name="makhachhang" value="<?php echo $user['makhachhang']; ?>" required>
+                    <label for="customer_id">Mã Khách hàng:</label>
+                    <input type="text" id="customer_id" name="customer_id" value="<?php echo $user['customer_id']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="tenkhachhang">Họ và Tên:</label>
-                    <input type="text" id="tenkhachhang" name="tenkhachhang" value="<?php echo $user['tenkhachhang']; ?>" required>
+                    <label for="customer_name">Họ và Tên:</label>
+                    <input type="text" id="customer_name" name="customer_name" value="<?php echo $user['customer_name']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="ngaysinh">Ngày sinh:</label>
-                    <input type="date" id="ngaysinh" name="ngaysinh" value="<?php echo $user['ngaysinh']; ?>" required>
+                    <label for="birthday">Ngày sinh:</label>
+                    <input type="date" id="birthday" name="birthday" value="<?php echo $user['birthday']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="gioitinh">Giới tính :</label>
-                    <select id="gioitinh" name="gioitinh" required>
-                        <option value="nam" <?php echo ($user['gioitinh'] == 'nam') ? 'selected' : ''; ?>>Nam</option>
-                        <option value="nu" <?php echo ($user['gioitinh'] == 'nu') ? 'selected' : ''; ?>>Nữ</option>
+                    <label for="gender">Giới tính :</label>
+                    <select id="gender" name="gender" required>
+                        <?php
+                            if ($gender_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($gender_result)) {?>
+                                <option value="<?php echo $row['gender']; ?>">
+                                    <?php echo $row['gender']; ?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                     </select>
                 </div>
             </div>
@@ -319,15 +352,15 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
                     <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="sodienthoai">Số điện thoại:</label>
-                    <input type="tel" id="sodienthoai" name="sodienthoai" value="<?php echo $user['sodienthoai']; ?>" required>
+                    <label for="customer_phone">Số điện thoại:</label>
+                    <input type="tel" id="customer_phone" name="customer_phone" value="<?php echo $user['customer_phone']; ?>" required>
                 </div>
                 <div class="form-group"> 
-                    <label for="diachi">Địa chỉ:</label>
-                    <input type="text" id="diachi" name="diachi" rows="3" value="<?php echo $user['diachi']; ?>" required></input>
+                    <label for="address">Địa chỉ:</label>
+                    <input type="text" id="address" name="address" rows="3" value="<?php echo $user['address']; ?>" required></input>
                 </div>
             </div>
-                    <div class="form-actions">
+            <div class="form-actions">
                 <button type="submit" name="submit_user" class="edit-btn">Cập nhật thông tin</button>
                 <button type="reset" class="cancel-btn">Hủy</button>
             </div>
@@ -336,10 +369,9 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
     <?php } else if ($is_edit_form) { ?>
         <p>Không tìm thấy thông tin khách hàng để sửa.</p>
     <?php } ?>
-
 </div>
 
-<!----------------------------------------- Chi tiết -------------------------------->
+<!-------------------------------- Giao diện thông tin chi tiết ------------------------------------>
 <div class="form-container"id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($user) { ?>
 
@@ -365,8 +397,8 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
         <div class="toolbar">
             <a href="home.php?page=user" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $user['makhachhang']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['makhachhang']; ?>')"></i> Xóa thông tin</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $user['customer_id']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $user['customer_id']; ?>')"></i> Xóa thông tin</button>
             </div>
         </div>
         
@@ -376,20 +408,20 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
             <div class="detail-section">
                 <h3>Thông tin cá nhân</h3>
                 <div class="info-group">
-                    <label for="makhachhang">Mã Khách hàng:</label>
-                    <p><?php echo $user['makhachhang']; ?></p>
+                    <label for="customer_id">Mã Khách hàng:</label>
+                    <p><?php echo $user['customer_id']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="tenkhachhang">Họ và Tên:</label>
-                    <p><?php echo $user['tenkhachhang']; ?></p>
+                    <label for="customer_name">Họ và Tên:</label>
+                    <p><?php echo $user['customer_name']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="ngaysinh">Ngày sinh:</label>
-                    <p><?php echo $user['ngaysinh']; ?></p>
+                    <label for="birthday">Ngày sinh:</label>
+                    <p><?php echo $user['birthday']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="gioitinh">Giới tính :</label>
-                    <p><?php echo $user['gioitinh']; ?></p>
+                    <label for="gender">Giới tính :</label>
+                    <p><?php echo $user['gender']; ?></p>
                 </div>
             </div>
             <div class="detail-section">
@@ -399,12 +431,12 @@ if (($is_edit_form || $is_detail_form) && $makhachhang) {
                     <p><?php echo $user['email']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="sodienthoai">Số điện thoại:</label>
-                    <p><?php echo $user['sodienthoai']; ?></p>
+                    <label for="customer_phone">Số điện thoại:</label>
+                    <p><?php echo $user['customer_phone']; ?></p>
                 </div>
                 <div class="info-group"> 
-                    <label for="diachi">Địa chỉ:</label>
-                    <p><?php echo $user['diachi']; ?></p>
+                    <label for="address">Địa chỉ:</label>
+                    <p><?php echo $user['address']; ?></p>
                 </div>
             </div>
         </div>

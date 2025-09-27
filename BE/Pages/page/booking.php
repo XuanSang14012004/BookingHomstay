@@ -18,22 +18,21 @@ if ($action === 'add_booking') {
 } else if ($action === 'detail_booking') {
     $is_detail_form = true;
 } else {
-    $is_view_form = true; // Trang chính
+    $is_view_form = true;
 
 }
 
-$madatphong= isset($_GET['id']) ? $_GET['id'] : null;
+$booking_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $booking = null;
-if (($is_edit_form || $is_detail_form) && $madatphong) {
-    $result = $conn->query("SELECT * FROM db_booking WHERE madondatphong = '$madatphong'");
+if (($is_edit_form || $is_detail_form) && $booking_id) {
+    $result = $conn->query("SELECT * FROM db_booking WHERE booking_id = '$booking_id'");
     if ($result && $result->num_rows > 0) {
         $booking = mysqli_fetch_assoc($result);
     }
 }
 ?>
-
-<!-------------------------------- Giao diện --------------------------->
+<!------------------------------------------------------------ Giao diện --------------------------------------------------->
 <div class="form-container" id="booking-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -58,7 +57,7 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormBooking('add-form')"><i class='bx bx-plus'></i> Thêm đơn đặt phòng mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm đơn đặt phòng...">
+                <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm đơn đặt phòng...">
                 <button type="submit" class="search-btn" onclick="showFormBooking('search-form')"><i class='bx bx-search'></i>
             </div>
         </div>
@@ -89,25 +88,25 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
                         $i = 1;
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['madondatphong'] ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['mahomestay'] ?></td>
-                            <td><?php echo $row['maphong'] ?></td>
-                            <td><?php echo $row['ngaydatphong'] ?></td>
-                            <td><?php echo $row['ngaynhanphong'] ?></td>
-                            <td><?php echo $row['ngaytraphong'] ?></td>
-                            <td><?php echo $row['songuoi'] ?></td>
-                            <td><?php echo $row['tongtien'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['chuthich'] ?></td>
+                            <td><?php echo $row['booking_id'] ?></td>
+                            <td><?php echo $row['customer_id'] ?></td>
+                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php echo $row['homestay_id'] ?></td>
+                            <td><?php echo $row['room_id'] ?></td>
+                            <td><?php echo $row['date_booking'] ?></td>
+                            <td><?php echo $row['date_checkin'] ?></td>
+                            <td><?php echo $row['date_checkout'] ?></td>
+                            <td><?php echo $row['booking_people'] ?></td>
+                            <td><?php echo $row['booking_price'] ?></td>
+                            <td><?php echo $row['booking_status'] ?></td>
+                            <td class="truncate-text"><?php echo $row['note'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $row['madondatphong']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $row['madondatphong']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $row['madondatphong']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $row['booking_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $row['booking_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $row['booking_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
-                    </tr>
-                <?php } ?>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -115,8 +114,7 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
 </div>
 
 
-
-<!---------------------------------- Thêm --------------------------->
+<!--------------------------------------------------------------Giao diện thêm mới --------------------------------------------------->
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -138,38 +136,50 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
     </div>
     <div class="management-container" >
         <div class="toolbar">
-            <a href="home.php?page=homestay" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
             <h2>Thêm Đơn Đặt Phòng Mới</h2>
-            <form action="../modules/Create/add_function.php" method="POST" enctype="multipart/form-data">
+            <?php 
+                $th_sql = "SELECT DISTINCT TRIM(booking_status) as booking_status FROM `db_booking`";
+                $th_result = mysqli_query($conn, $th_sql);
+            ?>
+            <form action="../modules/add_function.php" method="POST" enctype="multipart/form-data">
                 <div class="form-section">
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
                     <div class="form-group">
-                        <label for="madondatphong">Mã đơn đặt phòng:</label>
-                        <input type="text" id="madondatphong" name="madondatphong" required>
+                        <label for="booking_id">Mã đơn đặt phòng:</label>
+                        <input type="text" id="booking_id" name="booking_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="makhachhang">Mã Khách hàng:</label>
-                        <input type="text" id="makhachhang" name="makhachhang" required>
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <input type="text" id="customer_id" name="customer_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="mahomestay">Mã homestay:</label>
-                        <input type="text" id="mahomestay" name="mahomestay" required>
+                        <label for="homestay_id">Mã homestay:</label>
+                        <input type="text" id="homestay_id" name="homestay_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="maphong">Mã phòng:</label>
-                        <input type="text" id="maphong" name="maphong" required>
+                        <label for="room_id">Mã phòng:</label>
+                        <input type="text" id="room_id" name="room_id" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaydatphong">Ngày đặt phòng</label>
-                        <input type="date" id="ngaydatphong" name="ngaydatphong" required>
+                        <label for="date_booking">Ngày đặt phòng</label>
+                        <input type="date" id="date_booking" name="date_booking" required>
                     </div>
                     <div class="form-group">
-                        <label for="trangthai">Trạng thái:</label>
-                        <select id="trangthai" name="trangthai">
-                            <option value="danghoatdong">Đã xác nhận</option>
-                            <option value="dung">Tạm dừng</option>
-                            <option value="choduyet">Chờ duyệt</option>
+                        <label for="booking_status">Trạng thái:</label>
+                        <select id="booking_status" name="booking_status">
+                            <?php 
+                        if ($th_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($th_result)) {?>
+                                <option value="<?php echo $row['booking_status'];?>">
+                                    <?php echo $row['booking_status'];?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -177,33 +187,33 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
                 <div class="form-section">
                     <h3>Thông tin khách hàng đặt phòng</h3>
                     <div class="form-group">
-                        <label for="tenkhachhang">Tên Khách hàng:</label>
-                        <input type="text" id="tenkhachhang" name="tenkhachhang" required>
+                        <label for="customer_name">Tên Khách hàng:</label>
+                        <input type="text" id="customer_name" name="customer_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaynhanphong">Ngày nhận phòng:</label>
-                        <input type="date" id="ngaynhanphong" name="ngaynhanphong" required>
+                        <label for="date_checkin">Ngày nhận phòng:</label>
+                        <input type="date" id="date_checkin" name="date_checkin" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaytraphong">Ngày trả phòng:</label>
-                        <input type="date" id="ngaytraphong" name="ngaytraphong" required>
+                        <label for="date_checkout">Ngày trả phòng:</label>
+                        <input type="date" id="date_checkout" name="date_checkout" required>
                     </div>
                     <div class="form-group">
-                        <label for="songuoi">Số người:</label>
-                        <input type="number" id="songuoi" name="songuoi" required></input>
+                        <label for="booking_people">Số người:</label>
+                        <input type="number" id="booking_people" name="booking_people" required></input>
                     </div>
                     <div class="form-group">
-                        <label for="tongtien">Tổng số tiền(VNĐ):</label>
-                        <input type="number" id="tongtien" name="tongtien" required>
+                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
+                        <input type="number" id="booking_price" name="booking_price" required>
                     </div>
                     <div class="form-group">
-                        <label for="chuthich">Chú thích:</label>
-                        <input type="text" id="chuthich" name="chuthich" required>
+                        <label for="note">Chú thích:</label>
+                        <input type="text" id="note" name="note" required>
                     </div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" name="submit_booking" class="add-btn">Thêm đơn đặt phòng</button>
-                    <button type="reset"  class="cancel-btn">Hủy</button>
+                    <button type="reset" class="cancel-btn">Hủy</button>
                 </div>
             </form>
     </div>
@@ -211,8 +221,7 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
 
 
 
-
-<!-------------------------------- Tìm kiếm --------------------------->
+<!----------------------------------------------------------------------Tìm kiếm --------------------------------------------------->
 <div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -237,10 +246,11 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormBooking('add-form')"><i class='bx bx-plus'></i> Thêm đơn đặt phòng mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm đơn đặt phòng...">
-                <button type="submit" class="search-btn" onclick="showFormBooking('search-form')"><i class='bx bx-search'></i>
+                <input type="text" class="search" id="research" name="timkiem" placeholder="Tìm kiếm đơn đặt phòng...">
+                <button type="submit" class="search-btn" onclick="showFormBooking('research-form')"><i class='bx bx-search'></i>
             </div>
         </div>
+        <big>Kết quả tìm kiếm theo" ... "</big>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -266,41 +276,50 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
                         <?php
                         if( isset($_GET['content']) ? $_GET['content'] :'' ){
                             $search_query = trim($_GET['content']);
-                            $search = "%$search_query%";
+                            $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_booking WHERE madondatphong LIKE '$search' OR makhachhang LIKE '$search' OR tenkhachhang LIKE '$search' OR mahomestay LIKE '$search' 
-                            OR maphong LIKE '$search' OR songuoi LIKE '$search' OR ngaydatphong LIKE '$search' OR trangthai LIKE '$search' "; 
-                            $result = $conn->query($sql);} 
+                            $sql = "SELECT * FROM db_booking WHERE booking_id LIKE '$search' OR customer_id LIKE '$search' OR customer_name LIKE '$search' OR homestay_id LIKE '$search' 
+                            OR room_id LIKE '$search' OR booking_people LIKE '$search' OR date_booking LIKE '$search' OR booking_status LIKE '$search' "; 
+                            $result = $conn->query($sql);
                             $i = 1;
+                        }else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
+                            $search_query = trim($_GET['recontent']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_booking WHERE booking_id LIKE '$search' OR customer_id LIKE '$search' OR customer_name LIKE '$search' OR homestay_id LIKE '$search' 
+                            OR room_id LIKE '$search' OR booking_people LIKE '$search' OR date_booking LIKE '$search' OR booking_status LIKE '$search' "; 
+                            $result = $conn->query($sql);
+                            $i = 1;
+                        } 
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['madondatphong'] ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['mahomestay'] ?></td>
-                            <td><?php echo $row['maphong'] ?></td>
-                            <td><?php echo $row['ngaydatphong'] ?></td>
-                            <td><?php echo $row['ngaynhanphong'] ?></td>
-                            <td><?php echo $row['ngaytraphong'] ?></td>
-                            <td><?php echo $row['songuoi'] ?></td>
-                            <td><?php echo $row['tongtien'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['chuthich'] ?></td>
+                            <td><?php echo $row['booking_id'] ?></td>
+                            <td><?php echo $row['customer_id'] ?></td>
+                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php echo $row['homestay_id'] ?></td>
+                            <td><?php echo $row['room_id'] ?></td>
+                            <td><?php echo $row['date_booking'] ?></td>
+                            <td><?php echo $row['date_checkin'] ?></td>
+                            <td><?php echo $row['date_checkout'] ?></td>
+                            <td><?php echo $row['booking_people'] ?></td>
+                            <td><?php echo $row['booking_price'] ?></td>
+                            <td><?php echo $row['booking_status'] ?></td>
+                            <td class="truncate-text"><?php echo $row['note'] ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $row['madondatphong']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $row['madondatphong']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $row['madondatphong']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $row['booking_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $row['booking_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $row['booking_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
-                    </tr>
-                <?php } ?>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!---------------------------------- Sửa --------------------------->
 
+<!---------------------------------------------------------------------- Cập nhật --------------------------------------------------->
 <div class="form-container"id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($booking) { ?>
     <div class="head-title">
@@ -323,43 +342,55 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=booking" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $booking['madondatphong']; ?>')"><i class='bx bx-detail'></i>Xem thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $booking['madondatphong']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+                <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $booking['booking_id']; ?>')"><i class='bx bx-detail'></i>Xem thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $booking['booking_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
             </div>
         </div>
         <h2>Sửa thông tin đơn đặt phòng</h2>
+        <?php 
+                $th_sql = "SELECT DISTINCT TRIM(booking_status) as booking_status FROM `db_booking`";
+                $th_result = mysqli_query($conn, $th_sql);
+            ?>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="madondatphong" value="<?php echo $booking['madondatphong']; ?>">
+            <input type="hidden" name="booking_id" value="<?php echo $booking['booking_id']; ?>">
                 <div class="form-section">
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
                     <div class="form-group">
-                        <label for="madondatphong">Mã đơn đặt phòng:</label>
-                        <input type="text" id="madondatphong" name="madondatphong" value="<?php echo $booking['madondatphong']; ?>" required>
+                        <label for="booking_id">Mã đơn đặt phòng:</label>
+                        <input type="text" id="booking_id" name="booking_id" value="<?php echo $booking['booking_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="makhachhang">Mã Khách hàng:</label>
-                        <input type="text" id="makhachhang" name="makhachhang" value="<?php echo $booking['makhachhang']; ?>" required>
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <input type="text" id="customer_id" name="customer_id" value="<?php echo $booking['customer_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="mahomestay">Mã homestay:</label>
-                        <input type="text" id="mahomestay" name="mahomestay" value="<?php echo $booking['mahomestay']; ?>" required>
+                        <label for="homestay_id">Mã homestay:</label>
+                        <input type="text" id="homestay_id" name="homestay_id" value="<?php echo $booking['homestay_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="maphong">Mã phòng:</label>
-                        <input type="text" id="maphong" name="maphong" value="<?php echo $booking['maphong']; ?>" required>
+                        <label for="room_id">Mã phòng:</label>
+                        <input type="text" id="room_id" name="room_id" value="<?php echo $booking['room_id']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaydatphong">Ngày đặt phòng:</label>
-                        <input type="date" id="ngaydatphong" name="ngaydatphong" value="<?php echo $booking['ngaydatphong']; ?>" required>
+                        <label for="date_booking">Ngày đặt phòng:</label>
+                        <input type="date" id="date_booking" name="date_booking" value="<?php echo $booking['date_booking']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="trangthai">Trạng thái:</label>
-                        <select id="trangthai" name="trangthai">
-                            <option value="danghoatdong" <?php echo ($booking['trangthai'] == 'danghoatdong') ? 'selected' : ''; ?>>Đã xác nhận</option>
-                            <option value="dung" <?php echo ($booking['trangthai'] == 'dung') ? 'selected' : ''; ?>>Tạm dừng</option>
-                            <option value="choduyet" <?php echo ($booking['trangthai'] == 'choduyet') ? 'selected' : ''; ?>>Chờ duyệt</option>
+                        <label for="booking_status">Trạng thái:</label>
+                        <select id="booking_status" name="booking_status">
+                            <?php
+                             if ($th_result->num_rows > 0) {
+                            while ($row = mysqli_fetch_assoc($th_result)) {?>
+                                <option value="<?php echo $row['booking_status'];?>">
+                                    <?php echo $row['booking_status'];?>
+                                </option>
+                            <?php } 
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -367,33 +398,33 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
                 <div class="form-section">
                     <h3>Thông tin khách hàng đặt phòng</h3>
                     <div class="form-group">
-                        <label for="tenkhachhang">Tên Khách hàng:</label>
-                        <input type="text" id="tenkhachhang" name="tenkhachhang" value="<?php echo $booking['tenkhachhang']; ?>" required>
+                        <label for="customer_name">Tên Khách hàng:</label>
+                        <input type="text" id="customer_name" name="customer_name" value="<?php echo $booking['customer_name']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaynhanphong">Ngày nhận phòng:</label>
-                        <input type="date" id="ngaynhanphong" name="ngaynhanphong" value="<?php echo $booking['ngaynhanphong']; ?>" required>
+                        <label for="date_checkin">Ngày nhận phòng:</label>
+                        <input type="date" id="date_checkin" name="date_checkin" value="<?php echo $booking['date_checkin']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="ngaytraphong">Ngày trả phòng:</label>
-                        <input type="date" id="ngaytraphong" name="ngaytraphong" value="<?php echo $booking['ngaytraphong']; ?>" required>
+                        <label for="date_checkout">Ngày trả phòng:</label>
+                        <input type="date" id="date_checkout" name="date_checkout" value="<?php echo $booking['date_checkout']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="songuoi">Số người:</label>
-                        <input type="number" id="songuoi" name="songuoi" value="<?php echo $booking['songuoi']; ?>" required></input>
+                        <label for="booking_people">Số người:</label>
+                        <input type="number" id="booking_people" name="booking_people" value="<?php echo $booking['booking_people']; ?>" required></input>
                     </div>
                     <div class="form-group">
-                        <label for="tongtien">Tổng số tiền(VNĐ):</label>
-                        <input type="number" id="tongtien" name="tongtien" value="<?php echo $booking['tongtien']; ?>" required>
+                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
+                        <input type="number" id="booking_price" name="booking_price" value="<?php echo $booking['booking_price']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="chuthich">Chú thích:</label>
-                        <input type="text" id="chuthich" name="chuthich" value="<?php echo $booking['chuthich']; ?>" required>
+                        <label for="note">Chú thích:</label>
+                        <input type="text" id="note" name="note" value="<?php echo $booking['note']; ?>" required>
                     </div>
                 </div>
                     <div class="form-actions">
                     <button type="submit" name="submit_booking" class="edit-btn">Cập Nhật thông tin</button>
-                <button type="reset" class="cancel-btn">Hủy</button>
+                    <button type="reset" class="cancel-btn">Hủy</button>
                 </div>
             </form>
         </div>
@@ -402,7 +433,8 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
     <?php } ?>
 </div>
 
-<!-------------------------------- Chi tiết --------------------------->
+
+<!---------------------------------------------------------------------- Chi tiết --------------------------------------------------->
 <div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($booking) { ?>
     <div class="head-title">
@@ -425,10 +457,10 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=booking" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $booking['madondatphong']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $booking['madondatphong']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormBooking('edit-form', '<?php echo $booking['booking_id']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $booking['booking_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
             </div>
         </div>
         
@@ -438,56 +470,56 @@ if (($is_edit_form || $is_detail_form) && $madatphong) {
             <div class="detail-section">
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
                     <div class="info-group">
-                        <label for="madondatphong">Mã đơn đặt phòng:</label>
-                        <p> <?php echo $booking['madondatphong']; ?> </p>
+                        <label for="booking_id">Mã đơn đặt phòng:</label>
+                        <p> <?php echo $booking['booking_id']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="makhachhang">Mã Khách hàng:</label>
-                        <p> <?php echo $booking['makhachhang']; ?> </p>
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <p> <?php echo $booking['customer_id']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="mahomestay">Mã homestay:</label>
-                        <p> <?php echo $booking['mahomestay']; ?> </p>
+                        <label for="homestay_id">Mã homestay:</label>
+                        <p> <?php echo $booking['homestay_id']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="maphong">Mã phòng:</label>
-                        <p> <?php echo $booking['maphong']; ?> </p>
+                        <label for="room_id">Mã phòng:</label>
+                        <p> <?php echo $booking['room_id']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="ngaydatphong">Ngày đặt phòng:</label>
-                        <p> <?php echo $booking['ngaydatphong']; ?> </p>
+                        <label for="date_booking">Ngày đặt phòng:</label>
+                        <p> <?php echo $booking['date_booking']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="trangthai">Trạng thái:</label>
-                        <p> <?php echo $booking['trangthai']; ?> </p>
+                        <label for="booking_status">Trạng thái:</label>
+                        <p> <?php echo $booking['booking_status']; ?> </p>
                     </div>
                 </div>
 
                 <div class="detail-section">
                     <h3>Thông tin khách hàng đặt phòng</h3>
                     <div class="info-group">
-                        <label for="tenkhachhang">Tên Khách hàng:</label>
-                        <p> <?php echo $booking['tenkhachhang']; ?> </p>
+                        <label for="customer_name">Tên Khách hàng:</label>
+                        <p> <?php echo $booking['customer_name']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="ngaynhanphong">Ngày nhận phòng:</label>
-                        <p> <?php echo $booking['ngaynhanphong']; ?> </p>
+                        <label for="date_checkin">Ngày nhận phòng:</label>
+                        <p> <?php echo $booking['date_checkin']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="ngaytraphong">Ngày trả phòng:</label>
-                        <p> <?php echo $booking['madondatphong']; ?> </p>
+                        <label for="date_checkout">Ngày trả phòng:</label>
+                        <p> <?php echo $booking['date_checkout']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="songuoi">Số người:</label>
-                        <p> <?php echo $booking['songuoi']; ?> </p>
+                        <label for="booking_people">Số người:</label>
+                        <p> <?php echo $booking['booking_people']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="tongtien">Tổng số tiền(VNĐ):</label>
-                        <p> <?php echo $booking['tongtien']; ?> </p>
+                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
+                        <p> <?php echo $booking['booking_price']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="chuthich">Chú thích:</label>
-                        <p> <?php echo $booking['chuthich']; ?> </p>
+                        <label for="note">Chú thích:</label>
+                        <p> <?php echo $booking['note']; ?> </p>
                     </div>
                 </div>
 

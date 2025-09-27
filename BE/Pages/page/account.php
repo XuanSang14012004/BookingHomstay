@@ -33,7 +33,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 }
 ?>
 
-<!-------------------------------------- Giao diện --------------------------------------->
+<!-------------------------------------- Giao diện chính --------------------------------------->
 <div class="form-container" id="account-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -58,7 +58,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormAccount('add-form')"><i class='bx bx-plus'></i> Thêm tài khoản mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm tài khoản...">
+                <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm tài khoản...">
                 <button type="submit" class="search-btn" onclick="showFormAccount('search-form')"><i class='bx bx-search'></i>
             </div>
         </div>
@@ -101,7 +101,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 </div>
 
 
-<!-------------------------------------------- Thêm ------------------------------------------------->
+<!-------------------------------------------- Giao diện thêm mới ------------------------------------------------->
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -123,7 +123,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
     </div>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=account" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
         <h2>Thêm Tài Khoản Mới</h2>
         <form action="../modules/add_function.php" method="POST">
@@ -162,7 +162,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 
 
 
-<!-------------------------------------- Tìm kiếm --------------------------------------->
+<!-------------------------------------- Giao diện tìm kiếm --------------------------------------->
 <div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
@@ -187,10 +187,11 @@ if (($is_edit_form || $is_detail_form) && $email) {
         <div class="toolbar">
             <button class="add-btn" onclick="showFormAccount('add-form')"><i class='bx bx-plus'></i> Thêm tài khoản mới</button>
             <div class="search-box">
-                <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm homestay...">
-                <button type="submit" class="search-btn" onclick="showFormAccount('search-form')"><i class='bx bx-search'></i>
+                <input type="text" class="search" id="research" name="timkiem" placeholder="Tìm kiếm homestay...">
+                <button type="submit" class="search-btn" onclick="showFormAccount('research-form')"><i class='bx bx-search'></i>
             </div>
         </div>
+        <big>Kết quả tìm kiếm theo" ... "</big>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -209,11 +210,19 @@ if (($is_edit_form || $is_detail_form) && $email) {
                         <?php
                         if( isset($_GET['content']) ? $_GET['content'] :'' ){
                             $search_query = trim($_GET['content']);
-                            $search = "%$search_query%";
+                            $search = "%".$search_query."%";
 
                             $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' OR email LIKE '$search' OR role LIKE '$search' OR phone LIKE '$search'"; 
-                            $result = $conn->query($sql);} 
+                            $result = $conn->query($sql);
                             $i = 1;
+                        }else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
+                            $search_query = trim($_GET['recontent']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' OR email LIKE '$search' OR role LIKE '$search' OR phone LIKE '$search'"; 
+                            $result = $conn->query($sql);
+                            $i = 1;
+                        } 
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
                             <td><?php echo $row['fullname'] ?></td>
@@ -236,7 +245,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 
 
 
-<!----------------------------------------------- Sửa -------------------------------------------->
+<!----------------------------------------------- Giao diện cập nhật -------------------------------------------->
 
 <div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($account) { ?>
@@ -260,14 +269,14 @@ if (($is_edit_form || $is_detail_form) && $email) {
         </div>
         <div class="management-container">
             <div class="toolbar">
-                <a href="home.php?page=account" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+                <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
                 <div class="action-buttons">
                     <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $account['email']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
                     <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['email']; ?>')"></i> Xóa thông tin</button>
                 </div>
             </div>
             <h2>Sửa Thông Tin Tài Khoản</h2>
-            <form action="../../modules/Update/update_function.php" method="POST" enctype="multipart/form-data">
+            <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="email" value="<?php echo $account['email']; ?>">
 
                 <div class="form-section">
@@ -286,7 +295,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
                     </div>
                     <div class="form-group">
                         <label for="password">Mật khẩu:</label>
-                        <input type="text" id="password" name="password" value="<?php echo $account['phone']; ?>" required>
+                        <input type="text" id="password" name="password" value="<?php echo $account['password']; ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="role">Phân quyền:</label>
@@ -327,7 +336,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
         </div>
         <div class="management-container">
             <div class="toolbar">
-                <a href="home.php?page=account" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+                <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
                 <div class="action-buttons">
                     <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $account['email']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
                     <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['email']; ?>')"></i> Xóa thông tin</button>

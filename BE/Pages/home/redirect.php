@@ -28,4 +28,5 @@
                 include $_GET['page'] . '.php';
             }
         
+        
 ?>

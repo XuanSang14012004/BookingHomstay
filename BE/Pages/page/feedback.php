@@ -4,45 +4,40 @@ require_once "../../config/connect.php";
 $action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_view_form = false;
-$is_add_form = false;
-$is_edit_form = false;
+$is_reply_form = false;
 $is_detail_form = false;
+$is_search_form = false;
 
-if ($action === 'add_account') {
-    $is_add_form = true;
-} else if ($action === 'edit_account') {
-    $is_edit_form = true;
-} else if ($action === 'detail_account') {
+if ($action === 'reply_feedback') {
+    $is_reply_form = true;
+} else if ($action === 'detail_feedback') {
     $is_detail_form = true;
+} else if ($action === 'search_feedback') {
+    $is_search_form = true;
 } else {
-    $is_view_form = true; // Trang chính
-
+    $is_view_form = true;
 }
 
-$email = isset($_GET['id']) ? $_GET['id'] : null;
-
-$account = null;
-if (($is_edit_form || $is_detail_form) && $email) {
-    $result = $conn->query("SELECT * FROM db_account WHERE email = '$email'");
+$feedback_id = isset($_GET['id']) ? $_GET['id'] : null;
+$feedback = null;
+if (($is_reply_form || $is_detail_form) && $feedback_id) {
+    $result = $conn->query("SELECT * FROM db_feedback WHERE feedback_id = '$feedback_id'");
     if ($result && $result->num_rows > 0) {
-        $account = mysqli_fetch_assoc($result);
+        $feedback = mysqli_fetch_assoc($result);
     }
+    
 }
 ?>
 
-<!---------------------------------- Giao diện --------------------------------->
-<div class="form-container">
+<!-------------------------------------------------- Giao diện chính ---------------------------->
+<div class="form-container" id="feedback-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
             <h1>Management</h1>
             <ul class="breadcrumb">
-                <li>
-                    <a href="#">Admin Dashboard</a>
-                </li>
+                <li><a href="#">Admin Dashboard</a></li>
                 <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Phản hồi khách hàng</a>
-                </li>
+                <li><a class="active" href="#">Phản hồi khách hàng</a></li>
             </ul>
         </div>
         <a href="#" class="btn-download">
@@ -53,10 +48,9 @@ if (($is_edit_form || $is_detail_form) && $email) {
     <div class="management-container">
         <h2>Phản hồi Khách hàng</h2>
         <div class="toolbar">
-            <button class="feedback-btn"><i class='bx bx-conversation'></i>Phản hồi Khách hàng</button>
             <div class="search-box">
-                <input type="text" placeholder="Tìm kiếm phản hồi...">
-                <button class="search-btn"><i class='bx bx-search'></i></button>
+                <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm phản hồi...">
+                <button type="submit" class="search-btn" onclick="showFormFeedback('search-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
         <div class="table-responsive">
@@ -65,72 +59,58 @@ if (($is_edit_form || $is_detail_form) && $email) {
                     <tr>
                         <th>STT</th>
                         <th>Mã Phản hồi</th>
-                        <th>Mã Khách hàng</th>
-                        <th>Tên Khác hàng</th>
+                        <th>Tên Khách hàng</th>
                         <th>Tiêu đề</th>
                         <th>Nội dung</th>
                         <th>Ngày gửi</th>
                         <th>Trạng thái</th>
-                        <th>Phản hồi của chủ Homestay</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <?php
-                        $result = $conn->query("SELECT * FROM db_feedback");
-                        $i = 1;
-                        while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <?php
+                    $result = $conn->query("SELECT * FROM db_feedback ");
+                    $i = 1;
+                    while ($row = mysqli_fetch_assoc($result)) { ?>
+                        <tr>
                             <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['maphanhoi'] ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['tieude'] ?></td>
-                            <td><?php echo $row['noidung'] ?></td>
-                            <td><?php echo $row['ngaygui'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['traloi'] ?></td>
+                            <td><?php echo $row['feedback_id']; ?></td>
+                            <td><?php echo $row['customer_name']; ?></td>
+                            <td><?php echo $row['title']; ?></td>
+                            <td><?php echo $row['content']; ?></td>
+                            <td><?php echo $row['date']; ?></td>
+                            <td><?php echo $row['feedback_status']; ?></td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" read-page="detail_feedback" feedback-id="<?php echo $row['maphanhoi'] ?>"><i class='bx bx-detail'></i></button>
-                                <button class="delete-btn" title="Xóa" delete-page="delete_feedback" account-id="<?php echo $row['maphanhoi'] ?>"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormFeedback('detail-form', '<?php echo $row['feedback_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Phản hồi" onclick="showFormFeedback('reply-form', '<?php echo $row['feedback_id']; ?>')"><i class='bx bx-conversation'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteFeedback('<?php echo $row['feedback_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
-                    </tr>
-                <?php } ?>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-
-<!---------------------------------- Giao diện --------------------------------->
-<div class="form-container">
+<!-------------------------------------------------- Giao diện tìm kiếm ---------------------------->
+<div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
     <div class="head-title">
         <div class="left">
             <h1>Management</h1>
             <ul class="breadcrumb">
-                <li>
-                    <a href="#">Admin Dashboard</a>
-                </li>
+                <li><a href="#">Admin Dashboard</a></li>
                 <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Phản hồi khách hàng</a>
-                </li>
+                <li><a href="home.php?page=feedback">Phản hồi khách hàng</a></li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li><a class="active" href="#">Kết quả tìm kiếm</a></li>
             </ul>
         </div>
-        <a href="#" class="btn-download">
-            <i class='bx bxs-cloud-download'></i>
-            <span class="text">Download PDF</span>
-        </a>
     </div>
     <div class="management-container">
-        <h2>Phản hồi Khách hàng</h2>
+        <h2>Kết quả tìm kiếm cho: </h2>
         <div class="toolbar">
-            <button class="feedback-btn"><i class='bx bx-conversation'></i>Phản hồi Khách hàng</button>
-            <div class="search-box">
-                <input type="text" placeholder="Tìm kiếm phản hồi...">
-                <button class="search-btn"><i class='bx bx-search'></i></button>
-            </div>
+            <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm phản hồi...">
+            <button type="submit" class="search-btn" onclick="showFormFeed('research-form')"><i class='bx bx-search'></i></button>
         </div>
         <div class="table-responsive">
             <table class="data-table">
@@ -138,275 +118,207 @@ if (($is_edit_form || $is_detail_form) && $email) {
                     <tr>
                         <th>STT</th>
                         <th>Mã Phản hồi</th>
-                        <th>Mã Khách hàng</th>
-                        <th>Tên Khác hàng</th>
+                        <th>Tên Khách hàng</th>
                         <th>Tiêu đề</th>
                         <th>Nội dung</th>
                         <th>Ngày gửi</th>
                         <th>Trạng thái</th>
-                        <th>Phản hồi của chủ Homestay</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <?php
-                        $result = $conn->query("SELECT * FROM db_feedback");
-                        $i = 1;
-                        while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['maphanhoi'] ?></td>
-                            <td><?php echo $row['makhachhang'] ?></td>
-                            <td><?php echo $row['tenkhachhang'] ?></td>
-                            <td><?php echo $row['tieude'] ?></td>
-                            <td><?php echo $row['noidung'] ?></td>
-                            <td><?php echo $row['ngaygui'] ?></td>
-                            <td><?php echo $row['trangthai'] ?></td>
-                            <td class="truncate-text"><?php echo $row['traloi'] ?></td>
-                            <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" read-page="detail_feedback" feedback-id="<?php echo $row['maphanhoi'] ?>"><i class='bx bx-detail'></i></button>
-                                <button class="delete-btn" title="Xóa" delete-page="delete_feedback" account-id="<?php echo $row['maphanhoi'] ?>"><i class='bx bx-trash'></i></button>
-                            </td>
-                    </tr>
-                <?php } ?>
+                    <?php
+                    if( isset($_GET['content']) ? $_GET['content'] :'' ){
+                            $search_query = trim($_GET['content']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_feedback WHERE feedback_id LIKE '$search' OR customer_name LIKE '$search' OR feedback_status LIKE '$search' "; 
+                            $result = $conn->query($sql);
+                            $i = 1;
+                    }else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
+                            $search_query = trim($_GET['recontent']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_feedback WHERE feedback_id LIKE '$search' OR customer_name LIKE '$search' OR feedback_status LIKE '$search' "; 
+                            $result = $conn->query($sql);
+                            $i = 1;
+                    }       
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?php echo $i++; ?></td>
+                                <td><?php echo $row['feedback_id']; ?></td>
+                                <td><?php echo $row['customer_name']; ?></td>
+                                <td><?php echo $row['title']; ?></td>
+                                <td><?php echo $row['content']; ?></td>
+                                <td><?php echo $row['date']; ?></td>
+                                <td><?php echo $row['feedback_status']; ?></td>
+                                <td class="actions">
+                                    <button class="detail-btn" title="Chi tiết" onclick="showFormFeed('detail-form', '<?php echo $row['feedback_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                    <button class="edit-btn" title="Phản hồi" onclick="showFormFeed('reply-form', '<?php echo $row['feedback_id']; ?>')"><i class='bx bx-conversation'></i></button>
+                                    <button class="delete-btn" title="Xóa" onclick="deleteFeed('<?php echo $row['feedback_id']; ?>')"><i class='bx bx-trash'></i></button>
+                                </td>
+                            </tr>
+                        <?php }
+                    } else {
+                        echo "<tr><td colspan='7'>Không tìm thấy kết quả nào.</td></tr>";
+                    }
+                    $stmt->close();
+                    ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-
-<!--------------------------------------------- Phản hồi khiếu nại ---------------------------------->
-<div class="form-container">
-    <?php 
-    $mahomestay = isset($_GET['id']) ? $_GET['id'] : null;
-
-    $result = $conn->query("SELECT * FROM db_homestay WHERE mahomestay = '$mahomestay' ");
-    if ($homestay = mysqli_fetch_assoc($result)) { ?>
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí homestay</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Cập nhật thông tin Homestay</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="management-container">
-        <div class="toolbar">
-            <a href="home.php?page=homestay" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
-            <div class="action-buttons">
-                <a href="home.php?page=detail_homestay&id=<?php echo $mahomestay; ?>" class="detail-btn" edit-page="update_homestay" homestay-id="<?php echo $mahomestay; ?>"><i class='bx bx-detail'></i> Xem thông tin</a>
-                <a href="#" class="delete-btn"><i class='bx bx-trash'></i> Xóa thông tin</a>
+<!-------------------------------------------------- Giao diện phản hồi khách hàng ---------------------------->
+<div class="form-container" id="reply-form" style="display:<?php echo $is_reply_form ? 'block' : 'none'; ?>;">
+    <?php if ($feedback) { ?>
+        <div class="head-title">
+            <div class="left">
+                <h1>Management</h1>
+                <ul class="breadcrumb">
+                    <li><a href="#">Admin Dashboard</a></li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li><a href="home.php?page=feedback">Phản hồi khách hàng</a></li>
+                     <li><i class='bx bx-chevron-right'></i></li>
+                    <li><a class="active">Trả lời phản hồi</a></li>
+                </ul>
             </div>
         </div>
-        <h2>Sửa Thông Tin Homestay</h2>
-        <form action="../../modules/Update/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="mahomestay" value="<?php echo $homestay['mahomestay']; ?>">
-
-            <div class="form-section">
-                <h3>Thông tin cơ bản</h3>
-                <div class="form-group">
-                    <label for="mahomestay">Mã Homestay:</label>
-                    <input type="text" name="mahomestay" value="<?php echo $homestay['mahomestay']; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="tenhomestay">Tên Homestay:</label>
-                    <input type="text" id="tenhomestay" name="tenhomestay" value="<?php echo $homestay['tenhomestay']; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="loaihinh">Loại hình:</label>
-                    <select id="loaihinh" name="loaihinh">
-                        <option value="homestay" <?php echo ($homestay['loaihinh'] == 'homestay') ? 'selected' : ''; ?>>Homestay</option>
-                        <option value="villa" <?php echo ($homestay['loaihinh'] == 'villa') ? 'selected' : ''; ?>>Villa</option>
-                        <option value="canho" <?php echo ($homestay['loaihinh'] == 'canho') ? 'selected' : ''; ?>>Căn hộ dịch vụ</option>
-                        <option value="khac" <?php echo ($homestay['loaihinh'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="trangthai">Trạng thái hoạt động:</label>
-                    <select id="trangthai" name="trangthai">
-                        <option value="danghoatdong" <?php echo ($homestay['trangthaihoatdong'] == 'danghoatdong') ? 'selected' : ''; ?>>Đang hoạt động</option>
-                        <option value="dung" <?php echo ($homestay['trangthaihoatdong'] == 'dung') ? 'selected' : ''; ?>>Tạm dừng</option>
-                        <option value="choduyet" <?php echo ($homestay['trangthaihoatdong'] == 'choduyet') ? 'selected' : ''; ?>>Chờ duyệt</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="sophong">Số phòng:</label>
-                    <input type="number" id="sophong" name="sophong" value="<?php echo $homestay['sophong']; ?>" min="1" required>
-                </div>
+        <div class="management-container">
+            <div class="toolbar">
+                <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             </div>
+            <h2>Trả lời phản hồi: <?php echo $feedback['title']; ?></h2>
+            <form action="path/to/your/update_feedback_script.php" method="POST">
+                <input type="hidden" name="feedback_id" value="<?php echo $feedback['feedback_id']; ?>">
+                
+                <div class="form-section">
+                    <h3>Thông tin phản hồi</h3>
+                    <div class="form-group">
+                        <label>Từ khách hàng:</label>
+                        <p><?php echo $feedback['customer_name']; ?> (ID: <?php echo $feedback['customer_id']; ?>)</p>
+                    </div>
+                     <div class="form-group">
+                        <label>Ngày gửi:</label>
+                        <p><?php echo $feedback['date']; ?></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Nội dung:</label>
+                        <p style="border: 1px solid #eee; padding: 10px; border-radius: 5px;"><?php echo nl2br($feedback['content']); ?></p>
+                    </div>
+                </div>
 
-            <div class="form-section">
-                <h3>Thông tin liên hệ & Địa chỉ</h3>
-                <div class="form-group">
-                    <label for="sodienthoai">Số điện thoại:</label>
-                    <input type="tel" id="sodienthoai" name="sodienthoai" value="<?php echo $homestay['sodienthoai']; ?>" required>
+                <div class="form-section">
+                    <h3>Nội dung trả lời</h3>
+                    <div class="form-group">
+                        <label for="reply">Nội dung trả lời của bạn:</label>
+                        <textarea id="reply" name="reply" rows="5" required><?php echo $feedback['reply']; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback_status">Cập nhật trạng thái:</label>
+                        <select id="feedback_status" name="feedback_status">
+                            <option value="Chưa trả lời" <?php echo ($feedback['feedback_status'] == 'Chưa trả lời') ? 'selected' : ''; ?>>Chưa trả lời</option>
+                            <option value="Đã trả lời" <?php echo ($feedback['feedback_status'] == 'Đã trả lời') ? 'selected' : ''; ?>>Đã trả lời</option>
+                            <option value="Đã đóng" <?php echo ($feedback['feedback_status'] == 'Đã đóng') ? 'selected' : ''; ?>>Đã đóng</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email liên hệ:</label>
-                    <input type="email" id="email" name="email" value="<?php echo $homestay['email']; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="diachi">Địa chỉ:</label>
-                    <textarea id="diachi" name="diachi" rows="3" required><?php echo $homestay['diachi']; ?></textarea>
-                </div>
-            </div>
 
-            <div class="form-section">
-                <h3>Chi tiết & Mô tả</h3>
-                <div class="form-group">
-                    <label for="mota">Mô tả:</label>
-                    <textarea id="mota" name="mota" rows="5"><?php echo $homestay['mota']; ?></textarea>
+                <div class="form-actions">
+                    <button type="submit" class="add-btn">Gửi trả lời</button>
+                    <button type="reset" class="cancel-btn">Hủy</button>
                 </div>
-                <div class="form-group">
-                    <label for="tiennghi">Tiện nghi:</label>
-                    <textarea id="tiennghi" name="tiennghi" rows="3" placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."><?php echo $homestay['tiennghi']; ?></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="chinhsach">Chính sách:</label>
-                    <textarea id="chinhsach" name="chinhsach" rows="3"><?php echo $homestay['chinhsach']; ?></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="hinhanh">Hình ảnh hiện tại:</label>
-                    <img src="<?php echo $homestay['hinhanh']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
-                    <label for="hinhanh_new">Chọn ảnh mới để thay thế :</label>
-                    <input type="file" id="hinhanh_new" name="hinhanh_new[]" multiple accept="image/*">
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="add-btn">Cập Nhật Homestay</button>
-                <button type="reset" class="cancel-btn">Hủy</button>
-            </div>
-        </form>
-    </div>
-    <?php 
-    }else {
-        echo "Không tìm thấy dữ liệu homestay.";
-        exit();
-    } ?>
+            </form>
+        </div>
+    <?php } else { echo "<p>Không tìm thấy thông tin phản hồi.</p>"; } ?>
 </div>
 
-<!------------------------------------------------ Chi tiết ------------------------------------------->
-<div class="form-container">
-        <?php 
-    $maphanhoi= isset($_GET['id']) ? $_GET['id'] : null;
-
-    $result = $conn->query("SELECT * FROM db_feedback WHERE maphanhoi = '$maphanhoi' ");
-    if ($homestay = mysqli_fetch_assoc($result)) { ?>
-
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí homestay</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Thông tin chi tiết Homestay</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="management-container">
-        <div class="toolbar">
-            <a href="home.php?page=homestay&id="$homestay class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
-            <div class="action-buttons">
-                <a href="home.php?page=update_homestay&id=<?php echo $mahomestay; ?>" class="edit-btn" edit-page="update_homestay" homestay-id="<?php echo $mahomestay; ?>"><i class='bx bx-edit-alt'></i> Sửa thông tin</a>
-                <a href="#" class="delete-btn"><i class='bx bx-trash'></i> Xóa thông tin</a>
+<!-------------------------------------------------- Giao diện thông tin chi tiết ---------------------------->
+<div class="form-container" id="detail-form" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
+    <?php if ($feedback) { ?>
+        <div class="head-title">
+            <div class="left">
+                <h1>Management</h1>
+                <ul class="breadcrumb">
+                     <li><a href="#">Admin Dashboard</a></li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li><a href="home.php?page=feedback">Phản hồi khách hàng</a></li>
+                     <li><i class='bx bx-chevron-right'></i></li>
+                    <li><a class="active">Chi tiết phản hồi</a></li>
+                </ul>
             </div>
         </div>
-        
-        <h2>Chi tiết Homestay</h2>
-
-        <div class="detail-grid">
-            <div class="detail-section">
-                <h3>Thông tin cơ bản</h3>
-                <div class="info-group">
-                    <label>Tên Homestay:</label>
-                    <p>Homestay Vọng Nguyệt</p>
-                </div>
-                <div class="info-group">
-                    <label>Mã Homestay:</label>
-                    <p>HS-001</p>
-                </div>
-                <div class="info-group">
-                    <label>Loại hình:</label>
-                    <p>Homestay</p>
-                </div>
-                <div class="info-group">
-                    <label>Số phòng:</label>
-                    <p>5 phòng</p>
-                </div>
-                <div class="info-group">
-                    <label>Trạng thái hoạt động:</label>
-                    <p class="status-active">Đang hoạt động</p>
+        <div class="management-container">
+            <div class="toolbar">
+                <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+                <div class="action-buttons">
+                    <a href="home.php?page=feedback&action=reply_feedback&id=<?php echo $feedback['feedback_id']; ?>" class="edit-btn"><i class='bx bx-conversation'></i> Trả lời</a>
                 </div>
             </div>
+            
+            <h2>Chi tiết phản hồi #<?php echo $feedback['feedback_id']; ?></h2>
 
-            <div class="detail-section">
-                <h3>Mô tả & Tiện nghi</h3>
-                <div class="info-group">
-                    <label>Mô tả:</label>
-                    <p>Một homestay yên bình nằm trên đỉnh đồi, bao quanh bởi rừng thông và sương mù. Không gian được thiết kế theo phong cách tối giản, tận dụng tối đa ánh sáng tự nhiên và view toàn cảnh.</p>
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h3>Thông tin chung</h3>
+                    <div class="info-group">
+                        <label>Tiêu đề:</label>
+                        <p><?php echo $feedback['title']; ?></p>
+                    </div>
+                     <div class="info-group">
+                        <label>Tên Khách hàng:</label>
+                        <p><?php echo $feedback['customer_name']; ?></p>
+                    </div>
+                    <div class="info-group">
+                        <label>Mã Khách hàng:</label>
+                        <p><?php echo $feedback['customer_id']; ?></p>
+                    </div>
+                     <div class="info-group">
+                        <label>Ngày gửi:</label>
+                        <p><?php echo $feedback['date']; ?></p>
+                    </div>
+                    <div class="info-group">
+                        <label>Trạng thái:</label>
+                        <p><?php echo $feedback['feedback_status']; ?></p>
+                    </div>
                 </div>
-                <div class="info-group">
-                    <label>Tiện nghi:</label>
-                    <ul>
-                        <li>Wifi miễn phí</li>
-                        <li>Bếp nấu ăn chung</li>
-                        <li>Bãi đỗ xe</li>
-                        <li>Vườn nướng BBQ</li>
-                    </ul>
-                </div>
-                <div class="info-group">
-                    <label>Chính sách:</label>
-                    <p>Giờ nhận phòng: 14:00. Giờ trả phòng: 12:00. Không cho phép thú cưng.</p>
-                </div>
-            </div>
-
-            <div class="detail-section">
-                <h3>Địa chỉ & Liên hệ</h3>
-                <div class="info-group">
-                    <label>Địa chỉ:</label>
-                    <p>123 Đường Bán Nguyệt, Phường 2, Đà Lạt, Lâm Đồng</p>
-                </div>
-                <div class="info-group">
-                    <label>Số điện thoại:</label>
-                    <p>0987654321</p>
-                </div>
-                <div class="info-group">
-                    <label>Email liên hệ:</label>
-                    <p>contact@vongnguyet.vn</p>
-                </div>
-            </div>
-
-            <div class="detail-section">
-                <h3>Hình ảnh Homestay</h3>
-                <div class="images-gallery">
-                    <img src="path/to/image1.jpg" alt="Hình ảnh Homestay 1">
-                    <img src="path/to/image2.jpg" alt="Hình ảnh Homestay 2">
-                    <img src="path/to/image3.jpg" alt="Hình ảnh Homestay 3">
+                <div class="detail-section">
+                    <h3>Nội dung</h3>
+                    <div class="info-group">
+                        <label>Nội dung khách hàng gửi:</label>
+                        <p><?php echo nl2br($feedback['content']); ?></p>
+                    </div>
+                    <div class="info-group">
+                        <label>Nội dung đã trả lời:</label>
+                        <p><?php echo $feedback['reply'] ? nl2br($feedback['reply']) : '<i>Chưa có phản hồi.</i>'; ?></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <?php } else {
-        echo "<p>Không tìm thấy thông tin homestay.</p>";
-    } ?>
+    <?php } else { echo "<p>Không tìm thấy thông tin phản hồi.</p>"; } ?>
 </div>
+<script>
+    
+// ---------- Feedback ----------
+function showFormFeed(formId, feedback_id = null) {
+    const check_search = document.getElementById("search");
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
+
+    if (formId === 'feedback-form') {
+        showInternalForm(formId);
+    }else if (formId === 'search-form') {
+        navigateToUrl(`home.php?page=feedback&action=search_feedback&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=feedback&action=search_feedback&recontent=${research}`);
+    } else if (formId === 'reply-form' && feedback_id) {
+        navigateToUrl(`home.php?page=feedback&action=reply_feedback&id=${feedback_id}`);
+    } else if (formId === 'detail-form' && feedback_id) {
+        navigateToUrl(`home.php?page=feedback&action=detail_feedback&id=${feedback_id}`);
+    }
+}
+</script>
