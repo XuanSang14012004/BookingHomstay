@@ -1,237 +1,308 @@
+function navigateToUrl(url) {
+    window.location.href = url;
+}
 
-// ---------- Account ----------
-function showFormAccount(formId, email = null) {
-    const forms = document.querySelectorAll('.form-container');
-    const check_search = document.getElementById("search");
-    const search = check_search.value;
+function showInternalForm(formId, containerClass = '.form-container') {
+    const forms = document.querySelectorAll(containerClass);
     forms.forEach(form => {
         form.style.display = 'none';
     });
 
-    // Xử lý logic hiển thị
+    const selectedForm = document.getElementById(formId);
+    if (selectedForm) {
+        selectedForm.style.display = 'block';
+    }
+}
+
+/**
+@param {string} pageName
+@param {string} defaultFormId
+@param {string} formContainerClass
+**/
+function handlePopState(pageName, defaultFormId, formContainerClass = '.form-container') {
+    window.addEventListener('popstate', function(event) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
+        const action = urlParams.get('action');
+
+        if (page !== pageName) {
+            return;
+        }
+
+        const forms = document.querySelectorAll(formContainerClass);
+        if (forms.length === 0) {
+            return; 
+        }
+        
+        forms.forEach(form => {
+            form.style.display = 'none';
+        });
+
+        let formToShowId = defaultFormId;
+
+        if (action && action.startsWith('add_')) {
+            formToShowId = 'add-form'; 
+        } else if (action && action.startsWith('edit_')) {
+            formToShowId = 'edit-form'; 
+        } else if (action && action.startsWith('detail_')) {
+            formToShowId = 'detail-form'; 
+        } else if (action && action.startsWith('search_')) {
+            const content = urlParams.get('content') || urlParams.get('recontent');
+            if (content) {
+                 formToShowId = 'search-results';
+            }
+        } 
+        
+        if (pageName === 'feedback' && action === 'reply_feedback') {
+            formToShowId = 'reply-form';
+        }
+        if (pageName === 'reviews' && action === 'search_review') {
+             formToShowId = 'search-results'; 
+        }
+
+
+        const formToShow = document.getElementById(formToShowId);
+        if (formToShow) {
+            formToShow.style.display = 'block';
+        } else {
+             const defaultForm = document.getElementById(defaultFormId);
+             if (defaultForm) {
+                 defaultForm.style.display = 'block';
+             }
+        }
+    });
+}
+
+
+
+// ---------- Account ----------
+function showFormAccount(formId, email = null) {
+    const check_search = document.getElementById("search");
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
+
     if (formId === 'account-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=account&action=add_account&id=${email}`;
+        navigateToUrl(`home.php?page=account&action=add_account&id=${email}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=account&action=search_account&content=${search}`;
+        navigateToUrl(`home.php?page=account&action=search_account&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=account&action=search_account&recontent=${research}`);
     } else if (formId === 'edit-form' && email) {
-        window.location.href = `home.php?page=account&action=edit_account&id=${email}`;
+        navigateToUrl(`home.php?page=account&action=edit_account&id=${email}`);
     } else if (formId === 'detail-form' && email) {
-        window.location.href = `home.php?page=account&action=detail_account&id=${email}`;
+        navigateToUrl(`home.php?page=account&action=detail_account&id=${email}`);
     }
 }
 
 function deleteAccount(email) {
     if (confirm("Bạn có chắc chắn muốn xóa tài khoản này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_account&id=${email}`;
+        navigateToUrl(`home.php?page=delete&action=delete_account&id=${email}`);
     }
 }
 
 // ---------- User ----------
-function showFormUser(formId, makhachhang = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormUser(formId, customer_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'user-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=user&action=add_user&id=${makhachhang}`;
+        navigateToUrl(`home.php?page=user&action=add_user&id=${customer_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=user&action=search_user&content=${search}`;
-    } else if (formId === 'edit-form' && makhachhang) {
-        window.location.href = `home.php?page=user&action=edit_user&id=${makhachhang}`;
-    } else if (formId === 'detail-form' && makhachhang) {
-        window.location.href = `home.php?page=user&action=detail_user&id=${makhachhang}`;
+        navigateToUrl(`home.php?page=user&action=search_user&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=user&action=search_user&recontent=${research}`);
+    } else if (formId === 'edit-form' && customer_id) {
+        navigateToUrl(`home.php?page=user&action=edit_user&id=${customer_id}`);
+    } else if (formId === 'detail-form' && customer_id) {
+        navigateToUrl(`home.php?page=user&action=detail_user&id=${customer_id}`);
     }
 }
 
-function deleteUser(makhachhang) {
+function deleteUser(customer_id) {
     if (confirm("Bạn có chắc chắn muốn xóa khách hàng này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_user&id=${makhachhang}`;
+        navigateToUrl(`home.php?page=delete&action=delete_user&id=${customer_id}`);
     }
 }
 
 // ---------- Homestay ----------
-function showFormHomestay(formId, mahomestay = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormHomestay(formId, homestay_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
-
-    // Xử lý logic hiển thị
-    if (formId === 'Homestay-form') {
-        document.getElementById(formId).style.display = 'block';
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
+    
+    if (formId === 'Homestay-form') { 
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=homestay&action=add_homestay&id=${mahomestay}`;
+        navigateToUrl(`home.php?page=homestay&action=add_homestay&id=${homestay_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=homestay&action=search_homestay&content=${search}`;
-    } else if (formId === 'edit-form' && mahomestay) {
-        window.location.href = `home.php?page=homestay&action=edit_homestay&id=${mahomestay}`;
-    } else if (formId === 'detail-form' && mahomestay) {
-        window.location.href = `home.php?page=homestay&action=detail_homestay&id=${mahomestay}`;
+        navigateToUrl(`home.php?page=homestay&action=search_homestay&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=homestay&action=search_homestay&recontent=${research}`);
+    } else if (formId === 'edit-form' && homestay_id) {
+        navigateToUrl(`home.php?page=homestay&action=edit_homestay&id=${homestay_id}`);
+    } else if (formId === 'detail-form' && homestay_id) {
+        navigateToUrl(`home.php?page=homestay&action=detail_homestay&id=${homestay_id}`);
     }
 }
 
-function deleteHomestay(mahomestay) {
+function deleteHomestay(homestay_id) {
     if (confirm("Bạn có chắc chắn muốn xóa Homestay này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_homestay&id=${mahomestay}`;
+        navigateToUrl(`home.php?page=delete&action=delete_homestay&id=${homestay_id}`);
     }
 }
 
 // ---------- Rooms ----------
-function showFormRoom(formId, maphong = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormRoom(formId, room_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'room-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=rooms&action=add_room&id=${maphong}`;
+        navigateToUrl(`home.php?page=rooms&action=add_room&id=${room_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=rooms&action=search_room&content=${search}`;
-    } else if (formId === 'edit-form' && maphong) {
-        window.location.href = `home.php?page=rooms&action=edit_room&id=${maphong}`;
-    } else if (formId === 'detail-form' && maphong) {
-        window.location.href = `home.php?page=rooms&action=detail_room&id=${maphong}`;
+        navigateToUrl(`home.php?page=rooms&action=search_room&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=rooms&action=search_room&recontent=${research}`);
+    } else if (formId === 'edit-form' && room_id) {
+        navigateToUrl(`home.php?page=rooms&action=edit_room&id=${room_id}`);
+    } else if (formId === 'detail-form' && room_id) {
+        navigateToUrl(`home.php?page=rooms&action=detail_room&id=${room_id}`);
     }
 }
 
-function deleteRoom(maphong) {
+function deleteRoom(room_id) {
     if (confirm("Bạn có chắc chắn muốn xóa thông tin phòng này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_room&id=${maphong}`;
+        navigateToUrl(`home.php?page=delete&action=delete_room&id=${room_id}`);
     }
 }
 
 // ---------- Booking ----------
-function showFormBooking(formId, madatphong = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormBooking(formId, booking_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'booking-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=booking&action=add_booking&id=${madatphong}`;
+        navigateToUrl(`home.php?page=booking&action=add_booking&id=${booking_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=booking&action=search_booking&content=${search}`;
-    } else if (formId === 'edit-form' && madatphong) {
-        window.location.href = `home.php?page=booking&action=edit_booking&id=${madatphong}`;
-    } else if (formId === 'detail-form' && madatphong) {
-        window.location.href = `home.php?page=booking&action=detail_booking&id=${madatphong}`;
+        navigateToUrl(`home.php?page=booking&action=search_booking&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=booking&action=search_booking&recontent=${research}`);
+    } else if (formId === 'edit-form' && booking_id) {
+        navigateToUrl(`home.php?page=booking&action=edit_booking&id=${booking_id}`);
+    } else if (formId === 'detail-form' && booking_id) {
+        navigateToUrl(`home.php?page=booking&action=detail_booking&id=${booking_id}`);
     }
 }
 
-function deleteBooking(madatphong) {
+function deleteBooking(booking_id) {
     if (confirm("Bạn có chắc chắn muốn xóa đơn đặt phòng này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_booking&id=${madatphong}`;
+        navigateToUrl(`home.php?page=delete&action=delete_booking&id=${booking_id}`);
     }
 }
+
 // ---------- Payment ----------
-function showFormPay(formId, mathanhtoan = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormPay(formId, payment_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'payment-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     } else if (formId === 'add-form') {
-        window.location.href = `home.php?page=payment&action=add_payment&id=${mathanhtoan}`;
+        navigateToUrl(`home.php?page=payment&action=add_payment&id=${payment_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=payment&action=search_payment&content=${search}`;
-    } else if (formId === 'edit-form' && mathanhtoan) {
-        window.location.href = `home.php?page=payment&action=edit_payment&id=${mathanhtoan}`;
-    } else if (formId === 'detail-form' && mathanhtoan) {
-        window.location.href = `home.php?page=payment&action=detail_payment&id=${mathanhtoan}`;
+        navigateToUrl(`home.php?page=payment&action=search_payment&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=payment&action=search_payment&recontent=${research}`);
+    } else if (formId === 'edit-form' && payment_id) {
+        navigateToUrl(`home.php?page=payment&action=edit_payment&id=${payment_id}`);
+    } else if (formId === 'detail-form' && payment_id) {
+        navigateToUrl(`home.php?page=payment&action=detail_payment&id=${payment_id}`);
     }
 }
 
-function deletePay(mathanhtoan) {
+function deletePay(payment_id) {
     if (confirm("Bạn có chắc chắn muốn xóa hóa đơn này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_payment&id=${mathanhtoan}`;
+        navigateToUrl(`home.php?page=delete&action=delete_payment&id=${payment_id}`);
     }
 }
 
 // ---------- Reviews ----------
-function showFormReview(formId, madanhgia = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormReview(formId, review_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'review-form') {
-        document.getElementById(formId).style.display = 'block';
-    } else if (formId === 'edit-form' && madanhgia) {
-        window.location.href = `home.php?page=reviews&action=edit_review&id=${madanhgia}`;
+        showInternalForm(formId);
+    } else if (formId === 'edit-form' && review_id) {
+        navigateToUrl(`home.php?page=reviews&action=edit_review&id=${review_id}`);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=reviews&action=search_review&content=${search}`;
-    } else if (formId === 'detail-form' && madanhgia) {
-        window.location.href = `home.php?page=reviews&action=detail_review&id=${madanhgia}`;
+        navigateToUrl(`home.php?page=reviews&action=search_review&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=reviews&action=search_review&recontent=${research}`);
+    } else if (formId === 'detail-form' && review_id) {
+        navigateToUrl(`home.php?page=reviews&action=detail_review&id=${review_id}`);
     }
 }
 
-function deleteReview(madanhgia) {
+function deleteReview(review_id) {
     if (confirm("Bạn có chắc chắn muốn xóa đánh giá này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_review&id=${madanhgia}`;
+        navigateToUrl(`home.php?page=delete&action=delete_review&id=${review_id}`);
     }
 }
 
 // ---------- Feedback ----------
-function showFormFeed(formId, maphanhoi = null) {
-    const forms = document.querySelectorAll('.form-container');
+function showFormFeedback(formId, feedback_id = null) {
     const check_search = document.getElementById("search");
-    const search = check_search.value;
-    forms.forEach(form => {
-        form.style.display = 'none';
-    });
+    const check_research = document.getElementById("research");
+    const search = check_search ? check_search.value : '';
+    const research = check_research ? check_research.value : '';
 
-    // Xử lý logic hiển thị
     if (formId === 'feedback-form') {
-        document.getElementById(formId).style.display = 'block';
+        showInternalForm(formId);
     }else if (formId === 'search-form') {
-        window.location.href = `home.php?page=account&action=search_feedback&content=${search}`;
-    } else if (formId === 'edit-form' && maphanhoi) {
-        window.location.href = `home.php?page=feedback&action=edit_feedback&id=${maphanhoi}`;
-    } else if (formId === 'detail-form' && maphanhoi) {
-        window.location.href = `home.php?page=feedback&action=detail_feedback&id=${maphanhoi}`;
+        navigateToUrl(`home.php?page=feedback&action=search_feedback&content=${search}`);
+    }else if (formId === 'research-form') {
+        navigateToUrl(`home.php?page=feedback&action=search_feedback&recontent=${research}`);
+    } else if (formId === 'reply-form' && feedback_id) {
+        navigateToUrl(`home.php?page=feedback&action=reply_feedback&id=${feedback_id}`);
+    } else if (formId === 'detail-form' && feedback_id) {
+        navigateToUrl(`home.php?page=feedback&action=detail_feedback&id=${feedback_id}`);
     }
 }
 
-function deleteFeed(maphanhoi) {
+function deleteFeed(feedback_id) {
     if (confirm("Bạn có chắc chắn muốn xóa phản hồi này không?")) {
-        window.location.href = `home.php?page=delete&action=delete_feedback&id=${maphanhoi}`;
+        navigateToUrl(`home.php?page=delete&action=delete_feedback&id=${feedback_id}`);
     }
 }
 
-
-
-
-
-
-
+handlePopState('account', 'account-form'); 
+handlePopState('user', 'user-form'); 
+handlePopState('homestay', 'Homestay-form'); 
+handlePopState('rooms', 'room-form'); 
+handlePopState('booking', 'booking-form'); 
+handlePopState('payment', 'payment-form'); 
+handlePopState('reviews', 'review-form'); 
+handlePopState('feedback', 'feedback-form'); 
 
 
 
@@ -281,11 +352,11 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật tài khoản thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'add_account' && status === 'exists') {
+    if (page === 'account' && status === 'exists') {
         showMessage('Email đã tồn tại. Vui lòng sử dụng email khác.');
     }
 
-    // User
+    // Customer
     if (page === 'user') {
         if (status === 'add_success') {
             showMessage('Thêm khách hàng thành công!');
@@ -327,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật homestay thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'add_homestay' && status === 'exists') {
+    if (page === 'homestay' && status === 'exists') {
         showMessage('Mã homestay đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 

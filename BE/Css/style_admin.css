@@ -150,6 +150,7 @@ body {
 	color: var(--dark);
 	white-space: nowrap;
 	overflow-x: hidden;
+	transition: 0.4s;
 }
 #sidebar .side-menu.top li.active a {
 	color: var(--blue);
@@ -652,7 +653,7 @@ h2 {
     align-items: center;
 }
 
-#search {
+.search-box  .search {
     border: 1px solid var(--light);
     border-radius: 4px;
     padding: 9px 12px;
@@ -662,7 +663,7 @@ h2 {
     transition: border-color 0.3s ease;
 }
 
-#search:focus {
+.search-box .search:focus {
     border-color: var(--blue);
 }
 
@@ -849,6 +850,15 @@ h2 {
 }
 
 .form-actions .add-btn:hover {
+    background-color: var(--dark-blue);
+}
+
+.form-actions .edit-btn {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.form-actions .edit-btn:hover {
     background-color: var(--dark-blue);
 }
 

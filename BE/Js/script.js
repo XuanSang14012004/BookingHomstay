@@ -13,7 +13,6 @@ allSideMenu.forEach(item=> {
 
 
 
-
 // TOGGLE SIDEBAR
 const menuBar = document.querySelector('#content nav .bx.bx-menu');
 const sidebar = document.getElementById('sidebar');
@@ -21,7 +20,6 @@ const sidebar = document.getElementById('sidebar');
 menuBar.addEventListener('click', function () {
 	sidebar.classList.toggle('hide');
 })
-
 
 
 const searchButton = document.querySelector('#content nav form .form-input button');
@@ -41,9 +39,6 @@ searchButton.addEventListener('click', function (e) {
 })
 
 
-
-
-
 if(window.innerWidth < 768) {
 	sidebar.classList.add('hide');
 } else if(window.innerWidth > 576) {
@@ -60,7 +55,6 @@ window.addEventListener('resize', function () {
 })
 
 
-
 const switchMode = document.getElementById('switch-mode');
 
 switchMode.addEventListener('change', function () {
@@ -71,3 +65,6 @@ switchMode.addEventListener('change', function () {
 	}
 })
 
+function goBack() {
+      window.history.back();
+    }

@@ -155,32 +155,49 @@
     margin: 30px auto;
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
 /* Sidebar */
 .profile-left {
     width: 28%;
-    border-right: 1px solid #eee;
+    /* Dùng padding thay vì border-right để dễ dàng điều chỉnh khoảng cách hơn */
     padding-right: 20px;
+    margin-right: 20px;
+    border-right: 1px solid #eee;
+}
+
+.profile-left-img {
+    text-align: center; /* Căn giữa nội dung trong phần avatar và tên */
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
 }
 
 .profile-left-img img {
     width: 90px;
     height: 90px;
     border-radius: 50%;
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
     margin-bottom: 10px;
+    border: 3px solid #f8f9fa; /* Thêm viền nhẹ */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
 .profile-left-img h2 {
     font-size: 18px;
-    margin-bottom: 8px;
+    margin-bottom: 4px; /* Giảm khoảng cách */
+}
+
+.profile-left-img p i {
+    margin-right: 5px;
 }
 
 .profile-left-content h3 {
     font-size: 16px;
     margin: 18px 0 10px;
+    font-weight: 600; /* Làm nổi bật tiêu đề */
+    color: #007bff; /* Màu sắc thương hiệu */
 }
 
 .content-list ul {
@@ -191,68 +208,136 @@
 .content-list ul li a {
     text-decoration: none;
     color: #333;
-    padding: 6px 12px;
+    padding: 8px 12px; /* Tăng padding */
     display: block;
     border-radius: 6px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
-.content-list ul li a:hover {
+/* Thêm hiệu ứng cho mục đang active nếu có */
+.content-list ul li a[href="#hoso"] {
     background: #007bff;
     color: #fff;
+    font-weight: 500;
+}
+
+.content-list ul li a:hover:not([href="#hoso"]) {
+    background: #e9ecef; /* Màu nền nhẹ khi hover */
+    color: #007bff;
 }
 
 /* Main Content */
 .profile-right {
     flex: 1;
-    padding: 20px;
+    padding: 0 0 20px 20px; /* Bỏ padding-top vì đã có h2, thêm padding-bottom */
 }
 
 .profile-right h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 24px; /* Tăng kích thước tiêu đề chính */
+    margin-bottom: 5px;
+    color: #343a40;
 }
 
+.profile-right > p {
+    color: #6c757d;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* --- CHUẨN HÓA: profile-form --- */
 .profile-form {
     display: flex;
-    gap: 30px;
+    gap: 40px; /* Tăng khoảng cách giữa hai cột */
+    padding-top: 10px;
 }
 
 .form-left {
-    width: 65%;
+    flex: 1; /* Sử dụng flex: 1 thay vì width cố định để linh hoạt hơn */
+    max-width: 60%; /* Giữ max-width để avatar có đủ không gian */
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 18px; /* Tăng khoảng cách giữa các nhóm form */
 }
 
 .form-group label {
-    font-weight: bold;
+    font-weight: 600; /* Tăng độ đậm */
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    color: #495057;
+    font-size: 14px;
 }
 
 .form-group input[type="text"],
 .form-group input[type="password"] {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 10px 12px; /* Tăng padding để dễ nhập hơn */
+    border: 1px solid #ced4da;
     border-radius: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group p {
+    padding: 8px 0; /* Padding cho các dòng thông tin không phải input */
+    color: #333;
+}
+
+.form-group p a {
+    color: #007bff;
+    margin-left: 10px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-group p a:hover {
+    text-decoration: underline;
+}
+
+/* Radio buttons (Giới tính) */
+.form-group label input[type="radio"] {
+    margin-right: 5px;
+}
+
+.form-group > label:not(:first-child) { /* Áp dụng cho label Nam, Nữ, Khác */
+    font-weight: normal;
+    display: inline-block;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+/* Avatar Box */
 .avatar-box {
-    width: 35%;
-    text-align: center;
+    width: 40%;
+    max-width: 250px;
+    display: flex; /* Dùng flexbox để căn chỉnh nội dung */
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px; /* Tăng khoảng cách từ trên xuống cho phần avatar */
 }
 
 .avatar-box img {
-    width: 100px;
-    height: 100px;
+    width: 120px; /* Tăng kích thước avatar */
+    height: 120px;
     border-radius: 50%;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    object-fit: cover;
+    border: 5px solid #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.avatar-box button {
+.avatar-box input[type="file"] {
+    display: none; /* Ẩn input file gốc */
+}
+
+.avatar-box .btn-select-image { /* Nút Chọn Ảnh mới */
     padding: 8px 14px;
     background: #007bff;
     color: #fff;
@@ -260,20 +345,33 @@
     border-radius: 6px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background 0.2s;
+    font-weight: 500;
 }
 
-.avatar-box button:hover {
+.avatar-box .btn-select-image:hover {
     background: #0056b3;
 }
 
+/* Cập nhật phần thông báo kích thước/định dạng ảnh */
+.avatar-box p {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 10px;
+    line-height: 1.4;
+    text-align: center;
+}
+
 /* Button */
-.btn, .btn-edit, .btn-delete {
-    padding: 8px 16px;
+.btn, .btn-edit, .btn-delete, .password-form .btn {
+    padding: 10px 20px; /* Tăng padding cho nút chính */
     border-radius: 6px;
     border: none;
     cursor: pointer;
-    font-weight: 500;
-    margin-top: 10px;
+    font-weight: 600; /* Tăng độ đậm */
+    margin-top: 20px; /* Tăng khoảng cách trên */
+    transition: background 0.2s, box-shadow 0.2s;
+    font-size: 15px;
 }
 
 .btn {
@@ -281,18 +379,51 @@
     color: #fff;
 }
 
+.btn:hover {
+    background: #218838;
+    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+}
+
+/* Address List */
+.address-list {
+    margin-top: 15px;
+}
+
+.address-item {
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.address-item p {
+    margin-bottom: 5px;
+}
+
+.address-item b {
+    font-weight: 600;
+    color: #343a40;
+}
+
+.btn-edit, .btn-delete {
+    position: absolute;
+    top: 15px;
+    padding: 5px 10px;
+    font-weight: 500;
+    margin-top: 0;
+}
+
 .btn-edit {
+    right: 80px;
     background: #ffc107;
     color: #333;
 }
 
 .btn-delete {
+    right: 15px;
     background: #dc3545;
     color: #fff;
-}
-
-.btn:hover {
-    background: #218838;
 }
 
 .btn-edit:hover {
@@ -301,4 +432,37 @@
 
 .btn-delete:hover {
     background: #c82333;
+}
+
+.profile-right .btn:last-child { /* Nút Thêm địa chỉ mới */
+    background: #007bff;
+    color: #fff;
+}
+
+.profile-right .btn:last-child:hover {
+    background: #0056b3;
+}
+
+/* Password Form */
+.password-form {
+    max-width: 400px; /* Giới hạn chiều rộng cho form đổi mật khẩu */
+    padding-top: 15px;
+}
+
+.password-form hr {
+    margin: 15px 0 25px 0;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.password-form .form-group input {
+    margin-bottom: 10px;
+}
+
+.password-form .btn {
+    background: #007bff;
+}
+
+.password-form .btn:hover {
+    background: #0056b3;
 }
