@@ -65,7 +65,8 @@ include "../../config/connect.php";
 // ------------ Homestay ------------
 if (isset($_POST['submit_homestay'])) {
     $homestay_id = $_POST['homestay_id'];
-    $homestay_name = $_POST['homestay_name'];
+    $temp = $_POST['homestay_name'];
+    $homestay_name = mysqli_real_escape_string($conn, $temp);
     $homestay_type = $_POST['homestay_type'];
     $homestay_status = $_POST['homestay_status'];
     $room_number = $_POST['room_number'];
@@ -80,7 +81,7 @@ if (isset($_POST['submit_homestay'])) {
     $rating_number = $_POST['rating_number'];
     
     $image = basename($_FILES['image']['name']);
-    $target_dir = "../../../Images/";
+    $target_dir = "../../Images/";
     $target_file = $target_dir . $image;
     
     if (!empty($image) && move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
@@ -138,14 +139,15 @@ if (isset($_POST['submit_room'])) {
     $room_id = $_POST['room_id']; 
     $room_name = $_POST['room_name'];
     $room_type = $_POST['room_type'];
-    $homestay_name = $_POST['homestay_name'];
+    $temp = $_POST['homestay_name'];
+    $homestay_name = mysqli_real_escape_string($conn, $temp);
     $room_describe = $_POST['room_describe'];
     $room_people = $_POST['room_people'];
     $room_price = $_POST['room_price'];
     $room_status = $_POST['room_status'];
     
     $image_room = basename($_FILES['image_room']['name']);
-    $target_dir = "../../../Images/";
+    $target_dir = "../../Images/";
     $target_file = $target_dir . $image_room;
     
     if (!empty($image_room) && move_uploaded_file($_FILES["image_room"]["tmp_name"], $target_file)) {
@@ -256,27 +258,25 @@ if (isset($_POST['submit_payment'])) {
 
 <?php
 include "../../config/connect.php";
+$action = isset($_GET['action']) ? $_GET['action'] :'';
 // ------------ Reviews ------------
-if (isset($_POST['submit_review'])) {
-    $review_id = $_POST['review_id']; 
-    $customer_id = $_POST['customer_id'];
-    $room_id = $_POST['room_id'];
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $rating = $_POST['rating'];
-    $date = $_POST['date'];
+if ($action === 'reply_review') {
+    $review_id =  isset($_GET['id']) ? $_GET['id'] : null; 
+    $review_status = "Đã duyệt";
+    $sql = "UPDATE db_review SET review_status = '$review_status' WHERE review_id = '$review_id'";
+    $query = mysqli_query($conn, $sql);
+    if ($query) {
+        header("Location: ../home/home.php?page=reviews&status=update_success");
+        exit();
+    } else {
+    header("Location: ../home/home.php?page=reviews&status=update_error");
+        exit();
+    }
+}
+elseif (isset($_POST['submit_review'])) {
+    $review_id =  $_POST['review_id'];
     $review_status = $_POST['review_status'];
-    
-    $sql = "UPDATE db_review SET 
-                customer_id='$customer_id', 
-                room_id='$room_id', 
-                title='$title', 
-                content='$content', 
-                rating='$rating', 
-                date='$date', 
-                review_status='$review_status' 
-            WHERE review_id='$review_id'";
-            
+    $sql = "UPDATE db_review SET  review_status = '$review_status' WHERE review_id='$review_id'";         
     $query = mysqli_query($conn, $sql);
     if ($query) {
         header("Location: ../home/home.php?page=reviews&status=update_success");
@@ -293,20 +293,10 @@ include "../../config/connect.php";
 // ------------ Feedback ------------
 if (isset($_POST['submit_feedback'])) {
     $feedback_id = $_POST['feedback_id'];
-    $customer_id = $_POST['customer_id'];
-    $customer_name = $_POST['customer_name'];
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $date = $_POST['date'];
     $feedback_status = $_POST['feedback_status'];
     $reply = $_POST['reply'];
     
-    $sql = "UPDATE db_feedback SET 
-                customer_id='$customer_id', 
-                customer_name='$customer_name', 
-                title='$title', 
-                content='$content', 
-                date='$date', 
+    $sql = "UPDATE db_feedback SET  
                 feedback_status='$feedback_status', 
                 reply='$reply' 
             WHERE feedback_id='$feedback_id'";

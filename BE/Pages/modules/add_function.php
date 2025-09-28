@@ -146,7 +146,8 @@ if (isset($_POST['submit_room'])) {
     
     $room_name = $_POST['room_name'];
     $room_type = $_POST['room_type'];
-    $homestay_name = $_POST['homestay_name'];
+    $temp = $_POST['homestay_name'];
+    $homestay_name = mysqli_real_escape_string($conn, $temp);
     $room_describe = $_POST['room_describe'];
     $room_people = $_POST['room_people'];
     $room_price = $_POST['room_price'];

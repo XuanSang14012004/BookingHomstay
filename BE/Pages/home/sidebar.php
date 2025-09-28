@@ -1,9 +1,8 @@
 <!----SIDEBAR ---->
 <section id="sidebar">
-    <a href="home.php?page=profile" class="brand">
-        <i class='bx bx-smile'></i>
-        <span class="text"><?php echo $_SESSION['fullname']; ?></span>
-        <p>Chào mừng bạn trở lại!!!</p>
+    <a class="brand">
+        <!-- <i class='bx bx-folder' ></i> -->
+        <span class="text">ADMIN PANEL</span>
     </a>
     <ul class="side-menu top">
         <li class="<?= ($page == 'home') ? 'active' : '' ?>">
@@ -15,13 +14,13 @@
         <li class="<?= ($page == 'account') ? 'active' : '' ?>">
             <a href="home.php?page=account">
                 <i class='bx bxs-user-account'></i>
-                <span class="text">Quản lí thông tin tài khoản</span>
+                <span class="text">Quản lí tài khoản</span>
             </a>
         </li>
         <li class="<?= ($page == 'user') ? 'active' : '' ?>">
             <a href="home.php?page=user">
                 <i class='bx bx-user'></i>
-                <span class="text">Quản lí thông tin khách hàng</span>
+                <span class="text">Quản lí khách hàng</span>
             </a>
         </li>
         <li class="<?= ($page == 'homestay') ? 'active' : '' ?>">
@@ -64,6 +63,12 @@
             <a href="home.php?page=feedback">
                 <i class='bx bx-conversation'></i>
                 <span class="text">Phản hồi khách hàng</span>
+            </a>
+        </li>
+        <li>
+            <a href="../../../Login/logout.php" class="logout">
+                <i class='bx bx-log-out'></i>
+                <span>Đăng xuất</span>
             </a>
         </li>
     </ul>

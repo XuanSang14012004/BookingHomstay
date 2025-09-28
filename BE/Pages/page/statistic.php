@@ -1,21 +1,4 @@
-<div class="head-title">
-    <div class="left">
-        <h1>Management</h1>
-        <ul class="breadcrumb">
-            <li>
-                <a href="#">Admin Dashboard</a>
-            </li>
-            <li><i class='bx bx-chevron-right'></i></li>
-            <li>
-                <a class="active" href="#">Thống kê & Báo cáo</a>
-            </li>
-        </ul>
-    </div>
-    <a href="#" class="btn-download">
-        <i class='bx bxs-cloud-download'></i>
-        <span class="text">Download PDF</span>
-    </a>
-</div>
+<?php include "../home/header_content.php";?>
 <div class="management-container">
     <h2>Thống kê & Báo cáo</h2>
     <div class="card-container">

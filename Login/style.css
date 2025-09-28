@@ -36,7 +36,7 @@ body{
     display: flex;
 	background: white;
     width: 800px;
-	height: auto;
+	height: 600px;
     margin: 50px auto;
 	border: 2px solid rgba(255,255,255,0.5);
     border-radius:10px; 
@@ -69,15 +69,23 @@ body{
     text-transform: uppercase;
     text-align:center;
 }
+#signin-form .login-right{
+    margin-top: 80px;
+}
+#signup-form .login-right{
+    margin-top: 30px;
+}
+
 input{
 	color: var(--dark);
     width: 100%;
     background-color:transparent;
-    border:none;
-    border-bottom:1px solid var(--dark);
-    padding-left:1.5rem;
+    border:1px solid var(--dark);
+    border-radius: 5px;
+    padding-left:30px;
     font-size:16px;
     margin-bottom: 25px;
+    height: 35px;
 }
 .input-group{
     margin-right:20px;
@@ -85,32 +93,37 @@ input{
 
 }
 .input-group i{
-    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-size: 17px;
     position:absolute;
+    margin: 10px;
     color:var(--dark);
 }
 input:focus{
     background-color: transparent;
     outline:transparent;
-    border-bottom:2px solid var(--yellow);
+    border:1px solid var(--yellow);
 }
 input::placeholder{
-    font-size: 18px;
+    font-size: 16.5px;
     color: var(--dark);
     opacity: 1;
+    margin-left: 5px;
 }
 
 input:focus~label,input:not(:placeholder-shown)~label{
     top:-3em;
     color:var(--dark);
-    font-size: 18px;
+    font-size: 16.5px;  
 }
 .recover{
     margin-top: -10px;
     text-align:right;
     font-size:16px;
     margin-bottom:1rem;
-    margin-right:2rem;
+    margin-right:1rem;
 
 }
 .recover a{
@@ -123,7 +136,7 @@ input:focus~label,input:not(:placeholder-shown)~label{
 .submit-btn{
     width: 100%;
     font-size:16px;
-    padding:8px 0;
+    padding:10px 0;
     border-radius:5px;
     outline:none;
     border:none;
@@ -170,11 +183,13 @@ input:focus~label,input:not(:placeholder-shown)~label{
 
 .social-facebook:hover{
     background: var(--blue);
+    color:var(--light);
     font-size:20px 30px;
     border:2px solid var(--blue);
 }
 .social-google:hover{
     background: var(--red);
+    color:var(--light);
     font-size:20px 30px;
     border:2px solid var(--red);
 }

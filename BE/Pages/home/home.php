@@ -22,7 +22,11 @@ ob_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../Css/style_admin.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="../../Images/logo.jpg">
     <link rel="stylesheet" href="../../Css/test.css">
+    <script src="../../Js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../Js/chart.js"></script>
     <title>ADMIN DASHBOARD</title>
 </head>
 
@@ -35,10 +39,6 @@ ob_start();
             <script src="../../Js/test.js"></script>    
         </main>
     </section>
-    <script src="../../Js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../../Js/chart.js"></script>
-    
 </body>
 
 </html>

@@ -5,7 +5,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_view_form = false;
 $is_add_form = false;
-$is_search_form = false;
 $is_edit_form = false;
 $is_detail_form = false;
 
@@ -14,7 +13,7 @@ if ($action === 'add_account') {
 } else if ($action === 'edit_account') {
     $is_edit_form = true;
 } else if ($action === 'search_account') {
-    $is_search_form = true;
+    $is_view_form = true;
 } else if ($action === 'detail_account') {
     $is_detail_form = true;
 } else {
@@ -35,24 +34,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 
 <!-------------------------------------- Giao diện chính --------------------------------------->
 <div class="form-container" id="account-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Quản lí thông tin tài khoản</a>
-                </li>
-            </ul>
-        </div>
-        <a href="#" class="btn-download">
-            <i class='bx bxs-cloud-download'></i>
-            <span class="text">Download PDF</span>
-        </a>
-    </div>
+    <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <h2>Quản lý thông tin tài khoản</h2>
         <div class="toolbar">
@@ -62,6 +44,10 @@ if (($is_edit_form || $is_detail_form) && $email) {
                 <button type="submit" class="search-btn" onclick="showFormAccount('search-form')"><i class='bx bx-search'></i>
             </div>
         </div>
+        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+             } ?>
+        </h3>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -78,8 +64,20 @@ if (($is_edit_form || $is_detail_form) && $email) {
                 <tbody>
                     <tr>
                         <?php
-                        $result = $conn->query("SELECT * FROM db_account");
-                        $i = 1;
+                        if( isset($_GET['content']) ? $_GET['content'] :'' ){
+                            $search_query = trim($_GET['content']);
+                            $search = "%".$search_query."%";
+
+                            $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' 
+                                OR email LIKE '$search' 
+                                OR role LIKE '$search' 
+                                OR phone LIKE '$search'"; 
+                            $result = $conn->query($sql);
+                            $i = 1;
+                        }else{
+                            $result = $conn->query("SELECT * FROM db_account");
+                            $i = 1;
+                        }
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><?php echo $i++; ?></td>
                             <td><?php echo $row['fullname'] ?></td>
@@ -103,24 +101,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 
 <!-------------------------------------------- Giao diện thêm mới ------------------------------------------------->
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí thông tin tài khoản</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Thêm tài khoản mới</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
             <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
@@ -158,115 +139,11 @@ if (($is_edit_form || $is_detail_form) && $email) {
     </div>
 </div>
 
-
-
-
-
-<!-------------------------------------- Giao diện tìm kiếm --------------------------------------->
-<div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a href="#">Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active" href="#">Quản lí thông tin tài khoản</a>
-                </li>
-            </ul>
-        </div>
-        <a href="#" class="btn-download">
-            <i class='bx bxs-cloud-download'></i>
-            <span class="text">Download PDF</span>
-        </a>
-    </div>
-    <div class="management-container">
-        <h2>Quản lý thông tin tài khoản</h2>
-        <div class="toolbar">
-            <button class="add-btn" onclick="showFormAccount('add-form')"><i class='bx bx-plus'></i> Thêm tài khoản mới</button>
-            <div class="search-box">
-                <input type="text" class="search" id="research" name="timkiem" placeholder="Tìm kiếm homestay...">
-                <button type="submit" class="search-btn" onclick="showFormAccount('research-form')"><i class='bx bx-search'></i>
-            </div>
-        </div>
-        <big>Kết quả tìm kiếm theo" ... "</big>
-        <div class="table-responsive">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Mật khẩu</th>
-                        <th>Phân quyền</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <?php
-                        if( isset($_GET['content']) ? $_GET['content'] :'' ){
-                            $search_query = trim($_GET['content']);
-                            $search = "%".$search_query."%";
-
-                            $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' OR email LIKE '$search' OR role LIKE '$search' OR phone LIKE '$search'"; 
-                            $result = $conn->query($sql);
-                            $i = 1;
-                        }else if( isset($_GET['recontent']) ? $_GET['recontent'] :'' ){
-                            $search_query = trim($_GET['recontent']);
-                            $search = "%".$search_query."%";
-
-                            $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' OR email LIKE '$search' OR role LIKE '$search' OR phone LIKE '$search'"; 
-                            $result = $conn->query($sql);
-                            $i = 1;
-                        } 
-                        while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['fullname'] ?></td>
-                            <td><?php echo $row['email'] ?></td>
-                            <td><?php echo $row['phone'] ?></td>
-                            <td><?php echo $row['password'] ?></td>
-                            <td><?php echo $row['role'] ?></td>
-                            <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $row['email']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $row['email']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $row['email']; ?>')"><i class='bx bx-trash'></i></button>
-                            </td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-
 <!----------------------------------------------- Giao diện cập nhật -------------------------------------------->
 
 <div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($account) { ?>
-        <div class="head-title">
-            <div class="left">
-                <h1>Management</h1>
-                <ul class="breadcrumb">
-                    <li>
-                        <a>Admin Dashboard</a>
-                    </li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li>
-                        <a>Quản lí homestay</a>
-                    </li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li>
-                        <a class="active">Cập nhật thông tin tài khoản</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+       <?php include "../home/header_content.php"; ?>
         <div class="management-container">
             <div class="toolbar">
                 <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
@@ -316,24 +193,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
 <!-----------------------------------  Chi tiết --------------------------------->
 <div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($account) { ?>
-        <div class="head-title">
-            <div class="left">
-                <h1>Management</h1>
-                <ul class="breadcrumb">
-                    <li>
-                        <a>Admin Dashboard</a>
-                    </li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li>
-                        <a>Quản lí thông tin tài khoản</a>
-                    </li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li>
-                        <a class="active">Thông tin chi tiết tài khoản</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <?php include "../home/header_content.php"; ?>
         <div class="management-container">
             <div class="toolbar">
                 <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>

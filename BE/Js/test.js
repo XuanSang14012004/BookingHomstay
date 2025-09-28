@@ -1,3 +1,33 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Lấy checkbox "chọn tất cả"
+    const selectAllCheckbox = document.getElementById('select-all');
+    // Lấy tất cả các checkbox hàng
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+
+    // Sự kiện khi click vào "chọn tất cả"
+    selectAllCheckbox.addEventListener('change', function() {
+        // Đặt trạng thái của tất cả checkbox hàng giống với trạng thái của "chọn tất cả"
+        rowCheckboxes.forEach(function(checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    });
+
+    // Sự kiện khi click vào checkbox hàng
+    rowCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            // Nếu có bất kỳ hàng nào chưa được chọn, bỏ chọn "chọn tất cả"
+            if (!this.checked) {
+                selectAllCheckbox.checked = false;
+            } 
+            // Nếu tất cả các hàng đều đã được chọn, tự động chọn "chọn tất cả"
+            else if (document.querySelectorAll('.row-checkbox:checked').length === rowCheckboxes.length) {
+                selectAllCheckbox.checked = true;
+            }
+        });
+    });
+});
+
+
 function navigateToUrl(url) {
     window.location.href = url;
 }
@@ -78,9 +108,7 @@ function handlePopState(pageName, defaultFormId, formContainerClass = '.form-con
 // ---------- Account ----------
 function showFormAccount(formId, email = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'account-form') {
         showInternalForm(formId);
@@ -88,8 +116,6 @@ function showFormAccount(formId, email = null) {
         navigateToUrl(`home.php?page=account&action=add_account&id=${email}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=account&action=search_account&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=account&action=search_account&recontent=${research}`);
     } else if (formId === 'edit-form' && email) {
         navigateToUrl(`home.php?page=account&action=edit_account&id=${email}`);
     } else if (formId === 'detail-form' && email) {
@@ -106,9 +132,7 @@ function deleteAccount(email) {
 // ---------- User ----------
 function showFormUser(formId, customer_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'user-form') {
         showInternalForm(formId);
@@ -116,8 +140,6 @@ function showFormUser(formId, customer_id = null) {
         navigateToUrl(`home.php?page=user&action=add_user&id=${customer_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=user&action=search_user&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=user&action=search_user&recontent=${research}`);
     } else if (formId === 'edit-form' && customer_id) {
         navigateToUrl(`home.php?page=user&action=edit_user&id=${customer_id}`);
     } else if (formId === 'detail-form' && customer_id) {
@@ -134,9 +156,7 @@ function deleteUser(customer_id) {
 // ---------- Homestay ----------
 function showFormHomestay(formId, homestay_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
     
     if (formId === 'Homestay-form') { 
         showInternalForm(formId);
@@ -144,8 +164,6 @@ function showFormHomestay(formId, homestay_id = null) {
         navigateToUrl(`home.php?page=homestay&action=add_homestay&id=${homestay_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=homestay&action=search_homestay&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=homestay&action=search_homestay&recontent=${research}`);
     } else if (formId === 'edit-form' && homestay_id) {
         navigateToUrl(`home.php?page=homestay&action=edit_homestay&id=${homestay_id}`);
     } else if (formId === 'detail-form' && homestay_id) {
@@ -162,9 +180,7 @@ function deleteHomestay(homestay_id) {
 // ---------- Rooms ----------
 function showFormRoom(formId, room_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'room-form') {
         showInternalForm(formId);
@@ -172,8 +188,6 @@ function showFormRoom(formId, room_id = null) {
         navigateToUrl(`home.php?page=rooms&action=add_room&id=${room_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=rooms&action=search_room&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=rooms&action=search_room&recontent=${research}`);
     } else if (formId === 'edit-form' && room_id) {
         navigateToUrl(`home.php?page=rooms&action=edit_room&id=${room_id}`);
     } else if (formId === 'detail-form' && room_id) {
@@ -190,9 +204,7 @@ function deleteRoom(room_id) {
 // ---------- Booking ----------
 function showFormBooking(formId, booking_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'booking-form') {
         showInternalForm(formId);
@@ -200,8 +212,6 @@ function showFormBooking(formId, booking_id = null) {
         navigateToUrl(`home.php?page=booking&action=add_booking&id=${booking_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=booking&action=search_booking&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=booking&action=search_booking&recontent=${research}`);
     } else if (formId === 'edit-form' && booking_id) {
         navigateToUrl(`home.php?page=booking&action=edit_booking&id=${booking_id}`);
     } else if (formId === 'detail-form' && booking_id) {
@@ -218,9 +228,7 @@ function deleteBooking(booking_id) {
 // ---------- Payment ----------
 function showFormPay(formId, payment_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'payment-form') {
         showInternalForm(formId);
@@ -228,8 +236,6 @@ function showFormPay(formId, payment_id = null) {
         navigateToUrl(`home.php?page=payment&action=add_payment&id=${payment_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=payment&action=search_payment&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=payment&action=search_payment&recontent=${research}`);
     } else if (formId === 'edit-form' && payment_id) {
         navigateToUrl(`home.php?page=payment&action=edit_payment&id=${payment_id}`);
     } else if (formId === 'detail-form' && payment_id) {
@@ -246,18 +252,16 @@ function deletePay(payment_id) {
 // ---------- Reviews ----------
 function showFormReview(formId, review_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'review-form') {
         showInternalForm(formId);
+    } else if (formId === 'reply-form' && review_id) {
+        navigateToUrl(`home.php?page=reply&action=reply_review&id=${review_id}`);
     } else if (formId === 'edit-form' && review_id) {
         navigateToUrl(`home.php?page=reviews&action=edit_review&id=${review_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=reviews&action=search_review&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=reviews&action=search_review&recontent=${research}`);
     } else if (formId === 'detail-form' && review_id) {
         navigateToUrl(`home.php?page=reviews&action=detail_review&id=${review_id}`);
     }
@@ -272,16 +276,12 @@ function deleteReview(review_id) {
 // ---------- Feedback ----------
 function showFormFeedback(formId, feedback_id = null) {
     const check_search = document.getElementById("search");
-    const check_research = document.getElementById("research");
     const search = check_search ? check_search.value : '';
-    const research = check_research ? check_research.value : '';
 
     if (formId === 'feedback-form') {
         showInternalForm(formId);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=feedback&action=search_feedback&content=${search}`);
-    }else if (formId === 'research-form') {
-        navigateToUrl(`home.php?page=feedback&action=search_feedback&recontent=${research}`);
     } else if (formId === 'reply-form' && feedback_id) {
         navigateToUrl(`home.php?page=feedback&action=reply_feedback&id=${feedback_id}`);
     } else if (formId === 'detail-form' && feedback_id) {
@@ -289,7 +289,7 @@ function showFormFeedback(formId, feedback_id = null) {
     }
 }
 
-function deleteFeed(feedback_id) {
+function deleteFeedback(feedback_id) {
     if (confirm("Bạn có chắc chắn muốn xóa phản hồi này không?")) {
         navigateToUrl(`home.php?page=delete&action=delete_feedback&id=${feedback_id}`);
     }
@@ -469,4 +469,33 @@ document.addEventListener('DOMContentLoaded', function() {
     if (page === 'add_payment' && status === 'exists') {
         showMessage('Mã thanh toán đã tồn tại. Vui lòng sử dụng mã khác.');
     }
+
+    // Review
+    if (page === 'reviews') {
+        if (status === 'delete_success') {
+            showMessage('Xóa đánh giá thành công!');
+        } else if (status === 'delete_error') {
+            showMessage('Xóa đánh giá thất bại! Kiểm tra lại thao tác xóa.');
+        }
+        if (status === 'update_success') {
+            showMessage('Cập nhật trạng thái đánh giá thành công!');
+        } else if (status === 'update_error') {
+            showMessage('Cập nhật đánh giá thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+    }
+
+    // Feedback
+    if (page === 'feedback') {
+        if (status === 'delete_success') {
+            showMessage('Xóa yêu cầu phản hồi thành công!');
+        } else if (status === 'delete_error') {
+            showMessage('Xóa yêu cầu phản hồi thất bại! Kiểm tra lại thao tác xóa.');
+        }
+        if (status === 'update_success') {
+            showMessage('Cập nhật trạng thái, và thông tin phản hồi thành công!');
+        } else if (status === 'update_error') {
+            showMessage('Cập nhật trạn thái và thông tin phản hồi thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+    }
+
 });

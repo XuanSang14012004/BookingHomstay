@@ -5,7 +5,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_view_form = false;
 $is_add_form = false;
-$is_search_form = false;
 $is_edit_form = false;
 $is_detail_form = false;
 
@@ -14,7 +13,7 @@ if ($action === 'add_payment') {
 } else if ($action === 'edit_payment') {
     $is_edit_form = true;
 } else if ($action === 'search_payment') {
-    $is_search_form = true;
+    $is_view_form = true;
 } else if ($action === 'detail_payment') {
     $is_detail_form = true;
 } else {
@@ -32,35 +31,22 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
     }
 }
 ?>
-
+<!----------------------------------------------- Giao diện chính -------------------------------------------->
 <div class="form-container" id="payment-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
-<div class="head-title">
-    <div class="left">
-        <h1>Management</h1>
-        <ul class="breadcrumb">
-            <li>
-                <a href="#">Admin Dashboard</a>
-            </li>
-            <li><i class='bx bx-chevron-right'></i></li>
-            <li>
-                <a class="active" href="#">Quản lí thanh toán</a>
-            </li>
-        </ul>
-    </div>
-    <a href="#" class="btn-download">
-        <i class='bx bxs-cloud-download'></i>
-        <span class="text">Download PDF</span>
-    </a>
-</div>
+<?php include "../home/header_content.php"; ?>
 <div class="management-container">
     <h2>Quản lý Thanh toán</h2>
     <div class="toolbar">
         <button class="add-btn" onclick="showFormPay('add-form')"><i class='bx bx-plus'></i> Thêm hóa đơn mới</button>
         <div class="search-box">
-            <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm giao dịch...">
+            <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm giao dịch...">
             <button type="submit" class="search-btn" onclick="showFormPay('search-form')"><i class='bx bx-search'></i></button>
         </div>
     </div>
+    <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+             } ?>
+        </h3>
     <div class="table-responsive">
         <table class="data-table">
             <thead>
@@ -78,8 +64,22 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
             <tbody>
                 <tr>
                     <?php
-                    $result = $conn->query("SELECT * FROM db_payment");
-                    $i = 1;
+                    if( isset($_GET['content']) ? $_GET['content'] :'' ){
+                        $search_query = trim($_GET['content']);
+                        $search = "%$search_query%";
+
+                        $sql = "SELECT * FROM db_payment WHERE payment_id LIKE '$search' 
+                            OR booking_id LIKE '$search' 
+                            OR method LIKE '$search'
+                            OR payment_price LIKE '$search' 
+                            OR date LIKE '$search' 
+                            OR payment_status LIKE '$search'"; 
+                        $result = $conn->query($sql); 
+                        $i = 1;
+                    }else{
+                        $result = $conn->query("SELECT * FROM db_payment");
+                        $i = 1;
+                    }
                     while ($row = mysqli_fetch_assoc($result)) { ?>
                         <td><?php echo $i++; ?></td>
                         <td><?php echo $row['payment_id'] ?></td>
@@ -101,25 +101,9 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
 </div>
 </div>
 
+<!---------------------------------------- Giao diện thêm mới ------------------------------------>
 <div class="form-container" id="add-form" style="display:<?php echo $is_add_form ? 'block' : 'none'; ?>;">
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí thanh toán</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Thêm hóa đơn mới</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
             <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
@@ -170,100 +154,10 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
     </div>
 </div>
 
-<div class="form-container" id="search-form" style="display:<?php echo $is_search_form ? 'block' : 'none'; ?>;">
-<div class="head-title">
-    <div class="left">
-        <h1>Management</h1>
-        <ul class="breadcrumb">
-            <li>
-                <a href="#">Admin Dashboard</a>
-            </li>
-            <li><i class='bx bx-chevron-right'></i></li>
-            <li>
-                <a class="active" href="#">Quản lí thanh toán</a>
-            </li>
-        </ul>
-    </div>
-    <a href="#" class="btn-download">
-        <i class='bx bxs-cloud-download'></i>
-        <span class="text">Download PDF</span>
-    </a>
-</div>
-<div class="management-container">
-    <h2>Quản lý Thanh toán</h2>
-    <div class="toolbar">
-        <button class="add-btn" onclick="showFormPay('add-form')"><i class='bx bx-plus'></i> Thêm hóa đơn mới</button>
-        <div class="search-box">
-            <input type="text" id="search" name="timkiem" placeholder="Tìm kiếm giao dịch...">
-            <button type="submit" class="search-btn" onclick="showFormPay('search-form')"><i class='bx bx-search'></i></button>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Mã thanh toán</th>
-                    <th>Mã đơn đặt phòng</th>
-                    <th>Phương thức thanh toán</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày thanh toán</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <?php
-                    if( isset($_GET['content']) ? $_GET['content'] :'' ){
-                            $search_query = trim($_GET['content']);
-                            $search = "%$search_query%";
-
-                            $sql = "SELECT * FROM db_payment WHERE payment_id LIKE '$search' OR booking_id LIKE '$search' OR method LIKE '$search' OR date LIKE '$search' 
-                            OR payment_status LIKE '$search'"; 
-                            $result = $conn->query($sql);} 
-                            $i = 1;
-                    while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <td><?php echo $i++; ?></td>
-                        <td><?php echo $row['payment_id'] ?></td>
-                        <td><?php echo $row['booking_id'] ?></td>
-                        <td><?php echo $row['method'] ?></td>
-                        <td><?php echo $row['payment_price'] ?></td>
-                        <td><?php echo $row['date'] ?></td>
-                        <td><?php echo $row['payment_status'] ?></td>
-                        <td class="actions">
-                            <button class="detail-btn" title="Chi tiết" onclick="showFormPay('detail-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-detail'></i></button>
-                            <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                            <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['payment_id']; ?>')"><i class='bx bx-trash'></i></button>
-                        </td>
-                </tr>
-            <?php } ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-</div>
-
+<!-------------------------------------- Giao diện cập nhật --------------------------------------->
 <div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí  thanh toán</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Cập nhật thông tin hóa đơn</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
             <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
@@ -321,26 +215,11 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
         <p>Không tìm thấy thông tin hóa đơn để sửa.</p>
     <?php } ?>
 </div>
+
+<!-------------------------------------- Giao diện thông tin chi tiết --------------------------------------->
 <div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
-    <div class="head-title">
-        <div class="left">
-            <h1>Management</h1>
-            <ul class="breadcrumb">
-                <li>
-                    <a>Admin Dashboard</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a>Quản lí thanh toán</a>
-                </li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li>
-                    <a class="active">Thông tin chi tiết hóa đơn</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
             <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
