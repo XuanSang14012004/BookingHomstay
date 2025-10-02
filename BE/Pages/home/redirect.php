@@ -22,6 +22,8 @@
                 include "../page/statistic.php";
             }elseif(($_GET['page'])=='feedback'){
                 include "../page/feedback.php";
+            }elseif(($_GET['page'])=='reply'){
+                include "../modules/update_function.php";
             }elseif(($_GET['page'])=='delete'){
                 include "../modules/delete_function.php";
             }else {

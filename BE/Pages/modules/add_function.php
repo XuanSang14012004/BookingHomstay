@@ -44,7 +44,7 @@ if (isset($_POST['submit_user'])) {
     $check_result = mysqli_query($conn, $check_user);
     
     if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=add_user&status=exists");
+        header("Location: ../home/home.php?page=user&action=add_user&status=exists");
         exit();
     }
     $customer_name = $_POST['customer_name']; 
@@ -140,19 +140,19 @@ if (isset($_POST['submit_room'])) {
     $check_result = mysqli_query($conn, $check_room);
     
     if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=add_rooms&status=exists");
+        header("Location: ../home/home.php?page=rooms&action=add_room&status=exists");
         exit();
     }
     
     $room_name = $_POST['room_name'];
     $room_type = $_POST['room_type'];
-    $homestay_name = $_POST['homestay_name'];
+    $temp = $_POST['homestay_name'];
+    $homestay_name = mysqli_real_escape_string($conn, $temp);
     $room_describe = $_POST['room_describe'];
     $room_people = $_POST['room_people'];
     $room_price = $_POST['room_price'];
     $room_status = $_POST['room_status'];
     
-    // Xử lý ảnh
     $image_room = basename($_FILES['image_room']['name']); 
     $target_dir = "../../Images/";
     $target_file = $target_dir . $image_room;
@@ -163,7 +163,7 @@ if (isset($_POST['submit_room'])) {
         
         $query = mysqli_query($conn, $sql);
         
-        if ($query) {
+        if ($query&& mysqli_affected_rows($conn) > 0) {
             header("Location: ../home/home.php?page=rooms&status=add_success");
             exit();
         } else {
@@ -190,7 +190,7 @@ if (isset($_POST['submit_booking'])) {
     $check_booking = "SELECT booking_id FROM db_booking WHERE booking_id = '$booking_id'";
     $check_result = mysqli_query($conn, $check_booking);
     if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=add_booking&status=exists");
+        header("Location: ../home/home.php?page=booking&action=add_booking&status=exists");
         exit();
     }
     $customer_id = $_POST['customer_id'];
@@ -234,7 +234,7 @@ if (isset($_POST['submit_payment'])) {
     $check_result = mysqli_query($conn, $check_payment);
     
     if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=add_payment&status=exists");
+        header("Location: ../home/home.php?page=payment&action=add_payment&status=exists");
         exit();
     }
     

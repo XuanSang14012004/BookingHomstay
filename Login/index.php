@@ -7,7 +7,7 @@ if (isset($_POST['signUp'])) {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $password = $_POST['password'];
-    $role = "user";
+    $role = "customer";
 
 
     $checkEmail = "SELECT * From db_account where email='$email'";
@@ -17,9 +17,9 @@ if (isset($_POST['signUp'])) {
     } else {
         $sql = "INSERT INTO `db_account` (fullname,email,phone,password,role) VAlUES ('$fullname','$email','$phone','$password','$role')";
         if ($conn->query($sql) === TRUE) {
-            header("Location : login.php?success=Đăng kí tài khoản thành công");
+            header("Location: login.php?action=signin&success=Đăng kí tài khoản thành công");
         } else {
-            header("Location : login.php?error=Đăng kí tài khoản thất bại") . $conn->error;
+            header("Location: login.php?action=signin&error=Đăng kí tài khoản thất bại") . $conn->error;
         }
     }
 }
@@ -39,8 +39,8 @@ if (isset($_POST['signIn'])) {
             $_SESSION['email'] = $row['email'];
             $_SESSION['password'] = $row['password'];
             $_SESSION['role'] = $row['role'];
-            if ($row['role'] == 'user') {
-                header("Location: ../FE/TrangChu/user.php");
+            if ($row['role'] == 'customer') {
+                header("Location: ../FE/TrangChu/user_main.php");
                 exit();
             } elseif ($row['role'] == 'admin') {
                 header("Location: ../BE/Pages/home/home.php");

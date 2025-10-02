@@ -1,7 +1,7 @@
 <?php
 include "../BE/Config/connect.php";
 
-$action = isset($_GET['action']) ? $_GET['action'] : 'signin';
+$action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_signup_form = false;
 $is_signin_form = false;

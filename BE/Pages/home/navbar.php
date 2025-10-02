@@ -1,3 +1,4 @@
+<!-- NAVBAR -->
 <nav>
     <i class='bx bx-menu'> Menu</i>
     <form action="">
@@ -10,56 +11,19 @@
         <i class='bx bxs-bell'></i>
         <span class="num">8</span>
     </a>
-    <a href="#" class="profile">
-        <img src="../../Images/user.jpg" alt="">
-        <ul class="side-menu-user">
-            <li>
-                <a href="home.php?page=profile">
-                    <i class='bx bxs-user-detail'>
-                        <span>Thông tin tài khoản</span>
-                    </i>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-cog'>
-                        <span>Cài đặt</span>
-                    </i>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bx-help-circle'>
-                        <span>Trợ giúp</span>
-                    </i>
-
-                </a>
-            </li>
-            <li>
-                <a href="../../../Login/logout.php">
-                    <i class='bx bx-log-out'>
-                        <span>Đăng xuất</span>
-                    </i>
-                </a>
-            </li>
-        </ul>
+    <a href="home.php?page=profile" class="profile">
+        <div class="info-left">
+            <img src="../../Images/user.jpg" alt="">
+        </div> 
+        <div class="info-right">
+            <p><?php echo $_SESSION['fullname']; ?></p>
+            <p  class="name"><?php if($_SESSION['role'] ==='user'){
+                        echo 'Khách hàng';
+                    }else if($_SESSION['role'] === 'owner'){
+                        echo 'Chủ homestay';
+                    }else if($_SESSION['role'] === 'admin'){
+                        echo 'Quản trị viên';
+                    } ?></p>
+        </div>
     </a>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const profile = document.querySelector(".profile img");
-            const menu = document.querySelector(".side-menu-user");
-
-            profile.addEventListener("click", function(e) {
-                e.preventDefault();
-                menu.classList.toggle("active");
-            });
-
-            document.addEventListener("click", function(e) {
-                if (!profile.contains(e.target) && !menu.contains(e.target)) {
-                    menu.classList.remove("active");
-                }
-            });
-        });
-    </script>
 </nav>
-<!-- NAVBAR -->

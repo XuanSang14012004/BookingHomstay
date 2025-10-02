@@ -142,19 +142,19 @@ if ($action === 'delete_review') {
 }
 
 // ---------------------- Xóa khiếu nại -----------------------
-if ($action === 'delete_homestay') {
-    $delete_homestay = isset($_GET['id']) ? $_GET['id'] : null;
-    if ($delete_homestay) {
-        $sql = "DELETE FROM db_homestay WHERE homestay_id = ?";
+if ($action === 'delete_feedback') {
+    $delete_feedback = isset($_GET['id']) ? $_GET['id'] : null;
+    if ($delete_feedback) {
+        $sql = "DELETE FROM db_feedback WHERE feedback_id = ?";
 
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("s", $delete_homestay);
+            $stmt->bind_param("s", $delete_feedback);
             
             if ($stmt->execute()) {
-                header("Location: home.php?page=homestay&status=delete_success");
+                header("Location: home.php?page=feedback&status=delete_success");
                 exit();
             } else {
-                header("Location: home.php?page=homestay&status=delete_error");
+                header("Location: home.php?page=feedback&status=delete_error");
                 exit();
             }
         }
