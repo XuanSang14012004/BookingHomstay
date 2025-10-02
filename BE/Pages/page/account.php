@@ -30,6 +30,19 @@ if (($is_edit_form || $is_detail_form) && $email) {
         $account = mysqli_fetch_assoc($result);
     }
 }
+
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_account");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 
 <!-------------------------------------- Giao diện chính --------------------------------------->
@@ -44,15 +57,24 @@ if (($is_edit_form || $is_detail_form) && $email) {
                 <button type="submit" class="search-btn" onclick="showFormAccount('search-form')"><i class='bx bx-search'></i>
             </div>
         </div>
-        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+        <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="account">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+        <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
              } ?>
-        </h3>
+        </p>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>Họ và tên</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
@@ -64,22 +86,23 @@ if (($is_edit_form || $is_detail_form) && $email) {
                 <tbody>
                     <tr>
                         <?php
-                        if( isset($_GET['content']) ? $_GET['content'] :'' ){
+                        if( isset($_GET['content']) ? $_GET['content'] :'' ){ 
                             $search_query = trim($_GET['content']);
                             $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_account WHERE fullname LIKE '$search' 
+                            $sql = "SELECT * FROM db_account  WHERE fullname LIKE '$search' 
                                 OR email LIKE '$search' 
                                 OR role LIKE '$search' 
-                                OR phone LIKE '$search'"; 
+                                OR phone LIKE '$search'
+                                LIMIT $limit OFFSET $offset"; 
                             $result = $conn->query($sql);
-                            $i = 1;
                         }else{
-                            $result = $conn->query("SELECT * FROM db_account");
-                            $i = 1;
+                            $sql = "SELECT * FROM db_account LIMIT $limit OFFSET $offset";
+                            $result = $conn->query($sql);
                         }
+                        if ($result && mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
+                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['email']; ?>"></td> 
                             <td><?php echo $row['fullname'] ?></td>
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['phone'] ?></td>
@@ -91,9 +114,35 @@ if (($is_edit_form || $is_detail_form) && $email) {
                                 <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $row['email']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                     </tr>
-                <?php } ?>
+                    <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
+        </div>
+        <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=account&pagetable&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=account&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=account&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=account&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=account&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -128,7 +177,11 @@ if (($is_edit_form || $is_detail_form) && $email) {
                 </div>
                 <div class="form-group">
                     <label for="role">Phân quyền:</label>
-                    <input type="text" id="role" name="role" required>
+                    <select id="role" name="role">
+                        <option value="admin">Quản trị viên</option>
+                        <option value="customer" >Khách hàng</option>
+                        <option value="owner" >Chủ homestay</option>
+                    </select>
                 </div>
             </div>
             <div class="form-actions">
@@ -176,7 +229,11 @@ if (($is_edit_form || $is_detail_form) && $email) {
                     </div>
                     <div class="form-group">
                         <label for="role">Phân quyền:</label>
-                        <input type="text" id="role" name="role" value="<?php echo $account['role']; ?>" required>
+                        <select id="role" name="role">
+                            <option value="admin" <?php echo ($account['role'] == 'admin') ? 'selected' : ''; ?>>Quản trị viên</option>
+                            <option value="customer" <?php echo ($account['role'] == 'customer') ? 'selected' : ''; ?>>Khách hàng</option>
+                            <option value="owner" <?php echo ($account['role'] == 'owner') ? 'selected' : ''; ?>>Chủ homestay</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-actions">

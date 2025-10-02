@@ -16,7 +16,7 @@ if (isset($_POST['submit_account'])) {
             WHERE email='$email'";
     
     $query = mysqli_query($conn, $sql);
-    if ($query) {
+    if ($query&& mysqli_affected_rows($conn) > 0) {
         header("Location: ../home/home.php?page=account&status=update_success");
         exit();
     } else {
@@ -49,7 +49,7 @@ if (isset($_POST['submit_user'])) {
             WHERE customer_id='$customer_id'";
             
     $query = mysqli_query($conn, $sql);
-    if ($query) {
+    if ($query&& mysqli_affected_rows($conn) > 0) {
         header("Location: ../home/home.php?page=user&status=update_success");
         exit();
     } else {
@@ -80,11 +80,11 @@ if (isset($_POST['submit_homestay'])) {
     $home_rating = $_POST['home_rating'];
     $rating_number = $_POST['rating_number'];
     
-    $image = basename($_FILES['image']['name']);
+    $image = basename($_FILES['image_new']['name']);
     $target_dir = "../../Images/";
     $target_file = $target_dir . $image;
     
-    if (!empty($image) && move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+    if (!empty($image) && move_uploaded_file($_FILES["image_new"]["tmp_name"], $target_file)) {
         $sql = "UPDATE db_homestay SET 
                     homestay_name='$homestay_name', 
                     homestay_type='$homestay_type', 
@@ -97,7 +97,7 @@ if (isset($_POST['submit_homestay'])) {
                     `describe`='$describe', 
                     amenities='$amenities', 
                     `policy`='$policy', 
-                    image='$image', 
+                    `image`='$image', 
                     home_rating='$home_rating', 
                     rating_number='$rating_number' 
                 WHERE homestay_id='$homestay_id'";
@@ -120,7 +120,7 @@ if (isset($_POST['submit_homestay'])) {
     }
     
     $query = mysqli_query($conn, $sql);
-    if ($query) {
+    if ($query && mysqli_affected_rows($conn) > 0) {
         header("Location: ../home/home.php?page=homestay&status=update_success");
         exit();
     } else {
@@ -229,6 +229,22 @@ if (isset($_POST['submit_booking'])) {
 <?php
 include "../../config/connect.php";
 // ------------ Payment ------------
+$action = isset($_GET['action']) ? $_GET['action'] :'';
+// ------------ Reviews ------------
+if (isset($_POST['done_payment'])) {
+    $payment_id = $_POST['payment_id'];
+    $payment_status = "Đã thanh toán";
+    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE payment_id = '$payment_id'";
+    $query = mysqli_query($conn, $sql);
+    if ($query) {
+        header("Location: ../home/home.php?page=payment&status=success_payment");
+        exit();
+    } else {
+    header("Location: ../home/home.php?page=payment&status=error_payment");
+        exit();
+    }
+}
+
 if (isset($_POST['submit_payment'])) {
     $payment_id = $_POST['payment_id'];
     $booking_id = $_POST['booking_id'];

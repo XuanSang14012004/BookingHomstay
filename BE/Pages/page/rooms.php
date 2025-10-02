@@ -30,6 +30,17 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
         $rooms = mysqli_fetch_assoc($result);
     }
 }
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_room");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 
 <!----------------------------------- Giao diện chính ---------------------------------------------->
@@ -44,15 +55,24 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 <button type="submit" class="search-btn" onclick="showFormRoom('search-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
-        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+        <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="rooms">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+        <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
              } ?>
-        </h3>
+        </p>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>Thuộc Homestay</th>
                         <th>Mã Phòng</th>
                         <th>Tên Phòng</th>
@@ -79,35 +99,61 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                                 OR room_people LIKE '$search' 
                                 OR room_price LIKE '$search' 
                                 OR room_describe LIKE '$search'
-                                OR room_status LIKE '$search' "; 
+                                OR room_status LIKE '$search'
+                                LIMIT $limit OFFSET $offset "; 
                             
                             $result = $conn->query($sql);
-                            $i = 1;
                         }else{
-                            $result = $conn->query("SELECT * FROM db_room");
-                            $i = 1;
+                            $result = $conn->query("SELECT * FROM db_room LIMIT $limit OFFSET $offset");
                         }
-                        while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
-                            <td><?php echo $row['homestay_name'] ?></td>
-                            <td><?php echo $row['room_id'] ?></td>
-                            <td><?php echo $row['room_name'] ?></td>
-                            <td><?php echo $row['room_type'] ?></td>
-                            <td class="truncate-text"><?php echo $row['room_describe'] ?></td>
-                            <td><?php echo $row['room_people'] ?></td>
-                            <td><?php echo $row['room_price'] ?></td>
-                            <td><?php echo $row['room_status'] ?></td>
-                            <td><?php echo "<img src='../../Images/" .$row['image_room']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
-                            <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormRoom('detail-form', '<?php echo $row['room_id'] ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormRoom('edit-form', '<?php echo $row['room_id'] ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteRoom('<?php echo $row['room_id'] ?>')"><i class='bx bx-trash'></i></button>
+                        if ($result && mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) { ?>
+                                <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['room_id']; ?>"></td> 
+                                <td><?php echo $row['homestay_name'] ?></td>
+                                <td><?php echo $row['room_id'] ?></td>
+                                <td><?php echo $row['room_name'] ?></td>
+                                <td><?php echo $row['room_type'] ?></td>
+                                <td class="truncate-text"><?php echo $row['room_describe'] ?></td>
+                                <td><?php echo $row['room_people'] ?></td>
+                                <td><?php echo $row['room_price'] ?></td>
+                                <td><?php echo $row['room_status'] ?></td>
+                                <td><?php echo "<img src='../../Images/" .$row['image_room']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
+                                <td class="actions">
+                                    <button class="detail-btn" title="Chi tiết" onclick="showFormRoom('detail-form', '<?php echo $row['room_id'] ?>')"><i class='bx bx-detail'></i></button>
+                                    <button class="edit-btn" title="Sửa" onclick="showFormRoom('edit-form', '<?php echo $row['room_id'] ?>')"><i class='bx bx-edit-alt'></i></button>
+                                    <button class="delete-btn" title="Xóa" onclick="deleteRoom('<?php echo $row['room_id'] ?>')"><i class='bx bx-trash'></i></button>
+                                </td>
+                            </tr>
+                            <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
                             </td>
-                    </tr>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
+        <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=rooms&pagetable&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=rooms&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=rooms&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=rooms&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=rooms&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
+        </div>  
     </div>
 </div>
 
@@ -122,8 +168,6 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
         <?php 
             $hst_sql = "SELECT DISTINCT TRIM(homestay_name) as homestay_name FROM `db_room`";
             $hst_result = mysqli_query($conn, $hst_sql);
-            $lh_sql = "SELECT DISTINCT TRIM(room_type) as room_type FROM `db_room`";
-            $lh_result = mysqli_query($conn, $lh_sql);
         ?>
         <form action="../modules/add_function.php" method="POST" enctype="multipart/form-data">
             <div class="form-section">
@@ -132,7 +176,7 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                     <label for="homestay_name">Thuộc Homestay:</label>
                     <select id="homestay_name" name="homestay_name" required>
                         <?php
-                            if ($lh_result->num_rows > 0) {
+                            if ($hst_result->num_rows > 0) {
                             while ($row = mysqli_fetch_assoc($hst_result)) {?>
                                 <option value="<?php echo $row['homestay_name']; ?>">
                                     <?php echo $row['homestay_name']; ?>
@@ -154,19 +198,7 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 </div>
                 <div class="form-group">
                     <label for="room_type">Loại Phòng:</label>
-                    <select id="room_type" name="room_type" required>
-                        <?php
-                            if ($lh_result->num_rows > 0) {
-                            while ($row = mysqli_fetch_assoc($lh_result)) {?>
-                                <option value="<?php echo $row['room_type']; ?>">
-                                    <?php echo $row['room_type']; ?>
-                                </option>
-                            <?php } 
-                            } else {
-                                echo "<option value=''>Không có dữ liệu</option>";
-                            }
-                            ?>
-                    </select>
+                    <input type="text" id="room_type" name="room_type" required>
                 </div>
             </div>
             <div class="form-section">
@@ -185,7 +217,11 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 </div>
                 <div class="form-group">
                     <label for="room_status">Trạng thái:</label>
-                    <input type="text" id="room_status" name="room_status" rows="4"></input>
+                    <select id="room_status" name="room_status">
+                        <option value="Đang trống">Đang trống</option>
+                        <option value="Đã đặt" >Đã đặt</option>
+                        <option value="Đang bảo trì" >Chờ thanh toán</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="image_room">Hình ảnh:</label>
@@ -216,21 +252,29 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
         </div>
         <h2>Sửa thông tin phòng</h2>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="room_id" value="<?php echo $rooms['room_id']; ?>">
             <div class="form-section">
                 <h3>Thông tin cơ bản</h3>
                 <div class="form-group">
                     <label for="homestay_name">Thuộc Homestay:</label>
-                    <select id="homestay_name" name="homestay_name" required>
-                        <option value="HST_001" <?php echo ($rooms['homestay_name'] == 'HST_001') ? 'selected' : ''; ?>>Homestay Vọng Nguyệt</option>
-                        <option value="HST_002" <?php echo ($rooms['homestay_name'] == 'HST_002') ? 'selected' : ''; ?>>Nhà Của Gió</option>
-                        <option value="HST_003" <?php echo ($rooms['homestay_name'] == 'HST_003') ? 'selected' : ''; ?>>Biệt Thự Đồi</option>
-                        <option value="khac" <?php echo ($rooms['homestay_name'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
+                    <select id="homestay_name" name="homestay_name" required> 
+                        <?php
+                            $hst_sql = "SELECT DISTINCT TRIM(homestay_name) AS homestay_name FROM db_room";
+                            $hst_result = mysqli_query($conn, $hst_sql);
+
+                            if ($hst_result && mysqli_num_rows($hst_result) > 0) {
+                                while ($row = mysqli_fetch_assoc($hst_result)) {
+                                    $selected = ($row['homestay_name'] == trim($rooms['homestay_name'])) ? 'selected' : '';
+                                    echo "<option value='{$row['homestay_name']}' $selected>{$row['homestay_name']}</option>";
+                                }
+                            } else {
+                                echo "<option value=''>Không có dữ liệu</option>";
+                            }
+                            ?>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="room_id">Mã Phòng:</label>
-                    <input type="text" id="room_id" name="room_id" value="<?php echo $rooms['room_id']; ?>" required>
+                    <input type="text" id="room_id" name="room_id" value="<?php echo $rooms['room_id']; ?>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="room_name">Tên Phòng:</label>
@@ -238,12 +282,7 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 </div>
                 <div class="form-group">
                     <label for="room_type">Loại Phòng:</label>
-                    <select id="room_type" name="room_type" required>
-                        <option value="P_01" <?php echo ($rooms['room_type'] == 'P_01') ? 'selected' : ''; ?>>Phòng Đơn</option>
-                        <option value="P_02" <?php echo ($rooms['room_type'] == 'P_02') ? 'selected' : ''; ?>>Phòng Đôi</option>
-                        <option value="P_03" <?php echo ($rooms['room_type'] == 'P_03') ? 'selected' : ''; ?>>Phòng Gia Đình</option>
-                        <option value="P_04" <?php echo ($rooms['room_type'] == 'P_04') ? 'selected' : ''; ?>>Phòng Suite</option>
-                    </select>
+                    <input type="text" id="room_type" name="room_type" value="<?php echo $rooms['room_type']; ?>" required>
                 </div>
             </div>
             <div class="form-section">
@@ -262,12 +301,20 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 </div>
                 <div class="form-group">
                     <label for="room_status">Trạng thái:</label>
-                    <input type="text" id="room_status" name="room_status" rows="4" value="<?php echo $rooms['room_status']; ?>"></input>
+                    <select id="room_status" name="room_status">
+                        <option value="Đang trống" <?php echo ($rooms['room_status'] == 'Đang trống') ? 'selected' : ''; ?>>Đang trống</option>
+                        <option value="Đã đặt" <?php echo ($rooms['room_status'] == 'Đã đặt') ? 'selected' : ''; ?>>Đã đặt</option>
+                        <option value="Đang bảo trì"<?php echo ($rooms['room_status'] == 'Đang bảo trì') ? 'selected' : ''; ?>>Đang bảo trì</option>
+                        <option value="Đang vệ sinh"<?php echo ($rooms['room_status'] == 'Đang vệ sinh') ? 'selected' : ''; ?>>Đang vệ sinh</option>
+                        <option value="Đã xóa"<?php echo ($rooms['room_status'] == 'Đã xóa') ? 'selected' : ''; ?>>Đã xóa</option>
+
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="image_room">Hình ảnh:</label>
-                    <input type="image" id="image_room" name="image_room" value="<?php echo $rooms['image_room']; ?>">
-                    <input type="file" id="image_room" name="image_room[]" multiple accept="image/*" value="<?php echo $rooms['image_room']; ?>">
+                    <label for="image_room">Hình ảnh hiện tại:</label>
+                    <img src="../../Images/<?php echo $rooms['image_room']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="image_room">Chọn ảnh mới để thay thế :</label>
+                    <input type="file" id="image_room" name="image_room" multiple accept="image/*" value="<?php echo $rooms['image_room']; ?>">
                 </div>
             </div>
             <div class="form-actions">
@@ -331,15 +378,29 @@ if (($is_edit_form || $is_detail_form) && $room_id) {
                 </div>
                 <div class="info-group">
                     <label for="room_status">Trạng thái:</label>
-                    <p> <?php echo $rooms['room_status']; ?> </p>
+                    <p> <?php 
+                            $text='';
+                            $style='';
+                            if($rooms['room_status'] ==='Đang trống'){
+                                $text=  'Đang trống';
+                                $style= 'status-actived';
+                            }else if($rooms['room_status'] === 'Đang dọn dẹp'){
+                                $text=  'Đang bảo trì';
+                                $style= 'status-pending';
+                            }else if($rooms['room_status'] === 'Đã đặt'){
+                                $text=  'Đã đặt';
+                                $style= 'status-completed';
+                            }
+                            echo "<span class='" . $style . "'>" . $text . "</span>";?>
+                    </p>
                 </div>
             </div>
             <div class="detail-section">
                 <h3>Hình ảnh Homestay</h3>
                 <div class="images-gallery">
-                    <img src="../../../images/image1.jpg" alt="Hình ảnh Homestay 1">
-                    <img src="../../../images/image2.jpg" alt="Hình ảnh Homestay 2">
-                    <img src="../../../images/image3.jpg" alt="Hình ảnh Homestay 3">
+                    <img src="../../Images/<?php echo $rooms['image_room']; ?>" alt="Hình ảnh Homestay 1">
+                    <img src="../../Images/<?php echo $rooms['image_room']; ?>" alt="Hình ảnh Homestay 2">
+                    <img src="../../Images/<?php echo $rooms['image_room']; ?>" alt="Hình ảnh Homestay 3">
                 </div>
             </div>
         </div>

@@ -30,6 +30,18 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
         $user = mysqli_fetch_assoc($result);
     }
 }
+
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_customer");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 <!-------------------------------- Giao diện chính ------------------------------------>
 <div class="form-container" id="user-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;"> 
@@ -43,15 +55,24 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
                 <button type="submit" class="search-btn" onclick="showFormUser('search-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
-        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+        <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="user">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+        <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
              } ?>
-        </h3>
+        </p>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>Mã Khách hàng</th>
                         <th>Tên Khách hàng</th>
                         <th>Ngày sinh</th>
@@ -75,15 +96,16 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
                                 OR gender LIKE '$search' 
                                 OR email LIKE '$search' 
                                 OR customer_phone LIKE '$search' 
-                                OR address LIKE '$search' ";
+                                OR address LIKE '$search'
+                                LIMIT $limit OFFSET $offset ";
                             $result = $conn->query($sql); 
-                            $i = 1;
                         }else{
-                            $result = $conn->query("SELECT * FROM db_customer");
-                            $i = 1;
+                            $sql = "SELECT * FROM db_customer LIMIT $limit OFFSET $offset ";
+                            $result = $conn->query($sql);
                         }
+                        if ($result && mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
+                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['customer_id']; ?>"></td> 
                             <td><?php echo $row['customer_id'] ?></td>
                             <td><?php echo $row['customer_name'] ?></td>
                             <td><?php echo $row['birthday'] ?></td>
@@ -97,9 +119,35 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
                                 <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $row['customer_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                     </tr>
-                <?php } ?>
+                        <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
+        </div>
+        <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=user&pagetable&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=user&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=user&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=user&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=user&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -113,10 +161,6 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
         <h2>Thêm Khách Hàng Mới</h2>
-        <?php 
-            $gender_sql = "SELECT DISTINCT TRIM(gender) as gender FROM `db_customer`";
-            $gender_result = mysqli_query($conn, $gender_sql);
-        ?>
         <form action="../modules/add_function.php" method="POST">
             <div class="form-section">
                 <h3>Thông tin cá nhân</h3>
@@ -135,17 +179,9 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
                 <div class="form-group">
                     <label for="gender">Giới tính :</label>
                     <select id="gender" name="gender" required>
-                         <?php
-                            if ($gender_result->num_rows > 0) {
-                            while ($row = mysqli_fetch_assoc($gender_result)) {?>
-                                <option value="<?php echo $row['gender']; ?>">
-                                    <?php echo $row['gender']; ?>
-                                </option>
-                            <?php } 
-                            } else {
-                                echo "<option value=''>Không có dữ liệu</option>";
-                            }
-                            ?>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ" >Nữ</option>
+                        <option value="Khác" >Khác</option>
                     </select>
                 </div>
             </div>
@@ -186,10 +222,6 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
             </div>
         </div>
         <h2>Sửa Thông Tin Khác Hàng</h2>
-        <?php 
-            $gender_sql = "SELECT DISTINCT TRIM(gender) as gender FROM `db_customer`";
-            $gender_result = mysqli_query($conn, $gender_sql);
-        ?>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="customer_id" value="<?php echo $user['customer_id']; ?>">
 
@@ -210,17 +242,9 @@ if (($is_edit_form || $is_detail_form) && $customer_id) {
                 <div class="form-group">
                     <label for="gender">Giới tính :</label>
                     <select id="gender" name="gender" required>
-                        <?php
-                            if ($gender_result->num_rows > 0) {
-                            while ($row = mysqli_fetch_assoc($gender_result)) {?>
-                                <option value="<?php echo $row['gender']; ?>">
-                                    <?php echo $row['gender']; ?>
-                                </option>
-                            <?php } 
-                            } else {
-                                echo "<option value=''>Không có dữ liệu</option>";
-                            }
-                            ?>
+                        <option value="Nam" <?php echo ($user['gender'] == 'Nam') ? 'selected' : ''; ?>>Nam</option>
+                        <option value="Nữ" <?php echo ($user['gender'] == 'Nữ') ? 'selected' : ''; ?>>Nữ</option>
+                        <option value="Khác"<?php echo ($user['gender'] == 'Khác') ? 'selected' : ''; ?>>Khác</option>
                     </select>
                 </div>
             </div>

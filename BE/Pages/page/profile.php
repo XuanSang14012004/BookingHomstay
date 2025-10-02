@@ -1,58 +1,86 @@
+<?php 
+$sql = "SELECT * FROM db_account";
+$result = $conn->query($sql);
+$row = mysqli_fetch_assoc($result);
 
+$action = isset($_GET['action']) ? $_GET['action'] : 'view';
+
+$is_view_form = false;
+$is_add_form = false;
+$is_edit_form = false;
+$is_detail_form = false;
+
+if ($action === 'add_account') {
+    $is_add_form = true;
+} else if ($action === 'edit_account') {
+    $is_edit_form = true;
+} else if ($action === 'search_account') {
+    $is_view_form = true;
+} else if ($action === 'detail_account') {
+    $is_detail_form = true;
+} else {
+    $is_view_form = true; // Trang chính
+
+}
+
+$email = isset($_GET['id']) ? $_GET['id'] : null;
+
+$profile = null;
+if (($is_edit_form || $is_detail_form) && $email) {
+    $result = $conn->query("SELECT * FROM db_account WHERE email = '$email'");
+    if ($result && $result->num_rows > 0) {
+        $profile = mysqli_fetch_assoc($result);
+    }
+}
+
+?>
     <div class="form-container">
         <div class="profile-container">
             <div class ="profile-left">
                 <div class ="profile-left-img">
                     <p><img src="../../Images/user.jpg" alt="Avatar"></p>
-                    <h2>nguyensang14012004</h2>
+                    <h2 class="profile-name"><?php echo $row['fullname'] ?></h2>
                     <p><i class='bx bx-edit-alt' ></i></i>Sửa hồ sơ</p>
                 </div> 
                 <div class="profile-left-content">
                     <div class="content-list">
                         <h3>Tài khoản của tôi</h3>
                         <ul>
-                            <li><a href="#hoso">Thông tin tài khoản</a></li>
-                            <li><a href="#diachi">Thông tin cá nhân</a></li>
-                            <li><a href="#matkhau">Đổi mật khẩu</a></li>
+                            <li><button  onclick="showFormProfile('detail-form', '<?php echo $row['email']; ?>')">Thông tin cá nhân</button></li>
+                            <li><button  onclick="showFormProfile('edit-form', '<?php echo $row['email']; ?>')">Đổi mật khẩu</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="profile-right" id="info">
+            <div class="profile-right" id="info-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
                 <h2>Hồ Sơ Của Tôi</h2>
                 <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
                 <div class="profile-form">
                     <div class="form-left">
-                        <div class="form-group">
-                            <label>Tên đăng nhập : </label>
-                            <p>nguyensang1401</p>
-                        </div>
 
                         <div class="form-group">
-                            <label>Tên :</label>
-                            <input type="text" value="Sáng">
+                            <label>Họ và tên :</label>
+                            <p><?php echo $row['fullname'] ?> </p>
                         </div>
 
                         <div class="form-group">
                             <label>Email :</label>
-                            <p>nguyensang@gmail.com <a href="#">Thay Đổi</a></p>
+                            <p><?php echo $row['email'] ?> <a href="#">Thay Đổi</a></p>
                         </div>
 
                         <div class="form-group">
                             <label>Số điện thoại :</label>
-                            <p>0123456789 <a href="#">Thêm</a></p>
+                            <p><?php echo $row['phone'] ?></p>
                         </div>
 
                         <div class="form-group">
-                            <label>Giới tính</label>
-                            <label><input type="radio" name="gender"> Nam</label>
-                            <label><input type="radio" name="gender"> Nữ</label>
-                            <label><input type="radio" name="gender"> Khác</label>
+                            <label>giới tính :</label>
+                            <p>Nam</p>
                         </div>
 
                         <div class="form-group">
                             <label>Ngày sinh :</label>
-                            <p>14/01/2004 <a href="#">Thay Đổi</a></p>
+                            <p>01/03/2004</p>
                         </div>
 
                         <button class="btn">Lưu</button>
@@ -66,32 +94,51 @@
                     </div>
                 </div>
             </div>
-            <!-- ------------địa chỉ-------------- -->
-            <div class="profile-right" id="diachi" style="display:none;">
-                <h2>Địa chỉ của tôi</h2>
-                <p>Quản lý thông tin địa chỉ để thuận tiện khi đặt homestay</p>
+            <div class="profile-right" id="account-form" style="display:none;">
+                <h2>Hồ Sơ Của Tôi</h2>
+                <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                <div class="profile-form">
+                    <div class="form-left">
 
-                <div class="address-list">
-                    <div class="address-item">
-                        <p><b>Nguyensang14</b> | 0123 456 789</p>
-                        <p>123 Đường ABC, Quận 1, TP. HCM</p>
-                        <button class="btn-edit">Sửa</button>
-                        <button class="btn-delete">Xóa</button>
+                        <div class="form-group">
+                            <label>Họ và tên :</label>
+                            <p><?php echo $row['fullname'] ?> </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email :</label>
+                            <p><?php echo $row['email'] ?> <a href="#">Thay Đổi</a></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại :</label>
+                            <p><?php echo $row['phone'] ?></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>giới tính :</label>
+                            <p>Nam</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày sinh :</label>
+                            <p>01/03/2004</p>
+                        </div>
+
+                        <button class="btn">Lưu</button>
                     </div>
 
-                    <div class="address-item">
-                        <p><b>sangnguyen1401</b> | 0987 654 321</p>
-                        <p>456 Đường XYZ, Quận 2, TP. HCM</p>
-                        <button class="btn-edit">Sửa</button>
-                        <button class="btn-delete">Xóa</button>
+                    <div class="avatar-box">
+                        <img src="../../Images/user.jpg" alt="avatar">
+                        <input type="file"><button>Chọn Ảnh </button></input>
+
+                        <p>Dung lượng file tối đa 1 MB<br>Định dạng: .JPEG, .PNG</p>
                     </div>
                 </div>
-
-                    <button class="btn">+ Thêm địa chỉ mới</button>
             </div>
 
                 <!-- ------------đổi mật khẩu-------------- -->
-            <div class="profile-right" id="matkhau" style="display:none;">
+            <div class="profile-right" id="password-form" style="display:none;" >
                     <h2>Đổi mật khẩu</h2>
                     <p>Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác.</p>
                     <hr>

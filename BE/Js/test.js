@@ -1,32 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Lấy checkbox "chọn tất cả"
     const selectAllCheckbox = document.getElementById('select-all');
-    // Lấy tất cả các checkbox hàng
     const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-
-    // Sự kiện khi click vào "chọn tất cả"
     selectAllCheckbox.addEventListener('change', function() {
-        // Đặt trạng thái của tất cả checkbox hàng giống với trạng thái của "chọn tất cả"
         rowCheckboxes.forEach(function(checkbox) {
             checkbox.checked = selectAllCheckbox.checked;
         });
     });
 
-    // Sự kiện khi click vào checkbox hàng
     rowCheckboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
-            // Nếu có bất kỳ hàng nào chưa được chọn, bỏ chọn "chọn tất cả"
             if (!this.checked) {
                 selectAllCheckbox.checked = false;
             } 
-            // Nếu tất cả các hàng đều đã được chọn, tự động chọn "chọn tất cả"
             else if (document.querySelectorAll('.row-checkbox:checked').length === rowCheckboxes.length) {
                 selectAllCheckbox.checked = true;
             }
         });
     });
 });
-
 
 function navigateToUrl(url) {
     window.location.href = url;
@@ -77,7 +68,7 @@ function handlePopState(pageName, defaultFormId, formContainerClass = '.form-con
         } else if (action && action.startsWith('detail_')) {
             formToShowId = 'detail-form'; 
         } else if (action && action.startsWith('search_')) {
-            const content = urlParams.get('content') || urlParams.get('recontent');
+            const content = urlParams.get('content');
             if (content) {
                  formToShowId = 'search-results';
             }
@@ -207,7 +198,7 @@ function showFormBooking(formId, booking_id = null) {
     const search = check_search ? check_search.value : '';
 
     if (formId === 'booking-form') {
-        showInternalForm(formId);
+        navigateToUrl(`home.php?page=booking`);
     } else if (formId === 'add-form') {
         navigateToUrl(`home.php?page=booking&action=add_booking&id=${booking_id}`);
     }else if (formId === 'search-form') {
@@ -236,6 +227,8 @@ function showFormPay(formId, payment_id = null) {
         navigateToUrl(`home.php?page=payment&action=add_payment&id=${payment_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=payment&action=search_payment&content=${search}`);
+    } else if (formId === 'pay-form' && payment_id) {
+        navigateToUrl(`home.php?page=payment&action=action_payment&id=${payment_id}`);
     } else if (formId === 'edit-form' && payment_id) {
         navigateToUrl(`home.php?page=payment&action=edit_payment&id=${payment_id}`);
     } else if (formId === 'detail-form' && payment_id) {
@@ -309,6 +302,7 @@ handlePopState('feedback', 'feedback-form');
 //-----Hiển thị thông báo sau khi thực hiện thay đổi trên DB----- 
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
+    const action= urlParams.get('action');
     const status = urlParams.get('status');
     const page = urlParams.get('page');
 
@@ -352,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật tài khoản thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'account' && status === 'exists') {
+    if (page === 'account' && action === 'add_account' && status === 'exists') {
         showMessage('Email đã tồn tại. Vui lòng sử dụng email khác.');
     }
 
@@ -374,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật thông tin khách hàng thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'add_user' && status === 'exists') {
+    if (page === 'user' && action === 'add_user' && status === 'exists') {
         showMessage('Mã khách hàng đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
@@ -398,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật homestay thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'homestay' && status === 'exists') {
+    if (page === 'homestay' && action === 'add_homestay' && status === 'exists') {
         showMessage('Mã homestay đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
@@ -422,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật phòng thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'add_rooms' && status === 'exists') {
+    if (page === 'rooms' && action === 'add_room' && status === 'exists') {
         showMessage('Mã phòng đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
@@ -444,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật đơn đặt phòng thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'add_booking' && status === 'exists') {
+    if (page === 'booking' && action === 'add_booking' && status === 'exists') {
         showMessage('Mã đơn đặt phòng đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
@@ -465,8 +459,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (status === 'update_error') {
             showMessage('Cập nhật thanh toán thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
+        if (status === 'success_payment') {
+            showMessage('Thanh toán thành công!');
+        } else if (status === 'update_error') {
+            showMessage('Thanh toán thất bại! Vui lòng kiểm tra lại thông tin.');
+        }
     }
-    if (page === 'add_payment' && status === 'exists') {
+    if (page === 'payment' && action === 'add_payment' && status === 'exists') {
         showMessage('Mã thanh toán đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 

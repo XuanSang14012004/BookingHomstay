@@ -53,16 +53,16 @@
                 <span class="text">Quản lí đánh giá</span>
             </a>
         </li>
-        <li class="<?= ($page == 'statistic') ? 'active' : '' ?>">
-            <a href="home.php?page=statistic">
-                <i class='bx bx-bar-chart-alt-2'></i>
-                <span class="text">Thống kê & Báo cáo</span>
-            </a>
-        </li>
         <li class="<?= ($page == 'feedback') ? 'active' : '' ?>">
             <a href="home.php?page=feedback">
                 <i class='bx bx-conversation'></i>
                 <span class="text">Phản hồi khách hàng</span>
+            </a>
+        </li>
+        <li class="<?= ($page == 'statistic') ? 'active' : '' ?>">
+            <a href="home.php?page=statistic">
+                <i class='bx bx-bar-chart-alt-2'></i>
+                <span class="text">Thống kê & Báo cáo</span>
             </a>
         </li>
         <li>

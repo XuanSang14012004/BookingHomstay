@@ -17,7 +17,13 @@
         </div> 
         <div class="info-right">
             <p><?php echo $_SESSION['fullname']; ?></p>
-            <p><?php echo $_SESSION['role']; ?></p>
+            <p  class="name"><?php if($_SESSION['role'] ==='user'){
+                        echo 'Khách hàng';
+                    }else if($_SESSION['role'] === 'owner'){
+                        echo 'Chủ homestay';
+                    }else if($_SESSION['role'] === 'admin'){
+                        echo 'Quản trị viên';
+                    } ?></p>
         </div>
     </a>
 </nav>

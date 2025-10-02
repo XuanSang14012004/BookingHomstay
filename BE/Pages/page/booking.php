@@ -30,6 +30,18 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
         $booking = mysqli_fetch_assoc($result);
     }
 }
+
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_booking");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 <!------------------------------------------------------------ Giao diện chính --------------------------------------------------->
 <div class="form-container" id="booking-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
@@ -43,15 +55,25 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                 <button type="submit" class="search-btn" onclick="showFormBooking('search-form')"><i class='bx bx-search'></i>
             </div>
         </div>
-        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+        <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="booking">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+        
+        <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
              } ?>
-        </h3>
+        </p>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>Mã đơn đặt phòng</th>
                         <th>Mã khách hàng</th>
                         <th>Tên khách hàng</th>
@@ -85,15 +107,16 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                                 OR date_checkout LIKE '$search' 
                                 OR note LIKE '$search' 
                                 OR booking_price LIKE '$search' 
-                                OR booking_status LIKE '$search' "; 
+                                OR booking_status LIKE '$search'
+                                LIMIT $limit OFFSET $offset "; 
                             $result = $conn->query($sql);
-                            $i = 1;
                         }else{
-                            $result = $conn->query("SELECT * FROM db_booking");
-                            $i = 1;
+                            $sql = "SELECT * FROM db_booking LIMIT $limit OFFSET $offset";
+                            $result = $conn->query($sql);
                         }
+                        if ($result && mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><?php echo $i++; ?></td>
+                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['booking_id']; ?>"></td> 
                             <td><?php echo $row['booking_id'] ?></td>
                             <td><?php echo $row['customer_id'] ?></td>
                             <td><?php echo $row['customer_name'] ?></td>
@@ -112,9 +135,35 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                                 <button class="delete-btn" title="Xóa" onclick="deleteBooking('<?php echo $row['booking_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                         </tr>
+                    <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
+                            </td>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
+        </div>
+        <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=booking&pagetable1&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=booking&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=booking&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=booking&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=booking&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -128,10 +177,6 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
             <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
             <h2>Thêm Đơn Đặt Phòng Mới</h2>
-            <?php 
-                $th_sql = "SELECT DISTINCT TRIM(booking_status) as booking_status FROM `db_booking`";
-                $th_result = mysqli_query($conn, $th_sql);
-            ?>
             <form action="../modules/add_function.php" method="POST" enctype="multipart/form-data">
                 <div class="form-section">
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
@@ -158,17 +203,11 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                     <div class="form-group">
                         <label for="booking_status">Trạng thái:</label>
                         <select id="booking_status" name="booking_status">
-                            <?php 
-                        if ($th_result->num_rows > 0) {
-                            while ($row = mysqli_fetch_assoc($th_result)) {?>
-                                <option value="<?php echo $row['booking_status'];?>">
-                                    <?php echo $row['booking_status'];?>
-                                </option>
-                            <?php } 
-                            } else {
-                                echo "<option value=''>Không có dữ liệu</option>";
-                            }
-                            ?>
+                            <option value="Đã xác nhận">Đã xác nhận</option>
+                            <option value="Chờ xác nhận" >Chờ xác nhận</option>
+                            <option value="Chờ thanh toán" >Chờ thanh toán</option>
+                            <option value="Đã thanh toán" >Đã thanh toán</option>
+                            <option value="Đã hủy" >Đã hủy</option>
                         </select>
                     </div>
                 </div>
@@ -231,7 +270,7 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
                     <div class="form-group">
                         <label for="booking_id">Mã đơn đặt phòng:</label>
-                        <input type="text" id="booking_id" name="booking_id" value="<?php echo $booking['booking_id']; ?>" required>
+                        <input type="text" id="booking_id" name="booking_id" value="<?php echo $booking['booking_id']; ?>" disabled>
                     </div>
                     <div class="form-group">
                         <label for="customer_id">Mã Khách hàng:</label>
@@ -254,6 +293,8 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                         <select id="booking_status" name="booking_status">
                             <option value="Đã xác nhận" <?php echo ($booking['booking_status'] == 'Đã xác nhận') ? 'selected' : ''; ?>>Đã xác nhận</option>
                             <option value="Chờ xác nhận" <?php echo ($booking['booking_status'] == 'Chờ xác nhận') ? 'selected' : ''; ?>>Chờ xác nhận</option>
+                            <option value="Chờ thanh toán" <?php echo ($booking['booking_status'] == 'Chờ thanh toán') ? 'selected' : ''; ?>>Chờ thanh toán</option>
+                            <option value="Đã thanh toán" <?php echo ($booking['booking_status'] == 'Đã thanh toán') ? 'selected' : ''; ?>>Đã thanh toán</option>
                             <option value="Đã hủy" <?php echo ($booking['booking_status'] == 'Đã hủy') ? 'selected' : ''; ?>>Đã hủy</option>
                         </select>
                     </div>
@@ -336,7 +377,25 @@ if (($is_edit_form || $is_detail_form) && $booking_id) {
                     </div>
                     <div class="info-group">
                         <label for="booking_status" >Trạng thái:</label>
-                        <p class="status-active"> <?php echo $booking['booking_status']; ?> </p>
+                        <p> <?php 
+                            $text='';
+                            $style='';
+                            if($booking['booking_status'] ==='Đã xác nhận'){
+                                $text=  'Đã xác nhận';
+                                $style= 'status-actived';
+                            }else if($booking['booking_status'] === 'Chờ xác nhận'){
+                                $text=  'Chờ xác nhận';
+                                $style= 'status-pending';
+                            }else if($booking['booking_status'] === 'Chưa thanh toán'){
+                                $text=  'Chưa thanh toán';
+                                $style= 'status-pending';
+                            }else if($booking['booking_status'] === 'Đã hoàn tất'){
+                                $text=  'Đã thanh toán';
+                                $style= 'status-completed';
+                            }else if($booking['booking_status'] === 'Đã hủy'){
+                                $text=  'Đã hủy';
+                                $style= 'status-cancel';
+                            }echo "<span class='" . $style . "'>" . $text . "</span>";?> </p>
                     </div>
                 </div>
 

@@ -26,6 +26,18 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
     }
     
 }
+
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_feedback");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 
 <!-------------------------------------------------- Giao diện chính ---------------------------->
@@ -39,15 +51,24 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
                 <button type="submit" class="search-btn" onclick="showFormFeedback('search-form')"><i class='bx bx-search'></i></button>
             </div>
         </div>
-        <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
+        <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="feedback">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+        <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+            echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
              } ?>
-        </h3>
+        </p>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>Mã Phản hồi</th>
                         <th>Tên Khách hàng</th>
                         <th>Tiêu đề</th>
@@ -69,16 +90,16 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
                             OR title LIKE '$search'
                             OR content LIKE '$search'
                             OR date LIKE '$search'
-                            OR feedback_status LIKE '$search' "; 
+                            OR feedback_status LIKE '$search'
+                            LIMIT $limit OFFSET $offset "; 
                             $result = $conn->query($sql);
-                            $i = 1;
                     }else{
-                        $result = $conn->query("SELECT * FROM db_feedback ");
-                        $i = 1;
+                        $result = $conn->query("SELECT * FROM db_feedback LIMIT $limit OFFSET $offset ");
                     }
+                    if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) { ?>
                         <tr>
-                            <td><?php echo $i++; ?></td>
+                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['feedback_id']; ?>"></td> 
                             <td><?php echo $row['feedback_id']; ?></td>
                             <td><?php echo $row['customer_name']; ?></td>
                             <td><?php echo $row['title']; ?></td>
@@ -92,10 +113,36 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
                                 <button class="delete-btn" title="Xóa" onclick="deleteFeedback('<?php echo $row['feedback_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                         </tr>
+                    <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
+                            </td>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
         </div>
+        <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=feedback&pagetable&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=feedback&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=feedback&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=feedback&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=feedback&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
+        </div>  
     </div>
 </div>
 
@@ -137,9 +184,8 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
                     <div class="form-group">
                         <label for="feedback_status">Cập nhật trạng thái:</label>
                         <select id="feedback_status" name="feedback_status">
-                            <option value="Chưa trả lời" <?php echo ($feedback['feedback_status'] == 'Chưa trả lời') ? 'selected' : ''; ?>>Chưa trả lời</option>
-                            <option value="Đã trả lời" <?php echo ($feedback['feedback_status'] == 'Đã trả lời') ? 'selected' : ''; ?>>Đã trả lời</option>
-                            <option value="Đã đóng" <?php echo ($feedback['feedback_status'] == 'Đã đóng') ? 'selected' : ''; ?>>Đã đóng</option>
+                            <option value="Chưa phản hồi" <?php echo ($feedback['feedback_status'] == 'Chưa phản hồi') ? 'selected' : ''; ?>>Chưa phản hồi</option>
+                            <option value="Đã phản hồi" <?php echo ($feedback['feedback_status'] == 'Đã phản hồi') ? 'selected' : ''; ?>>Đã phản hồi</option>
                         </select>
                     </div>
                 </div>
@@ -189,7 +235,17 @@ if (($is_reply_form || $is_detail_form) && $feedback_id) {
                     </div>
                     <div class="info-group">
                         <label>Trạng thái:</label>
-                        <p><?php echo $feedback['feedback_status']; ?></p>
+                        <p><?php 
+                            $text='';
+                            $style='';
+                            if($feedback['feedback_status'] ==='Đã phản hồi'){
+                                $text=  'Đã phản hồi';
+                                $style= 'status-completed';
+                            }else if($feedback['feedback_status'] === 'Chưa phản hồi'){
+                                $text=  'Chưa phản hồi';
+                                $style= 'status-pending';
+                            }
+                            echo "<span class='" . $style . "'>" . $text . "</span>";?></p>
                     </div>
                 </div>
                 <div class="detail-section">

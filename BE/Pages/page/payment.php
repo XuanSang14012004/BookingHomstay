@@ -5,17 +5,20 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_view_form = false;
 $is_add_form = false;
+$is_pay_form = false;
 $is_edit_form = false;
 $is_detail_form = false;
 
 if ($action === 'add_payment') {
     $is_add_form = true;
 } else if ($action === 'edit_payment') {
-    $is_edit_form = true;
+    $is_edit_form = true;  
 } else if ($action === 'search_payment') {
     $is_view_form = true;
 } else if ($action === 'detail_payment') {
     $is_detail_form = true;
+} else if ($action === 'action_payment') {
+    $is_pay_form = true;
 } else {
     $is_view_form = true; // Trang chính
 
@@ -24,12 +27,24 @@ if ($action === 'add_payment') {
 $payment_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 $payment = null;
-if (($is_edit_form || $is_detail_form) && $payment_id) {
+if (($is_edit_form || $is_detail_form || $is_pay_form) && $payment_id) {
     $result = $conn->query("SELECT * FROM db_payment WHERE payment_id = '$payment_id'");
     if ($result && $result->num_rows > 0) {
         $payment = mysqli_fetch_assoc($result);
     }
 }
+
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+if ($limit <= 0) $limit = 10;
+
+$pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
+if ($pagetable < 1) $pagetable = 1;
+$offset = ($pagetable - 1) * $limit;
+
+$total_result = $conn->query("SELECT COUNT(*) as total FROM db_payment");
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $limit);
 ?>
 <!----------------------------------------------- Giao diện chính -------------------------------------------->
 <div class="form-container" id="payment-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;">
@@ -43,15 +58,24 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
             <button type="submit" class="search-btn" onclick="showFormPay('search-form')"><i class='bx bx-search'></i></button>
         </div>
     </div>
-    <h3><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
-            echo "Kết quả tìm kiếm theo: {$_GET['content']}";
-             } ?>
-        </h3>
+    <div class="limit-form">
+            <form method="get">
+                <input type="hidden" name="page" value="payment">
+                <label for="limit">Hiển thị</label>
+                <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
+                <input type="hidden" name="pagetable" value="1">
+                <button type="submit">Xem</button>
+            </form>
+        </div>
+    <p class="line-search"><?php if( isset($_GET['content']) ? $_GET['content'] :'' ){
+        echo "Kết quả tìm kiếm theo từ khóa: '{$_GET['content']}'";
+            } ?>
+    </p>
     <div class="table-responsive">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>STT</th>
+                    <th><input type="checkbox" id="select-all"></th>
                     <th>Mã thanh toán</th>
                     <th>Mã đơn đặt phòng</th>
                     <th>Phương thức thanh toán</th>
@@ -73,15 +97,15 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                             OR method LIKE '$search'
                             OR payment_price LIKE '$search' 
                             OR date LIKE '$search' 
-                            OR payment_status LIKE '$search'"; 
+                            OR payment_status LIKE '$search'
+                            LIMIT $limit OFFSET $offset"; 
                         $result = $conn->query($sql); 
-                        $i = 1;
                     }else{
-                        $result = $conn->query("SELECT * FROM db_payment");
-                        $i = 1;
+                        $result = $conn->query("SELECT * FROM db_payment LIMIT $limit OFFSET $offset");
                     }
+                    if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <td><?php echo $i++; ?></td>
+                        <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['payment_id']; ?>"></td> 
                         <td><?php echo $row['payment_id'] ?></td>
                         <td><?php echo $row['booking_id'] ?></td>
                         <td><?php echo $row['method'] ?></td>
@@ -93,12 +117,38 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                             <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $row['payment_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
                             <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $row['payment_id']; ?>')"><i class='bx bx-trash'></i></button>
                         </td>
-                </tr>
-            <?php } ?>
+                    </tr>
+                <?php } 
+                        } else { ?>
+                        <tr>
+                            <td colspan="11" style="text-align:center; color: #888; font-style: italic;">
+                                Không có dữ liệu phù hợp
+                            </td>
+                        </tr>
+                    <?php } ?>
             </tbody>
         </table>
     </div>
-</div>
+    <div class="pagination">
+            <?php if ($pagetable > 1): ?>
+                <a href="home.php?page=payment&pagetable&limit=<?= $limit ?>">&laquo;</a>
+                <a href="home.php?page=payment&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <?php if ($i == $pagetable): ?>
+                    <span><?= $i ?></span>
+                <?php else: ?>
+                    <a href="home.php?page=payment&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($pagetable < $total_pages): ?>
+                <a href="home.php?page=payment&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
+                <a href="home.php?page=payment&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+            <?php endif; ?>
+        </div>  
+    </div>
 </div>
 
 <!---------------------------------------- Giao diện thêm mới ------------------------------------>
@@ -123,10 +173,12 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                     <div class="form-group">
                         <label for="method">Hình thức thanh toán:</label>
                         <select id="method" name="method">
-                            <option value="thetindung">Thẻ tín dụng</option>
-                            <option value="chuyenkhoannganhang">Chuyển khoản ngân hàng</option>
-                            <option value="tienmat">Tiền mặt</option>
-                            <option value="khac">Khác</option>
+                            <option value="Thẻ tín dụng">Thẻ tín dụng</option>
+                            <option value="Chuyển khoản ngân hàng">Chuyển khoản ngân hàng</option>
+                            <option value="Tiền mặt">Tiền mặt</option>
+                            <option value="Momo">Momo</option>
+                            <option value="VNpay">VNpay</option>
+                            <option value="Khác">Khác</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -140,9 +192,9 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                     <div class="form-group">
                         <label for="payment_status">Trạng thái:</label>
                         <select id="payment_status" name="payment_status">
-                            <option value="dathanhtoan">Đã thanh toán</option>
-                            <option value="dangcho">Đang chờ</option>
-                            <option value="chuathanhtoan">Chưa thanh toán</option>
+                            <option value="Đã đặt cọc">Đã đặt cọc</option>
+                            <option value="Đã thanh toán">Đã thanh toán</option>
+                            <option value="Chưa thanh toán">Chưa thanh toán</option>
                         </select>
                     </div>
                 </div>
@@ -155,7 +207,7 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
 </div>
 
 <!-------------------------------------- Giao diện cập nhật --------------------------------------->
-<div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
+<div class="form-container" id="update-form" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
     <?php include "../home/header_content.php"; ?>
     <div class="management-container">
@@ -182,10 +234,11 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                     <div class="form-group">
                         <label for="method">Hình thức thanh toán:</label>
                         <select id="method" name="method">
-                            <option value="thetindung" <?php echo ($payment['method'] == 'thetindung') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
-                            <option value="chuyenkhoannganhang" <?php echo ($payment['method'] == 'chuyenkhoannganhang') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
-                            <option value="tienmat" <?php echo ($payment['method'] == 'tienmat') ? 'selected' : ''; ?>>Tiền mặt</option>
-                            <option value="khac" <?php echo ($payment['method'] == 'khac') ? 'selected' : ''; ?>>Khác</option>
+                            <option value="Thẻ tín dụng" <?php echo ($payment['method'] == 'Thẻ tín dụng') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
+                            <option value="Chuyển khoản ngân hàng" <?php echo ($payment['method'] == 'Chuyển khoản ngân hàng') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
+                            <option value="Tiền mặt" <?php echo ($payment['method'] == 'Tiền mặt') ? 'selected' : ''; ?>>Tiền mặt</option>
+                            <option value="Momo" <?php echo ($payment['method'] == 'Momo') ? 'selected' : ''; ?>>Momo</option>
+                            <option value="VNpay" <?php echo ($payment['method'] == 'VNpay') ? 'selected' : ''; ?>>VNpay</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -199,9 +252,9 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                     <div class="form-group">
                         <label for="payment_status">Trạng thái:</label>
                         <select id="payment_status" name="payment_status">
-                            <option value="dathanhtoan"<?php echo ($payment['payment_status'] == 'dathanhtoan') ? 'selected' : ''; ?>>Đã thanh toán</option>
-                            <option value="dangcho"<?php echo ($payment['payment_status'] == 'dangcho') ? 'selected' : ''; ?>>Đang chờ</option>
-                            <option value="chuathanhtoan"<?php echo ($payment['payment_status'] == 'chuathanhtoan') ? 'selected' : ''; ?>>Chưa thanh toán</option>
+                            <option value="Đã thanh toán"<?php echo ($payment['payment_status'] == 'Đã thanh toán') ? 'selected' : ''; ?>>Đã thanh toán</option>
+                            <option value="Đã đặt cọc"<?php echo ($payment['payment_status'] == 'Đã đặt cọc') ? 'selected' : ''; ?>>Đã đặt cọc</option>
+                            <option value="Chưa thanh toán"<?php echo ($payment['payment_status'] == 'Chưa thanh toán') ? 'selected' : ''; ?>>Chưa thanh toán</option>
                         </select>
                     </div>
                 </div>
@@ -217,7 +270,72 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
 </div>
 
 <!-------------------------------------- Giao diện thông tin chi tiết --------------------------------------->
-<div class="form-container" id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
+<div class="form-container" id="detail-form" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
+    <?php if ($payment) { ?>
+    <?php include "../home/header_content.php"; ?>
+    <div class="management-container">
+        <div class="toolbar">
+            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <div class="action-buttons">
+                <button class="detail-btn" title="Sửa" onclick="showFormPay('pay-form', '<?php echo $payment['payment_id']; ?>')"><i class='bx bx-dollar-circle'></i> Thanh toán</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormPay('edit-form', '<?php echo $payment['payment_id']; ?>')"><i class='bx bx-edit-alt'></i>Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deletePay('<?php echo $payment['payment_id']; ?>')"><i class='bx bx-trash'></i>Xóa thông tin</button>
+            </div>
+        </div>
+        
+        <h2>Chi tiết hóa đơn</h2>
+        <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="payment_id" value="<?php echo $payment['payment_id']; ?>">
+        <div class="detail-grid">
+            <div class="detail-section">
+                <h3>Thông tin hóa đơn</h3>
+                <div class="info-group">
+                    <label for="payment_id">Mã thanh toán:</label>
+                    <p><?php echo $payment['payment_id']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label for="booking_id">Mã đơn đặt phòng:</label>
+                    <p><?php echo $payment['booking_id']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label for="method">Hình thức thanh toán:</label>
+                    <p><?php echo $payment['method']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label for="payment_price">Số tiền (VNĐ):</label>
+                    <p><?php echo $payment['payment_price']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label for="date">Ngày thanh toán:</label>
+                    <p><?php echo $payment['date']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label for="payment_status">Trạng thái:</label>
+                    <p><?php 
+                            $text='';
+                            $style='';
+                            if($payment['payment_status'] ==='Đã thanh toán'){
+                                $text=  'Đã thanh toán';
+                                $style= 'status-completed';
+                            }else if($payment['payment_status'] === 'Đã đặt cọc'){
+                                $text=  'Đã đặt cọc';
+                                $style= 'status-pending';
+                            }else if($payment['payment_status'] === 'Chưa thanh toán'){
+                                $text=  'Đã đặt';
+                                $style= 'status-cancel';
+                            }
+                            echo "<span class='" . $style . "'>" . $text . "</span>";?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } else if ($is_detail_form) { ?>
+        <p>Không tìm thấy thông tin hóa đơn.</p>
+    <?php } ?>
+</div>
+
+<!-------------------------------------- Giao diện thông tin chi tiết --------------------------------------->
+<div class="form-container" id="pay-form" style="display:<?php echo $is_pay_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
     <?php include "../home/header_content.php"; ?>
     <div class="management-container">
@@ -253,11 +371,17 @@ if (($is_edit_form || $is_detail_form) && $payment_id) {
                 <div class="info-group">
                     <label for="date">Ngày thanh toán:</label>
                     <p><?php echo $payment['date']; ?></p>
+                </div>
                 <div class="info-group">
                     <label for="payment_status">Trạng thái:</label>
                     <p><?php echo $payment['payment_status']; ?></p>
                 </div>
+                <div class="form-actions">
+                    <button type="submit" name="done_payment" class="edit-btn">Xác nhận thanh toán</button>
+                    <button type="reset" class="cancel-btn">Hủy</button>
+                </div>
             </div>
+            </form>
         </div>
     </div>
     <?php } else if ($is_detail_form) { ?>
