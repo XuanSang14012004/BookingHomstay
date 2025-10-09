@@ -16,6 +16,10 @@
                             <a class="active" href="home.php?page=account">Quản lí tài khoản</a>
                         <?php } else if ($page == 'user') { ?>
                             <a class="active" href="home.php?page=user">Quản lí khách hàng</a>
+                        <?php } else if ($page == 'admin') { ?>
+                        <a class="active" href="home.php?page=admin">Quản lí quản trị viên</a>
+                        <?php } else if ($page == 'owner') { ?>
+                        <a class="active" href="home.php?page=owner">Quản lí chủ Homestay</a>
                         <?php } else if ($page == 'homestay') { ?>
                             <a class="active" href="home.php?page=homestay">Quản lí homestay</a>
                         <?php } else if ($page == 'rooms') { ?>

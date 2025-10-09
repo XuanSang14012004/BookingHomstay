@@ -1,18 +1,11 @@
 <?php 
-$sql = "SELECT * FROM db_account";
-$result = $conn->query($sql);
-$row = mysqli_fetch_assoc($result);
-
 $action = isset($_GET['action']) ? $_GET['action'] : 'view';
 
 $is_view_form = false;
-$is_add_form = false;
 $is_edit_form = false;
 $is_detail_form = false;
 
-if ($action === 'add_account') {
-    $is_add_form = true;
-} else if ($action === 'edit_account') {
+if ($action === 'edit_account') {
     $is_edit_form = true;
 } else if ($action === 'search_account') {
     $is_view_form = true;
@@ -23,14 +16,16 @@ if ($action === 'add_account') {
 
 }
 
-$email = isset($_GET['id']) ? $_GET['id'] : null;
+$account_id = $_SESSION['account_id'];
 
-$profile = null;
-if (($is_edit_form || $is_detail_form) && $email) {
-    $result = $conn->query("SELECT * FROM db_account WHERE email = '$email'");
-    if ($result && $result->num_rows > 0) {
-        $profile = mysqli_fetch_assoc($result);
-    }
+$sql = "SELECT * FROM db_admin WHERE account_id = '$account_id'";
+$result = mysqli_query($conn, $sql);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+} else {
+    echo "Không tìm thấy thông tin admin!";
+    exit();
 }
 
 ?>
@@ -38,7 +33,7 @@ if (($is_edit_form || $is_detail_form) && $email) {
         <div class="profile-container">
             <div class ="profile-left">
                 <div class ="profile-left-img">
-                    <p><img src="../../Images/user.jpg" alt="Avatar"></p>
+                    <p><img src="../../Images/<?php echo $row['image'] ?>" alt="Avatar"></p>
                     <h2 class="profile-name"><?php echo $row['fullname'] ?></h2>
                     <p><i class='bx bx-edit-alt' ></i></i>Sửa hồ sơ</p>
                 </div> 
@@ -62,7 +57,14 @@ if (($is_edit_form || $is_detail_form) && $email) {
                             <label>Họ và tên :</label>
                             <p><?php echo $row['fullname'] ?> </p>
                         </div>
-
+                        <div class="form-group">
+                            <label>Ngày sinh :</label>
+                            <p><?php echo $birthday=date("d/m/Y ",strtotime($row['birthday']));?></p>
+                        </div>
+                        <div class="form-group">
+                            <label>Giới tính :</label>
+                            <p><?php echo $row['gender'] ?></p>
+                        </div>
                         <div class="form-group">
                             <label>Email :</label>
                             <p><?php echo $row['email'] ?> <a href="#">Thay Đổi</a></p>
@@ -72,22 +74,16 @@ if (($is_edit_form || $is_detail_form) && $email) {
                             <label>Số điện thoại :</label>
                             <p><?php echo $row['phone'] ?></p>
                         </div>
-
                         <div class="form-group">
-                            <label>giới tính :</label>
-                            <p>Nam</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ngày sinh :</label>
-                            <p>01/03/2004</p>
+                            <label>Địa chỉ:</label>
+                            <p><?php echo $row['address'];?></p>
                         </div>
 
                         <button class="btn">Lưu</button>
                     </div>
 
                     <div class="avatar-box">
-                        <img src="../../Images/user.jpg" alt="avatar">
+                        <img src="../../Images/<?php echo $row['image'] ?>" alt="avatar">
                         <input type="file"><button>Chọn Ảnh </button></input>
 
                         <p>Dung lượng file tối đa 1 MB<br>Định dạng: .JPEG, .PNG</p>

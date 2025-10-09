@@ -21,11 +21,11 @@ if ($action === 'add_account') {
 
 }
 
-$email = isset($_GET['id']) ? $_GET['id'] : null;
+$ID = isset($_GET['id']) ? $_GET['id'] : null;
 
 $account = null;
-if (($is_edit_form || $is_detail_form) && $email) {
-    $result = $conn->query("SELECT * FROM db_account WHERE email = '$email'");
+if (($is_edit_form || $is_detail_form) && $ID) {
+    $result = $conn->query("SELECT * FROM db_account WHERE account_id = '$ID'");
     if ($result && $result->num_rows > 0) {
         $account = mysqli_fetch_assoc($result);
     }
@@ -75,6 +75,7 @@ $total_pages = ceil($total_records / $limit);
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="select-all"></th>
+                        <th>Mã tài khoản</th>
                         <th>Họ và tên</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
@@ -90,7 +91,8 @@ $total_pages = ceil($total_records / $limit);
                             $search_query = trim($_GET['content']);
                             $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_account  WHERE fullname LIKE '$search' 
+                            $sql = "SELECT * FROM db_account  WHERE account_id LIKE '$search' 
+                                OR fullname LIKE '$search' 
                                 OR email LIKE '$search' 
                                 OR role LIKE '$search' 
                                 OR phone LIKE '$search'
@@ -102,16 +104,24 @@ $total_pages = ceil($total_records / $limit);
                         }
                         if ($result && mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) { ?>
-                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['email']; ?>"></td> 
+                            <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['account_id']; ?>"></td> 
+                            <td><?php echo $row['account_id'] ?></td>
                             <td><?php echo $row['fullname'] ?></td>
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['phone'] ?></td>
                             <td><?php echo $row['password'] ?></td>
-                            <td><?php echo $row['role'] ?></td>
+                            <td><?php if($row['role'] ==='user'){
+                                            echo 'Khách hàng';
+                                        }else if($row['role'] === 'owner'){
+                                            echo 'Chủ homestay';
+                                        }else if($row['role'] === 'admin'){
+                                            echo 'Quản trị viên';
+                                        } ?>
+                            </td>
                             <td class="actions">
-                                <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $row['email']; ?>')"><i class='bx bx-detail'></i></button>
-                                <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $row['email']; ?>')"><i class='bx bx-edit-alt'></i></button>
-                                <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $row['email']; ?>')"><i class='bx bx-trash'></i></button>
+                                <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $row['account_id']; ?>')"><i class='bx bx-detail'></i></button>
+                                <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $row['account_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
+                                <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $row['account_id']; ?>')"><i class='bx bx-trash'></i></button>
                             </td>
                     </tr>
                     <?php } 
@@ -179,7 +189,7 @@ $total_pages = ceil($total_records / $limit);
                     <label for="role">Phân quyền:</label>
                     <select id="role" name="role">
                         <option value="admin">Quản trị viên</option>
-                        <option value="customer" >Khách hàng</option>
+                        <option value="user" >Khách hàng</option>
                         <option value="owner" >Chủ homestay</option>
                     </select>
                 </div>
@@ -201,13 +211,13 @@ $total_pages = ceil($total_records / $limit);
             <div class="toolbar">
                 <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
                 <div class="action-buttons">
-                    <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $account['email']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
-                    <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['email']; ?>')"></i> Xóa thông tin</button>
+                    <button class="detail-btn" title="Chi tiết" onclick="showFormAccount('detail-form', '<?php echo $account['account_id']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
+                    <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['account_id']; ?>')"></i> Xóa thông tin</button>
                 </div>
             </div>
             <h2>Sửa Thông Tin Tài Khoản</h2>
             <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="email" value="<?php echo $account['email']; ?>">
+                <input type="hidden" name="account_id" value="<?php echo $account['account_id']; ?>">
 
                 <div class="form-section">
                     <h3>Thông tin cá nhân</h3>
@@ -231,7 +241,7 @@ $total_pages = ceil($total_records / $limit);
                         <label for="role">Phân quyền:</label>
                         <select id="role" name="role">
                             <option value="admin" <?php echo ($account['role'] == 'admin') ? 'selected' : ''; ?>>Quản trị viên</option>
-                            <option value="customer" <?php echo ($account['role'] == 'customer') ? 'selected' : ''; ?>>Khách hàng</option>
+                            <option value="user" <?php echo ($account['role'] == 'user') ? 'selected' : ''; ?>>Khách hàng</option>
                             <option value="owner" <?php echo ($account['role'] == 'owner') ? 'selected' : ''; ?>>Chủ homestay</option>
                         </select>
                     </div>
@@ -255,8 +265,8 @@ $total_pages = ceil($total_records / $limit);
             <div class="toolbar">
                 <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
                 <div class="action-buttons">
-                    <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $account['email']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
-                    <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['email']; ?>')"></i> Xóa thông tin</button>
+                    <button class="edit-btn" title="Sửa" onclick="showFormAccount('edit-form', '<?php echo $account['account_id']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
+                    <button class="delete-btn" title="Xóa" onclick="deleteAccount('<?php echo $account['account_id']; ?>')"></i> Xóa thông tin</button>
                 </div>
             </div>
 
@@ -283,7 +293,13 @@ $total_pages = ceil($total_records / $limit);
                     </div>
                     <div class="info-group">
                         <label for="role">Phân quyền:</label>
-                        <p><?php echo $account['role']; ?></p>
+                        <p><?php if($account['role'] ==='user'){
+                                            echo 'Khách hàng';
+                                        }else if($account['role'] === 'owner'){
+                                            echo 'Chủ homestay';
+                                        }else if($account['role'] === 'admin'){
+                                            echo 'Quản trị viên';
+                                        } ?></p>
                     </div>
                 </div>
             </div>

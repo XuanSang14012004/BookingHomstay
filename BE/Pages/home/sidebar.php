@@ -17,10 +17,22 @@
                 <span class="text">Quản lí tài khoản</span>
             </a>
         </li>
+        <li class="<?= ($page == 'admin') ? 'active' : '' ?>">
+            <a href="home.php?page=admin">
+                <i class='bx bx-user'></i>
+                <span class="text">Quản lí quản trị viên</span>
+            </a>
+        </li>
         <li class="<?= ($page == 'user') ? 'active' : '' ?>">
             <a href="home.php?page=user">
                 <i class='bx bx-user'></i>
                 <span class="text">Quản lí khách hàng</span>
+            </a>
+        </li>
+        <li class="<?= ($page == 'owner') ? 'active' : '' ?>">
+            <a href="home.php?page=owner">
+                <i class='bx bx-user'></i>
+                <span class="text">Quản lí chủ homestay</span>
             </a>
         </li>
         <li class="<?= ($page == 'homestay') ? 'active' : '' ?>">
@@ -29,12 +41,7 @@
                 <span class="text">Quản lí Homestay</span>
             </a>
         </li>
-        <li class="<?= ($page == 'rooms') ? 'active' : '' ?>">
-            <a href="home.php?page=rooms">
-                <i class='bx bx-hotel'></i>
-                <span class="text">Quản lí phòng</span>
-            </a>
-        </li>
+
         <li class="<?= ($page == 'booking') ? 'active' : '' ?>">
             <a href="home.php?page=booking">
                 <i class='bx bx-list-check'></i>
@@ -47,18 +54,14 @@
                 <span class="text">Quản lí thanh toán</span>
             </a>
         </li>
+        
         <li class="<?= ($page == 'reviews') ? 'active' : '' ?>">
             <a href="home.php?page=reviews">
                 <i class='bx bx-table'></i>
                 <span class="text">Quản lí đánh giá</span>
             </a>
         </li>
-        <li class="<?= ($page == 'feedback') ? 'active' : '' ?>">
-            <a href="home.php?page=feedback">
-                <i class='bx bx-conversation'></i>
-                <span class="text">Phản hồi khách hàng</span>
-            </a>
-        </li>
+        
         <li class="<?= ($page == 'statistic') ? 'active' : '' ?>">
             <a href="home.php?page=statistic">
                 <i class='bx bx-bar-chart-alt-2'></i>

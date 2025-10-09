@@ -2,7 +2,7 @@
 session_start();
 require_once('../../Config/connect.php');
 if (
-   isset($_SESSION['fullname']) && isset($_SESSION['email']) && isset($_SESSION['password']) && isset($_SESSION['role']) ) { ?>
+   isset($_SESSION['account_id']) && isset($_SESSION['fullname']) && isset($_SESSION['email']) && isset($_SESSION['password']) && isset($_SESSION['role']) ) { ?>
     
 <?php } else {
     header("Location: Pages/Login/login.php");
@@ -22,6 +22,7 @@ ob_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../Css/style_admin.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="icon" href="../../Images/logo.jpg">
     <link rel="stylesheet" href="../../Css/test.css">
     <script src="../../Js/script.js"></script>

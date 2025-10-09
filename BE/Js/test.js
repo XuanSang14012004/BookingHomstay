@@ -128,7 +128,8 @@ function showFormUser(formId, customer_id = null) {
     if (formId === 'user-form') {
         showInternalForm(formId);
     } else if (formId === 'add-form') {
-        navigateToUrl(`home.php?page=user&action=add_user&id=${customer_id}`);
+        showInternalForm('add-form');
+        history.pushState({}, '', 'home.php?page=user&action=add_user');
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=user&action=search_user&content=${search}`);
     } else if (formId === 'edit-form' && customer_id) {
@@ -144,6 +145,54 @@ function deleteUser(customer_id) {
     }
 }
 
+// ---------- Admin ----------
+function showFormAdmin(formId, admin_id = null) {
+    const check_search = document.getElementById("search");
+    const search = check_search ? check_search.value : '';
+
+    if (formId === 'admin-form') {
+        showInternalForm(formId);
+    } else if (formId === 'add-form') {
+        navigateToUrl(`home.php?page=admin&action=add_admin`);
+    }else if (formId === 'search-form') {
+        navigateToUrl(`home.php?page=admin&action=search_admin&content=${search}`);
+    } else if (formId === 'edit-form' && admin_id) {
+        navigateToUrl(`home.php?page=admin&action=edit_admin&id=${admin_id}`);
+    } else if (formId === 'detail-form' && admin_id) {
+        navigateToUrl(`home.php?page=admin&action=detail_admin&id=${admin_id}`);
+    }
+}
+
+function deleteAdmin(admin_id) {
+    if (confirm("Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+        navigateToUrl(`home.php?page=delete&action=delete_admin&id=${admin_id}`);
+    }
+}
+
+// ---------- Owner ----------
+function showFormOwner(formId, owner_id = null) {
+    const check_search = document.getElementById("search");
+    const search = check_search ? check_search.value : '';
+
+    if (formId === 'owner-form') {
+        showInternalForm(formId);
+    } else if (formId === 'add-form') {
+        navigateToUrl(`home.php?page=owner&action=add_owner`);
+    }else if (formId === 'search-form') {
+        navigateToUrl(`home.php?page=owner&action=search_owner&content=${search}`);
+    } else if (formId === 'edit-form' && owner_id) {
+        navigateToUrl(`home.php?page=owner&action=edit_owner&id=${owner_id}`);
+    } else if (formId === 'detail-form' && owner_id) {
+        navigateToUrl(`home.php?page=owner&action=detail_owner&id=${owner_id}`);
+    }
+}
+
+function deleteOwner(owner_id) {
+    if (confirm("Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+        navigateToUrl(`home.php?page=delete&action=delete_owner&id=${owner_id}`);
+    }
+}
+
 // ---------- Homestay ----------
 function showFormHomestay(formId, homestay_id = null) {
     const check_search = document.getElementById("search");
@@ -152,7 +201,7 @@ function showFormHomestay(formId, homestay_id = null) {
     if (formId === 'Homestay-form') { 
         showInternalForm(formId);
     } else if (formId === 'add-form') {
-        navigateToUrl(`home.php?page=homestay&action=add_homestay&id=${homestay_id}`);
+        navigateToUrl(`home.php?page=homestay&action=add_homestay`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=homestay&action=search_homestay&content=${search}`);
     } else if (formId === 'edit-form' && homestay_id) {
@@ -168,29 +217,6 @@ function deleteHomestay(homestay_id) {
     }
 }
 
-// ---------- Rooms ----------
-function showFormRoom(formId, room_id = null) {
-    const check_search = document.getElementById("search");
-    const search = check_search ? check_search.value : '';
-
-    if (formId === 'room-form') {
-        showInternalForm(formId);
-    } else if (formId === 'add-form') {
-        navigateToUrl(`home.php?page=rooms&action=add_room&id=${room_id}`);
-    }else if (formId === 'search-form') {
-        navigateToUrl(`home.php?page=rooms&action=search_room&content=${search}`);
-    } else if (formId === 'edit-form' && room_id) {
-        navigateToUrl(`home.php?page=rooms&action=edit_room&id=${room_id}`);
-    } else if (formId === 'detail-form' && room_id) {
-        navigateToUrl(`home.php?page=rooms&action=detail_room&id=${room_id}`);
-    }
-}
-
-function deleteRoom(room_id) {
-    if (confirm("Bạn có chắc chắn muốn xóa thông tin phòng này không?")) {
-        navigateToUrl(`home.php?page=delete&action=delete_room&id=${room_id}`);
-    }
-}
 
 // ---------- Booking ----------
 function showFormBooking(formId, booking_id = null) {
@@ -200,7 +226,7 @@ function showFormBooking(formId, booking_id = null) {
     if (formId === 'booking-form') {
         navigateToUrl(`home.php?page=booking`);
     } else if (formId === 'add-form') {
-        navigateToUrl(`home.php?page=booking&action=add_booking&id=${booking_id}`);
+        navigateToUrl(`home.php?page=booking&action=add_booking`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=booking&action=search_booking&content=${search}`);
     } else if (formId === 'edit-form' && booking_id) {
@@ -224,7 +250,7 @@ function showFormPay(formId, payment_id = null) {
     if (formId === 'payment-form') {
         showInternalForm(formId);
     } else if (formId === 'add-form') {
-        navigateToUrl(`home.php?page=payment&action=add_payment&id=${payment_id}`);
+        navigateToUrl(`home.php?page=payment&action=add_payment`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=payment&action=search_payment&content=${search}`);
     } else if (formId === 'pay-form' && payment_id) {
@@ -249,10 +275,8 @@ function showFormReview(formId, review_id = null) {
 
     if (formId === 'review-form') {
         showInternalForm(formId);
-    } else if (formId === 'reply-form' && review_id) {
-        navigateToUrl(`home.php?page=reply&action=reply_review&id=${review_id}`);
     } else if (formId === 'edit-form' && review_id) {
-        navigateToUrl(`home.php?page=reviews&action=edit_review&id=${review_id}`);
+        navigateToUrl(`home.php?page=reviews&action=edit_review`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=reviews&action=search_review&content=${search}`);
     } else if (formId === 'detail-form' && review_id) {
@@ -266,36 +290,16 @@ function deleteReview(review_id) {
     }
 }
 
-// ---------- Feedback ----------
-function showFormFeedback(formId, feedback_id = null) {
-    const check_search = document.getElementById("search");
-    const search = check_search ? check_search.value : '';
 
-    if (formId === 'feedback-form') {
-        showInternalForm(formId);
-    }else if (formId === 'search-form') {
-        navigateToUrl(`home.php?page=feedback&action=search_feedback&content=${search}`);
-    } else if (formId === 'reply-form' && feedback_id) {
-        navigateToUrl(`home.php?page=feedback&action=reply_feedback&id=${feedback_id}`);
-    } else if (formId === 'detail-form' && feedback_id) {
-        navigateToUrl(`home.php?page=feedback&action=detail_feedback&id=${feedback_id}`);
-    }
-}
-
-function deleteFeedback(feedback_id) {
-    if (confirm("Bạn có chắc chắn muốn xóa phản hồi này không?")) {
-        navigateToUrl(`home.php?page=delete&action=delete_feedback&id=${feedback_id}`);
-    }
-}
 
 handlePopState('account', 'account-form'); 
-handlePopState('user', 'user-form'); 
+handlePopState('user', 'user-form');
+handlePopState('admin', 'admin-form'); 
+handlePopState('owner', 'owner-form');  
 handlePopState('homestay', 'Homestay-form'); 
-handlePopState('rooms', 'room-form'); 
 handlePopState('booking', 'booking-form'); 
 handlePopState('payment', 'payment-form'); 
 handlePopState('reviews', 'review-form'); 
-handlePopState('feedback', 'feedback-form'); 
 
 
 
@@ -306,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const status = urlParams.get('status');
     const page = urlParams.get('page');
 
-    // Hàm hiển thị thông báo không chặn luồng
+
     function showMessage(msg) {
         let box = document.createElement('div');
         box.className = 'custom-alert';
@@ -396,30 +400,6 @@ document.addEventListener('DOMContentLoaded', function() {
         showMessage('Mã homestay đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
-    // Rooms
-    if (page === 'rooms') {
-        if (status === 'add_success') {
-            showMessage('Thêm phòng thành công!');
-        } else if (status === 'add_error') {
-            showMessage('Thêm phòng thất bại. Vui lòng kiểm tra lại thông tin đã nhập.');
-        } else if (status === 'error_upload') {
-            showMessage('Thêm phòng thất bại. Hình ảnh chưa được chọn hoặc không đúng định dạng.');
-        }
-        if (status === 'delete_success') {
-            showMessage('Xóa phòng thành công!');
-        } else if (status === 'delete_error') {
-            showMessage('Xóa phòng thất bại! Kiểm tra lại thao tác xóa.');
-        }
-        if (status === 'update_success') {
-            showMessage('Cập nhật phòng thành công!');
-        } else if (status === 'update_error') {
-            showMessage('Cập nhật phòng thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
-        }
-    }
-    if (page === 'rooms' && action === 'add_room' && status === 'exists') {
-        showMessage('Mã phòng đã tồn tại. Vui lòng sử dụng mã khác.');
-    }
-
     // Booking
     if (page === 'booking') {
         if (status === 'add_success') {
@@ -480,20 +460,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Cập nhật trạng thái đánh giá thành công!');
         } else if (status === 'update_error') {
             showMessage('Cập nhật đánh giá thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
-        }
-    }
-
-    // Feedback
-    if (page === 'feedback') {
-        if (status === 'delete_success') {
-            showMessage('Xóa yêu cầu phản hồi thành công!');
-        } else if (status === 'delete_error') {
-            showMessage('Xóa yêu cầu phản hồi thất bại! Kiểm tra lại thao tác xóa.');
-        }
-        if (status === 'update_success') {
-            showMessage('Cập nhật trạng thái, và thông tin phản hồi thành công!');
-        } else if (status === 'update_error') {
-            showMessage('Cập nhật trạn thái và thông tin phản hồi thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
 

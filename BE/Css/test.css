@@ -199,6 +199,7 @@ h2 {
 
 .form-group input[type="text"],
 .form-group input[type="date"],
+.form-group input[type="datetime-local"],
 .form-group input[type="number"],
 .form-group input[type="tel"],	
 .form-group input[type="email"],

@@ -449,6 +449,9 @@ body {
 	flex-grow: 1;
 	flex-basis: 500px;
 }
+#content main .table-data .order .head a {
+	color: var(--dark);
+}
 #content main .table-data .order table {
 	width: 100%;
 	border-collapse: collapse;
@@ -511,6 +514,9 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+#content main .table-data .todo .head a {
+	color: var(--dark);
 }
 #content main .table-data .todo .todo-list li .bx {
 	cursor: pointer;

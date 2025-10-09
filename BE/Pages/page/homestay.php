@@ -76,17 +76,18 @@ $total_pages = ceil($total_records / $limit);
                         <th><input type="checkbox" id="select-all"></th>
                         <th>Mã Homestay</th>
                         <th>Tên Homestay</th>
-                        <th>Loại hình</th>
-                        <th>Trạng thái hoạt động</th>
-                        <th>Mô tả chi tiêt</th>
-                        <th>Số phòng</th>
-                        <th>Tiện nghi</th>
                         <th>Địa chỉ</th>
-                        <th>Số điện thoại</th>
-                        <th>Email liên hệ</th>
-                        <th>Giá thuê (VND)</th>
-                        <th>Chính sách</th>
                         <th>Hình ảnh</th>
+                        <th>Trạng thái</th>
+                        <th>Loại phòng</th>
+                        <th>Tiện nghi</th>
+                        <th>Mô tả chi tiêt</th>
+                        <th>Sức chứa</th>
+                        <th>Thời gian Checkin</th>
+                        <th>Thời gian checkout</th>
+                        <th>Giá thuê (VND)</th>
+                        <th>Email liên hệ</th>
+                        <th>Số điện thoại</th>
                         <th>Điểm đánh giá trung bình(/5)</th>
                         <th>Số lượt đánh giá đã nhận</th>
                         <th>Thao tác</th>
@@ -101,18 +102,19 @@ $total_pages = ceil($total_records / $limit);
 
                             $sql = "SELECT * FROM db_homestay WHERE homestay_id LIKE '$search' 
                                 OR homestay_name LIKE '$search' 
-                                OR homestay_type LIKE '$search' 
-                                OR homestay_status LIKE '$search' 
-                                OR room_number LIKE '$search' 
-                                OR email LIKE '$search' 
-                                OR phone_owner LIKE '$search' 
-                                OR home_price LIKE '$search' 
-                                OR homestay_address LIKE '$search' 
-                                OR rating_number LIKE '$search' 
-                                OR `describe` LIKE '$search'
+                                OR room_type LIKE '$search' 
+                                OR `status` LIKE '$search' 
+                                OR guests LIKE '$search' 
+                                OR homestay_email LIKE '$search' 
+                                OR homestay_phone LIKE '$search' 
+                                OR price LIKE '$search' 
+                                OR `address` LIKE '$search' 
+                                OR reviews_count LIKE '$search' 
+                                OR `description` LIKE '$search'
                                 OR `policy` LIKE '$search'
-                                OR amenities LIKE '$search'
-                                OR home_rating LIKE '$search' 
+                                OR checkin LIKE '$search'
+                                OR checkout LIKE '$search'
+                                OR rating LIKE '$search' 
                                 LIMIT $limit OFFSET $offset"; 
                             $result = $conn->query($sql);
                         }else {
@@ -123,19 +125,20 @@ $total_pages = ceil($total_records / $limit);
                             <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['homestay_id']; ?>"></td> 
                             <td><?php echo $row['homestay_id'] ?></td>
                             <td><?php echo $row['homestay_name'] ?></td>
-                            <td><?php echo $row['homestay_type'] ?></td>
-                            <td><?php echo $row['homestay_status'] ?></td>
-                            <td class="truncate-text"><?php echo $row['describe'] ?></td>
-                            <td><?php echo $row['room_number'] ?></td>
-                            <td class="truncate-text"><?php echo $row['amenities'] ?></td>
-                            <td class="truncate-text"><?php echo $row['homestay_address'] ?></td>
-                            <td><?php echo $row['phone_owner'] ?></td>
-                            <td><?php echo $row['email'] ?></td>
-                            <td class="truncate-text"><?php echo $row['home_price'] ?></td>
+                            <td><?php echo $row['address'] ?></td>
+                            <td><?php echo "<img src='../../../FE/images/" .$row['img']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td> 
+                            <td><?php echo $row['status'] ?></td>
+                            <td><?php echo $row['room_type'] ?></td>
                             <td class="truncate-text"><?php echo $row['policy'] ?></td>
-                            <td><?php echo "<img src='../../Images/" .$row['image']. "' alt='Hình ảnh' style='width:100px;height:auto;'>"; ?></td>  
-                            <td><?php echo $row['home_rating'] ?></td>
-                            <td><?php echo $row['rating_number'] ?></td>
+                            <td class="truncate-text"><?php echo $row['description'] ?></td>
+                            <td class="truncate-text"><?php echo $row['guests'] ?></td>
+                            <td><?php echo $row['checkin'] ?></td>
+                            <td><?php echo $row['checkout'] ?></td>
+                            <td><?php echo $row['price'] ?></td>
+                            <td><?php echo $row['homestay_email'] ?></td> 
+                            <td><?php echo $row['homestay_phone'] ?></td>
+                            <td><?php echo $row['rating'] ?></td>
+                            <td><?php echo $row['reviews_count'] ?></td>
                             <td class="actions">
                                 <button class="detail-btn" title="Chi tiết" onclick="showFormHomestay('detail-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-detail'></i></button>
                                 <button class="edit-btn" title="Sửa" onclick="showFormHomestay('edit-form', '<?php echo $row['homestay_id']; ?>')"><i class='bx bx-edit-alt'></i></button>
@@ -187,77 +190,88 @@ $total_pages = ceil($total_records / $limit);
                 <div class="form-section">
                     <h3>Thông tin cơ bản</h3>
                     <div class="form-group">
-                        <label for="homestay_id">Mã Homestay:</label>
-                        <input type="text" id="homestay_id" name="homestay_id" required>
-                    </div>
-                    <div class="form-group">
                         <label for="homestay_name">Tên Homestay:</label>
                         <input type="text" id="homestay_name" name="homestay_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="homestay_type">Loại hình:</label>
-                        <input type="text" id="homestay_type" name="homestay_type" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="homestay_status">Trạng thái hoạt động:</label>
-                        <select id="homestay_status" name="homestay_status">
-                            <option value="Đang hoạt động">Đang hoạt động</option>
-                            <option value="Tạm ngưng" >Tạm ngưng</option>
-                            <option value="Đã xóa" >Đã xóa</option>
+                        <label for="status">Trạng thái:</label>
+                        <select id="status" name="status">
+                            <option value="còn phòng"> Còn phòng</option>
+                            <option value="Đã đặt"> Đã đặt</option>
+                            <option value="Đang bảo trì"> Đang bảo trì</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="room_number">Số phòng:</label>
-                        <input type="number" id="room_number" name="room_number" min="1" required>
+                        <label for="room_type">Loại phòng:</label>
+                        <input type="text" id="room_type" name="room_type" required>
                     </div>
                     <div class="form-group">
-                        <label for="home_price">Giá thuê trung bình (VNĐ/đêm):</label>
-                        <input type="number" id="home_price" name="home_price" required>
+                        <label for="checkin">Thời gian nhận phòng:</label>
+                        <input type="text" id="checkin" name="checkin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout">Thời gian trả phòng:</label>
+                        <input type="text" id="checkout" name="checkout" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="guests">Sức chứa:</label>
+                        <input type="number" id="guests" name="guests" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Giá thuê trung bình (VNĐ/đêm):</label>
+                        <input type="number" id="price" name="price" required>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3>Thông tin liên hệ & Địa chỉ</h3>
                     <div class="form-group">
-                        <label for="phone_owner">Số điện thoại:</label>
-                        <input type="tel" id="phone_owner" name="phone_owner" required>
+                        <label for="homestay_phone">Số điện thoại:</label>
+                        <input type="tel" id="homestay_phone" name="homestay_phone" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email liên hệ:</label>
-                        <input type="email" id="email" name="email" required>
+                        <label for="homestay_email">Email liên hệ:</label>
+                        <input type="email" id="homestay_email" name="homestay_email" required>
                     </div>
                     <div class="form-group">
-                        <label for="homestay_address">Địa chỉ:</label>
-                        <textarea id="homestay_address" name="homestay_address" rows="3" required></textarea>
+                        <label for="address">Địa chỉ:</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3>Chi tiết & Mô tả</h3>
                     <div class="form-group">
-                        <label for="describe">Mô tả:</label>
-                        <textarea id="describe" name="describe" rows="5"></textarea>
+                        <label for="description">Mô tả:</label>
+                        <textarea id="description" name="description" rows="5"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="amenities">Tiện nghi:</label>
-                        <textarea id="amenities" name="amenities" rows="3"
-                        placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="policy">Chính sách:</label>
+                        <label for="policy">Tiện nghi:</label>
                         <textarea id="policy" name="policy" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="image">Hình ảnh:</label>
-                        <input type="file" id="image" name="image" multiple accept="image/*">
+                        <label for="img">Hình ảnh chính:</label>
+                        <input type="file" id="img" name="img" multiple accept="image/*">
                     </div>
                     <div class="form-group">
-                        <label for="home_rating">Điểm đánh giá trung bình(/5):</label>
-                        <input type="number" id="home_rating" name="home_rating" required>
+                        <label for="img1">Hình ảnh phụ 1:</label>
+                        <input type="file" id="img1" name="img1" multiple accept="image/*">
                     </div>
                     <div class="form-group">
-                        <label for="rating_number">Số lượt đánh giá đã nhận:</label>
-                        <input type="number" id="rating_number" name="rating_number" required>
+                        <label for="img2">Hình ảnh phụ 2:</label>
+                        <input type="file" id="img2" name="img2" multiple accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="img3">Hình ảnh phụ 3:</label>
+                        <input type="file" id="img3" name="img3" multiple accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Điểm đánh giá trung bình:</label>
+                        <input type="number" id="rating" name="rating" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviews_count">Số lượt đánh giá đã nhận:</label>
+                        <input type="number" id="reviews_count" name="reviews_count" required>
                     </div>
                 </div>
 
@@ -297,70 +311,92 @@ $total_pages = ceil($total_records / $limit);
                     <input type="text" id="homestay_name" name="homestay_name" value="<?php echo $homestay['homestay_name']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="homestay_type">Loại hình:</label>
-                    <input type="text" id="homestay_type" name="homestay_type" value="<?php echo $homestay['homestay_type']; ?>" required>
+                    <label for="room_type">Loại phòng:</label>
+                    <input type="text" id="room_type" name="room_type" value="<?php echo $homestay['room_type']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="homestay_status">Trạng thái hoạt động:</label>
-                    <select id="homestay_status" name="homestay_status">
-                        <option value="Đang hoạt động" <?php echo ($homestay['homestay_status'] == 'Đang hoạt động') ? 'selected' : ''; ?>>Đang hoạt động</option>
-                        <option value="Tạm ngưng" <?php echo ($homestay['homestay_status'] == 'Tạm ngưng') ? 'selected' : ''; ?>>Tạm ngưng</option>
-                        <option value="Đã xóa"<?php echo ($homestay['homestay_status'] == 'Đã xóa') ? 'selected' : ''; ?>>Đã xóa</option>
+                    <label for="status">Trạng thái:</label>
+                    <select id="status" name="status">
+                        <option value="Đang bảo trì" <?php echo ($homestay['status'] == 'Đang bảo trì') ? 'selected' : ''; ?>>Đang bảo trì</option>
+                        <option value="Còn trống" <?php echo ($homestay['status'] == 'Còn trống') ? 'selected' : ''; ?>>Còn trống</option>
+                        <option value="Đã đặt"<?php echo ($homestay['status'] == 'Đã đặt') ? 'selected' : ''; ?>>Đã đặt</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="room_number">Số phòng:</label>
-                    <input type="number" id="room_number" name="room_number" value="<?php echo $homestay['room_number']; ?>" min="1" required>
+                    <label for="checkin">Thời gian nhận phòng:</label>
+                    <input type="text" id="checkin" name="checkin" value="<?php echo $homestay['checkin']; ?>"  required>
                 </div>
                 <div class="form-group">
-                    <label for="home_price">Giá thuê:</label>
-                    <input type="number" id="home_price" name="home_price" value="<?php echo $homestay['home_price']; ?>" min="100" required>
+                    <label for="checkout">Thời gian trả phòng:</label>
+                    <input type="text" id="checkout" name="checkout" value="<?php echo $homestay['checkout']; ?>"  required>
                 </div>
                 <div class="form-group">
-                    <label for="home_rating">Điểm đánh giá trung bình:</label>
-                    <input type="number" id="home_rating" name="home_rating" value="<?php echo $homestay['home_rating']; ?>" min="1" required>
+                    <label for="guests">Sức chứa:</label>
+                    <input type="number" id="guests" name="guests" value="<?php echo $homestay['guests']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="rating_number">Số lượt đánh giá đã nhận:</label>
-                    <input type="number" id="rating_number" name="rating_number" value="<?php echo $homestay['rating_number']; ?>" min="1" required>
-                </div>
+                    <label for="price">Giá thuê:</label>
+                    <input type="number" id="price" name="price" value="<?php echo $homestay['price']; ?>" min="100" required>
+                </div>   
             </div>
 
             <div class="form-section">
                 <h3>Thông tin liên hệ & Địa chỉ</h3>
                 <div class="form-group">
-                    <label for="phone_owner">Số điện thoại chủ homestay:</label>
-                    <input type="tel" id="phone_owner" name="phone_owner" value="<?php echo $homestay['phone_owner']; ?>" required>
+                    <label for="homestay_phone">Số điện thoại:</label>
+                    <input type="tel" id="homestay_phone" name="homestay_phone" value="<?php echo $homestay['homestay_phone']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email liên hệ:</label>
-                    <input type="email" id="email" name="email" value="<?php echo $homestay['email']; ?>" required>
+                    <label for="homestay_email">Email liên hệ:</label>
+                    <input type="email" id="homestay_email" name="homestay_email" value="<?php echo $homestay['homestay_email']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="homestay_address">Địa chỉ:</label>
-                    <textarea id="homestay_address" name="homestay_address" rows="3" required><?php echo $homestay['homestay_address']; ?></textarea>
+                    <label for="address">Địa chỉ:</label>
+                    <textarea id="address" name="address" rows="3" required><?php echo $homestay['address']; ?></textarea>
                 </div>
             </div>
 
             <div class="form-section">
                 <h3>Chi tiết & Mô tả</h3>
                 <div class="form-group">
-                    <label for="describe">Mô tả:</label>
-                    <textarea id="describe" name="describe" rows="5"><?php echo $homestay['describe']; ?></textarea>
+                    <label for="description">Mô tả:</label>
+                    <textarea id="description" name="description" rows="5"><?php echo $homestay['description']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="amenities">Tiện nghi:</label>
-                    <textarea id="amenities" name="amenities" rows="3" placeholder="Ví dụ: Wifi, Bếp nấu ăn, Bãi đỗ xe..."><?php echo $homestay['amenities']; ?></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="policy">Chính sách:</label>
+                    <label for="policy">Tiện nghi:</label>
                     <textarea id="policy" name="policy" rows="3"><?php echo $homestay['policy']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="image">Hình ảnh hiện tại:</label>
-                    <img src="../../Images/<?php echo $homestay['image']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="img">Hình ảnh hiện tại:</label>
+                    <img src="../../../FE/images/<?php echo $homestay['img']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
                     <label for="image_new">Chọn ảnh mới để thay thế :</label>
                     <input type="file" id="image_new" name="image_new" multiple accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="img1">Hình ảnh hiện tại:</label>
+                    <img src="../../../FE/images/<?php echo $homestay['img1']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="image1_new">Chọn ảnh mới để thay thế :</label>
+                    <input type="file" id="image1_new" name="image1_new" multiple accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="img2">Hình ảnh hiện tại:</label>
+                    <img src="../../../FE/images/<?php echo $homestay['img2']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="image2_new">Chọn ảnh mới để thay thế :</label>
+                    <input type="file" id="image2_new" name="image2_new" multiple accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="img3">Hình ảnh hiện tại:</label>
+                    <img src="../../../FE/images/<?php echo $homestay['img3']; ?>" alt="Hình ảnh homestay" style="width: 150px; height: auto; display: block; margin-bottom: 10px;">
+                    <label for="image3_new">Chọn ảnh mới để thay thế :</label>
+                    <input type="file" id="image3_new" name="image3_new" multiple accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="rating">Điểm đánh giá trung bình:</label>
+                    <input type="number" id="rating" name="rating" value="<?php echo $homestay['rating']; ?>" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="reviews_count">Số lượt đánh giá đã nhận:</label>
+                    <input type="number" id="reviews_count" name="reviews_count" value="<?php echo $homestay['reviews_count']; ?>" min="1" required>
                 </div>
             </div>
 
@@ -394,38 +430,46 @@ $total_pages = ceil($total_records / $limit);
             <div class="detail-section">
                 <h3>Thông tin cơ bản</h3>
                 <div class="info-group">
-                    <label>Tên Homestay:</label>
-                    <p><?php echo $homestay['homestay_name']; ?></p>
-                </div>
-                <div class="info-group">
                     <label>Mã Homestay:</label>
                     <p><?php echo $homestay['homestay_id']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label>Loại hình:</label>
-                    <p><?php echo $homestay['homestay_type']; ?></p>
+                    <label>Tên Homestay:</label>
+                    <p><?php echo $homestay['homestay_name']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label>Số phòng:</label>
-                    <p><?php echo $homestay['room_number']; ?></p>
+                    <label>Loại phòng:</label>
+                    <p><?php echo $homestay['room_type']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label>Trạng thái hoạt động:</label>
+                    <label>Trạng thái:</label>
                     <p><?php 
                             $text='';
                             $style='';
-                            if($homestay['homestay_status'] ==='Đang hoạt động'){
-                                $text=  'Đang hoạt động';
-                                $style= 'status-actived';
-                            }else if($homestay['homestay_status'] === 'Tạm ngưng'){
-                                $text=  'Tạm ngưng';
+                            if($homestay['status'] ==='Đang bảo trì'){
+                                $text=  'Đang bảo trì';
                                 $style= 'status-pending';
-                            }else if($homestay['homestay_status'] === 'Đã xóa'){
-                                $text=  'Đã xóa';
-                                $style= 'status-cancel';
+                            }else if($homestay['status'] === 'còn phòng'){
+                                $text=  'Còn phòng';
+                                $style= 'status-actived';
+                            }else if($homestay['status'] === 'Đã đặt'){
+                                $text=  'Đã đặt';
+                                $style= 'status-completed';
                             }
                             echo "<span class='" . $style . "'>" . $text . "</span>";?>
                         </p>
+                </div>
+                <div class="info-group">
+                    <label>Thời gian nhận phòng:</label>
+                    <p><?php echo $homestay['checkin']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label>Thời gian trả phòng:</label>
+                    <p><?php echo $homestay['checkout']; ?></p>
+                </div>
+                <div class="info-group">
+                    <label>Sức chứa:</label>
+                    <p><?php echo $homestay['guests']; ?></p>
                 </div>
             </div>
 
@@ -433,14 +477,10 @@ $total_pages = ceil($total_records / $limit);
                 <h3>Mô tả & Tiện nghi</h3>
                 <div class="info-group">
                     <label>Mô tả:</label>
-                    <p><?php echo $homestay['describe']; ?></p>
+                    <p><?php echo $homestay['description']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Tiện nghi:</label>
-                    <p><?php echo $homestay['amenities'];?></p>
-                </div>
-                <div class="info-group">
-                    <label>Chính sách:</label>
                     <p><?php echo $homestay['policy']; ?></p>
                 </div>
             </div>
@@ -449,24 +489,24 @@ $total_pages = ceil($total_records / $limit);
                 <h3>Địa chỉ & Liên hệ</h3>
                 <div class="info-group">
                     <label>Địa chỉ:</label>
-                    <p><?php echo $homestay['homestay_address']; ?></p>
+                    <p><?php echo $homestay['address']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Số điện thoại:</label>
-                    <p><?php echo $homestay['phone_owner']; ?></p>
+                    <p><?php echo $homestay['homestay_phone']; ?></p>
                 </div>
                 <div class="info-group">
                     <label>Email liên hệ:</label>
-                    <p><?php echo $homestay['email']; ?></p>
+                    <p><?php echo $homestay['homestay_email']; ?></p>
                 </div>
             </div>
 
             <div class="detail-section">
                 <h3>Hình ảnh Homestay</h3>
                 <div class="images-gallery">
-                    <img src="../../Images/<?php echo $homestay['image']; ?>" alt="Hình ảnh Homestay 1">
-                    <img src="../../Images/<?php echo $homestay['image']; ?>" alt="Hình ảnh Homestay 2">
-                    <img src="../../Images/<?php echo $homestay['image']; ?>" alt="Hình ảnh Homestay 3">
+                    <img src="../../../FE/images/<?php echo $homestay['img1']; ?>" alt="Hình ảnh Homestay 1">
+                    <img src="../../../FE/images/<?php echo $homestay['img2']; ?>" alt="Hình ảnh Homestay 2">
+                    <img src="../../../FE/images/<?php echo $homestay['img3']; ?>" alt="Hình ảnh Homestay 3">
                 </div>
             </div>
         </div>

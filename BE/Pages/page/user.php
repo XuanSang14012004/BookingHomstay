@@ -47,9 +47,9 @@ $total_pages = ceil($total_records / $limit);
 <div class="form-container" id="user-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;"> 
     <?php include "../home/header_content.php"; ?>
     <div class="management-container">
-        <h2>Quản lý thông tin Khách hàng</h2>
+        <h2>Thông tin Khách hàng</h2>
         <div class="toolbar">
-            <button class="add-btn" onclick="showFormUser('add-form')"><i class='bx bx-plus'></i> Thêm Khách hàng mới</button>
+            <button class="add-btn" onclick="showFormUser('add-form')"><i class='bx bx-plus'></i> Thêm khách hàng mới</button>
             <div class="search-box">
                 <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm khách hàng...">
                 <button type="submit" class="search-btn" onclick="showFormUser('search-form')"><i class='bx bx-search'></i></button>
@@ -74,6 +74,7 @@ $total_pages = ceil($total_records / $limit);
                     <tr>
                         <th><input type="checkbox" id="select-all"></th>
                         <th>Mã Khách hàng</th>
+                        <th>Mã tài khoản</th>
                         <th>Tên Khách hàng</th>
                         <th>Ngày sinh</th>
                         <th>Giới tính</th>
@@ -90,12 +91,13 @@ $total_pages = ceil($total_records / $limit);
                             $search_query = trim($_GET['content']);
                             $search = "%".$search_query."%";
 
-                            $sql = "SELECT * FROM db_customer WHERE customer_id LIKE '$search' 
-                                OR customer_name LIKE '$search' 
+                            $sql = "SELECT * FROM db_customer WHERE customer_id LIKE '$search'
+                                OR account_id LIKE '$search'
+                                OR fullname LIKE '$search' 
                                 OR birthday LIKE '$search' 
                                 OR gender LIKE '$search' 
                                 OR email LIKE '$search' 
-                                OR customer_phone LIKE '$search' 
+                                OR phone LIKE '$search' 
                                 OR address LIKE '$search'
                                 LIMIT $limit OFFSET $offset ";
                             $result = $conn->query($sql); 
@@ -107,11 +109,16 @@ $total_pages = ceil($total_records / $limit);
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['customer_id']; ?>"></td> 
                             <td><?php echo $row['customer_id'] ?></td>
-                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php if($row['account_id'] === NULL){
+                                            echo 'Khách hàng chưa có tài khoản';
+                                        }else{
+                                            echo $row['account_id'];
+                                        } ?></td>
+                            <td><?php echo $row['fullname'] ?></td>
                             <td><?php echo $row['birthday'] ?></td>
                             <td><?php echo $row['gender'] ?></td>
                             <td><?php echo $row['email'] ?></td>
-                            <td><?php echo $row['customer_phone'] ?></td>
+                            <td><?php echo $row['phone'] ?></td>
                             <td class="truncate-text"><?php echo $row['address'] ?></td>
                             <td class="actions">
                                 <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $row['customer_id']; ?>')"><i class='bx bx-detail'></i></button>
@@ -160,17 +167,17 @@ $total_pages = ceil($total_records / $limit);
         <div class="toolbar">
            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
-        <h2>Thêm Khách Hàng Mới</h2>
+        <h2>Thêm khách hàng mới </h2>
         <form action="../modules/add_function.php" method="POST">
             <div class="form-section">
                 <h3>Thông tin cá nhân</h3>
                 <div class="form-group">
-                    <label for="customer_id">Mã Khách hàng:</label>
-                    <input type="text" id="customer_id" name="customer_id" required>
+                    <label for="account_id">Mã tài khoản:</label>
+                    <input type="number" id="account_id" name="account_id" placeholder="Bỏ qua nếu khách hàng chưa có tài khoản">
                 </div>
                 <div class="form-group">
-                    <label for="customer_name">Họ và Tên:</label>
-                    <input type="text" id="customer_name" name="customer_name" required>
+                    <label for="fullname">Họ và Tên:</label>
+                    <input type="text" id="fullname" name="fullname" required>
                 </div>
                 <div class="form-group">
                     <label for="birthday">Ngày sinh:</label>
@@ -192,8 +199,8 @@ $total_pages = ceil($total_records / $limit);
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="customer_phone">Số điện thoại:</label>
-                    <input type="tel" id="customer_phone" name="customer_phone" required>
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
                 <div class="form-group">
                     <label for="address">Địa chỉ:</label>
@@ -202,7 +209,7 @@ $total_pages = ceil($total_records / $limit);
             </div>
 
             <div class="form-actions">
-                <button type="submit" name="submit_user" class="add-btn">Thêm Khách Hàng</button>
+                <button type="submit" name="submit_user" class="add-btn">Thêm khách hàng</button>
                 <button type="reset" class="cancel-btn">Hủy</button>
             </div>
         </form>
@@ -221,19 +228,35 @@ $total_pages = ceil($total_records / $limit);
                 <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $user['customer_id']; ?>')"></i> Xóa thông tin</button>
             </div>
         </div>
-        <h2>Sửa Thông Tin Khác Hàng</h2>
+        <h2>Cập Nhật Thông Tin Khách Hàng</h2>
+        
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="customer_id" value="<?php echo $user['customer_id']; ?>">
 
             <div class="form-section">
                 <h3>Thông tin cá nhân</h3>
                 <div class="form-group">
-                    <label for="customer_id">Mã Khách hàng:</label>
-                    <input type="text" id="customer_id" name="customer_id" value="<?php echo $user['customer_id']; ?>" required>
+                    <label for="account_id">Mã tài khoản:</label>
+                    <select id="account_id" name="account_id" >
+                        <option value="">Khách hàng chưa có tài khoản</option>
+                            <?php
+                                $user_sql = "SELECT account_id, fullname FROM db_account";
+                                $user_result = mysqli_query($conn, $user_sql);
+
+                                if ($user_result && mysqli_num_rows($user_result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($user_result)) {
+                                        $selected = ($row['account_id'] == $user['account_id']) ? 'selected' : '';
+                                        echo "<option value='{$row['account_id']}' $selected>{$row['account_id']} - {$row['fullname']}</option>";
+                                    }
+                                } else {
+                                    echo "<option value=''>Khách hàng chưa có tài khoản</option>";
+                                }
+                            ?>
+                        </select>
                 </div>
                 <div class="form-group">
-                    <label for="customer_name">Họ và Tên:</label>
-                    <input type="text" id="customer_name" name="customer_name" value="<?php echo $user['customer_name']; ?>" required>
+                    <label for="fullname">Họ và Tên:</label>
+                    <input type="text" id="fullname" name="fullname" value="<?php echo $user['fullname']; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="birthday">Ngày sinh:</label>
@@ -255,8 +278,8 @@ $total_pages = ceil($total_records / $limit);
                     <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="customer_phone">Số điện thoại:</label>
-                    <input type="tel" id="customer_phone" name="customer_phone" value="<?php echo $user['customer_phone']; ?>" required>
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="tel" id="phone" name="phone" value="<?php echo $user['phone']; ?>" required>
                 </div>
                 <div class="form-group"> 
                     <label for="address">Địa chỉ:</label>
@@ -297,8 +320,8 @@ $total_pages = ceil($total_records / $limit);
                     <p><?php echo $user['customer_id']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="customer_name">Họ và Tên:</label>
-                    <p><?php echo $user['customer_name']; ?></p>
+                    <label for="fullname">Họ và Tên:</label>
+                    <p><?php echo $user['fullname']; ?></p>
                 </div>
                 <div class="info-group">
                     <label for="birthday">Ngày sinh:</label>
@@ -316,8 +339,8 @@ $total_pages = ceil($total_records / $limit);
                     <p><?php echo $user['email']; ?></p>
                 </div>
                 <div class="info-group">
-                    <label for="customer_phone">Số điện thoại:</label>
-                    <p><?php echo $user['customer_phone']; ?></p>
+                    <label for="phone">Số điện thoại:</label>
+                    <p><?php echo $user['phone']; ?></p>
                 </div>
                 <div class="info-group"> 
                     <label for="address">Địa chỉ:</label>

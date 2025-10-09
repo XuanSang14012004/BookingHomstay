@@ -15,16 +15,16 @@
     $row = $result->fetch_assoc();
     $total_bookings = $row['total_bookings'];
 
-    $sql_revenue = "SELECT SUM(booking_price) AS total_revenue FROM db_booking";
+    $sql_revenue = "SELECT SUM(total_price) AS total_revenue FROM db_booking";
     $result = $conn->query($sql_revenue);
     $row = $result->fetch_assoc();
     $total_revenue = $row['total_revenue'] ?? 0;
 
     $revenueData = array_fill(1, 12, 0);
 
-    $sql_revenue = "SELECT MONTH(date_booking) as month, SUM(booking_price) as total 
+    $sql_revenue = "SELECT MONTH(created_at) as month, SUM(total_price) as total 
                     FROM db_booking 
-                    GROUP BY MONTH(date_booking)";
+                    GROUP BY MONTH(created_at)";
     $res_revenue = $conn->query($sql_revenue);
 
     if ($res_revenue) {
@@ -35,14 +35,14 @@
     $roomLabels = [];
     $roomRatings = [];
 
-    $sql_rating = "SELECT room_id, AVG(rating) as avg_rating 
+    $sql_rating = "SELECT booking_id, AVG(rating) as avg_rating 
                 FROM db_review 
-                GROUP BY room_id";
+                GROUP BY booking_id";
     $res_rating = $conn->query($sql_rating);
 
     if ($res_rating) {
         while ($row = $res_rating->fetch_assoc()) {
-            $roomLabels[] = "Room " . $row['room_id'];
+            $roomLabels[] = "Booking " . $row['booking_id'];
             $roomRatings[] = round($row['avg_rating'], 2);
         }
     }
@@ -137,7 +137,7 @@
                 scales: {
                     y: { 
                         beginAtZero: true,
-                        max: 10 
+                        max: 5
                     }
                 }
             }

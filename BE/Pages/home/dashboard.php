@@ -1,26 +1,20 @@
 <?php
 include '../../Config/connect.php';
 
-// Tổng số khách hàng đăng ký trong ngày hôm nay
+// Tổng số khách hàng đăng ký trong tháng
 $sql_customers = "SELECT COUNT(*) AS total_customers FROM db_account WHERE DATE(created_at) = CURDATE()";
 $result = $conn->query($sql_customers);
 $row = $result->fetch_assoc();
 $total_customers_today = $row['total_customers'] ?? 0;
 
-// Tổng số homestay tạo mới trong ngày hôm nay
-$sql_homestay = "SELECT COUNT(*) AS total_homestay FROM db_homestay WHERE DATE(created_at) = CURDATE()";
-$result = $conn->query($sql_homestay);
-$row = $result->fetch_assoc();
-$total_homestay_today = $row['total_homestay'] ?? 0;
-
-// Tổng số đơn đặt phòng trong ngày hôm nay
-$sql_bookings = "SELECT COUNT(*) AS total_bookings FROM db_booking WHERE DATE(date_booking) = CURDATE()";
+// Tổng số đơn đặt phòng trong tháng
+$sql_bookings = "SELECT COUNT(*) AS total_bookings FROM db_booking WHERE DATE(created_at) = CURDATE()";
 $result = $conn->query($sql_bookings);
 $row = $result->fetch_assoc();
 $total_bookings_today = $row['total_bookings'] ?? 0;
 
-// Tổng doanh thu trong ngày hôm nay
-$sql_revenue = "SELECT SUM(booking_price) AS total_revenue FROM db_booking WHERE DATE(date_booking) = CURDATE()";
+// Tổng doanh thu trong tháng
+$sql_revenue = "SELECT SUM(total_price) AS total_revenue FROM db_booking WHERE DATE(created_at) = CURDATE()";
 $result = $conn->query($sql_revenue);
 $row = $result->fetch_assoc();
 $total_revenue_today = $row['total_revenue'] ?? 0;
@@ -50,21 +44,21 @@ $total_revenue_today = $row['total_revenue'] ?? 0;
         <i class='bx bxs-calendar-check'></i>
         <span class="text">
             <h3><?php echo number_format($total_bookings_today); ?></h3>
-            <p>Đơn đặt phòng (<?php echo date("d/m/Y");?>)</p>
+            <p>Đơn đặt phòng</p>
         </span>
     </li>
     <li>
         <i class='bx bxs-group'></i>
         <span class="text">
             <h3><?php echo number_format($total_customers_today); ?></h3>
-            <p>Số lượng khách(<?php echo date("d/m/Y");?>)</p>
+            <p>Số lượng khách</p>
         </span>
     </li>
     <li>
         <i class='bx bxs-dollar-circle'></i>
         <span class="text">
             <h3><?php echo number_format($total_revenue_today, 0, ',', '.'); ?> VNĐ</h3>
-            <p>Doanh thu(<?php echo date("d/m/Y");?>)</p>
+            <p>Doanh thu</p>
         </span>
     </li>
 </ul>
@@ -74,7 +68,7 @@ $total_revenue_today = $row['total_revenue'] ?? 0;
     <div class="order">
         <div class="head">
             <h3>Danh sách đặt phòng</h3>
-            <i class='bx bx-search'></i>
+            <a href="home.php?page=booking"><i class='bx bx-search'></i></a>
             <i class='bx bx-filter'></i>
         </div>
         <table>
@@ -98,21 +92,18 @@ $total_revenue_today = $row['total_revenue'] ?? 0;
 
                         <p><?php echo $row['customer_name'] ?></p>
                     </td>
-                    <td><?php echo $booking_time=date("d/m/Y ",strtotime($row['date_booking']));?></td>
+                    <td><?php echo $booking_time=date("d/m/Y ",strtotime($row['created_at']));?></td>
                     <td>
                         <?php 
                             $text='';
                             $style='';
-                            if($row['booking_status'] ==='Đã xác nhận'){
+                            if($row['status'] ==='Đã xác nhận'){
                                 $text=  'Đã xác nhận';
                                 $style= 'status-actived';
-                            }else if($row['booking_status'] === 'Chờ thanh toán'){
-                                $text=  'Chờ thanh toán';
+                            }else if($row['status'] === 'Chờ xác nhận'){
+                                $text=  'Chờ xác nhận';
                                 $style= 'status-pending';
-                            }else if($row['booking_status'] === 'Đã hoàn tất'){
-                                $text=  'Đã thanh toán';
-                                $style= 'status-completed';
-                            }else if($row['booking_status'] === 'Đã hủy'){
+                            }else if($row['status'] === 'Đã hủy'){
                                 $text=  'Đã hủy';
                                 $style= 'status-cancel';
                             }echo "<span class='" . $style . "'>" . $text . "</span>";?>
@@ -124,26 +115,26 @@ $total_revenue_today = $row['total_revenue'] ?? 0;
     </div>
     <div class="todo">
         <div class="head">
-            <h3>Danh sách góp ý của khách hàng</h3>
-            <i class='bx bx-plus'></i>
+            <h3>Danh sách đánh giá của khách hàng</h3>
+            <a href="home.php?page=reviews"><i class='bx bx-search'></i></a>
             <i class='bx bx-filter'></i>
         </div>
         <ul class="todo-list">
-            <?php $result = $conn->query("SELECT * FROM db_feedback ");
+            <?php $result = $conn->query("SELECT * FROM db_review ");
                  while ($row = mysqli_fetch_assoc($result)) { ?>
             <li class="<?php 
-                    if ($row['feedback_status'] === 'Đã phản hồi') {
+                    if ($row['status_review'] === 'Đã phản hồi') {
                         echo 'completed';
-                    } else if ($row['feedback_status'] === 'Chưa phản hồi') {
+                    } else if ($row['status_review'] === 'Chưa phản hồi') {
                         echo 'not-completed';
                     } 
                 ?>">
-                 <p class="truncate-text"><?php echo $row['title']; ?></p> 
+                 <p class="truncate-text"><?php echo $row['content_review']; ?></p> 
                  <div class="todo-item"><i class='bx bx-dots-vertical-rounded'></i>
                     <div class="action-menu">
                         <ul>
-                            <button class="detail-btn" title="Chi tiết" onclick="showFormFeedback('detail-form', '<?php echo $row['feedback_id']; ?>')"><i class='bx bx-detail'></i> Xem chi tiết</button>
-                            <button class="delete-btn" title="Xóa" onclick="deleteFeedback('<?php echo $row['feedback_id']; ?>')"><i class='bx bx-trash'></i>Xóa góp ý</button>
+                            <button class="detail-btn" title="Chi tiết" onclick="showFormReview('detail-form', '<?php echo $row['review_id']; ?>')"><i class='bx bx-detail'></i> Xem chi tiết</button>
+                            <button class="delete-btn" title="Xóa" onclick="deleteReview('<?php echo $row['review_id']; ?>')"><i class='bx bx-trash'></i>Xóa góp ý</button>
                         </ul>
                     </div>
                 </div>  

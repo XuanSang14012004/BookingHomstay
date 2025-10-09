@@ -39,23 +39,21 @@ $sql_user = "SELECT * FROM db_customer";
 $result_user = mysqli_query($conn, $sql_user);
 
 if (isset($_POST['submit_user'])) {
-    $customer_id = $_POST['customer_id'];
-    $check_user = "SELECT customer_id FROM db_customer WHERE customer_id = '$customer_id'";
-    $check_result = mysqli_query($conn, $check_user);
-    
-    if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=user&action=add_user&status=exists");
-        exit();
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
     }
-    $customer_name = $_POST['customer_name']; 
+    $fullname =  $_POST['fullname'];
     $birthday = $_POST['birthday'];          
     $gender = $_POST['gender']; 
     $email = $_POST['email'];    
-    $customer_phone = $_POST['customer_phone']; 
+    $customer_phone = $_POST['phone']; 
     $address = $_POST['address'];   
     
-    $sql = "INSERT INTO db_customer(customer_id, customer_name, birthday, gender, email, customer_phone, address)
-    VALUES ('$customer_id','$customer_name','$birthday','$gender','$email','$customer_phone','$address')";
+    $sql = "INSERT INTO db_customer( account_id,fullname, birthday, gender, email, phone, address)
+    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$customer_phone','$address')";
     
     $query = mysqli_query($conn, $sql);
     
@@ -70,6 +68,84 @@ if (isset($_POST['submit_user'])) {
 }
 ?>
 
+<!-- Add Admin -->
+<?php
+include "../../config/connect.php";
+
+$sql_admin = "SELECT * FROM db_admin";
+$result_admin = mysqli_query($conn, $sql_admin);
+
+if (isset($_POST['submit_admin'])) {
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
+    }
+    $fullname =  $_POST['fullname'];
+    $birthday = $_POST['birthday'];          
+    $gender = $_POST['gender']; 
+    $email = $_POST['email'];    
+    $customer_phone = $_POST['phone']; 
+    $address = $_POST['address'];  
+    
+    $image = basename($_FILES['image']['name']); 
+    $target_dir = "../../Images/";
+    $target_file = $target_dir . $image;
+    
+    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)){
+    $sql = "INSERT INTO db_admin( account_id,fullname, birthday, gender, email, phone, `address`,`image`)
+    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$customer_phone','$address','$image')";
+    }
+    $query = mysqli_query($conn, $sql);
+    
+    if ($query) {
+        header("Location: ../home/home.php?page=admin&status=add_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=admin&status=add_error");
+        exit();
+    }
+
+}
+?>
+
+<!-- Add Owner -->
+<?php
+include "../../config/connect.php";
+
+$sql_owner = "SELECT * FROM db_owner";
+$result_owner = mysqli_query($conn, $sql_ower);
+
+if (isset($_POST['submit_user'])) {
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
+    }
+    $fullname =  $_POST['fullname'];
+    $birthday = $_POST['birthday'];          
+    $gender = $_POST['gender']; 
+    $email = $_POST['email'];    
+    $customer_phone = $_POST['phone']; 
+    $address = $_POST['address'];   
+    
+    $sql = "INSERT INTO db_customer( account_id,fullname, birthday, gender, email, phone, address)
+    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$customer_phone','$address')";
+    
+    $query = mysqli_query($conn, $sql);
+    
+    if ($query) {
+        header("Location: ../home/home.php?page=user&status=add_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=user&status=add_error");
+        exit();
+    }
+
+}
+?>
 
 <!-- Add Homestay -->
 <?php
@@ -79,35 +155,43 @@ $sql_homestay = "SELECT * FROM db_homestay";
 $result_homestay = mysqli_query($conn, $sql_homestay);
 
 if (isset($_POST['submit_homestay'])) {
-    $homestay_id = $_POST['homestay_id']; 
-    $check_homestay = "SELECT homestay_id FROM db_homestay WHERE homestay_id = '$homestay_id'";
-    $check_result = mysqli_query($conn, $check_homestay);
-    
-    if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=homestay&action=add_homestay&status=exists");
-        exit();
-    }
     $homestay_name = $_POST['homestay_name'];
-    $homestay_type = $_POST['homestay_type'];
-    $homestay_status = $_POST['homestay_status'];
-    $room_number = $_POST['room_number'];
-    $home_price = $_POST['home_price'];
-    $phone_owner = $_POST['phone_owner'];
-    $email = $_POST['email'];
-    $homestay_address = $_POST['homestay_address'];
-    $describe = $_POST['describe'];
-    $amenities = $_POST['amenities'];
+    $room_type = $_POST['room_type'];
+    $status = $_POST['status'];
+    $price = $_POST['price'];
+    $checkin = $_POST['checkin'];
+    $checkout = $_POST['checkout'];
+    $homestay_phone = $_POST['homestay_phone'];
+    $homestay_email = $_POST['homestay_email'];
+    $homestay_address = $_POST['address'];
+    $description = $_POST['description'];
+    $guests = $_POST['guests'];
     $policy = $_POST['policy'];
-    $home_rating = $_POST['home_rating'];
-    $rating_number = $_POST['rating_number'];
+    $rating = $_POST['rating'];
+    $reviews_count = $_POST['reviews_count'];
     
-    $image = basename($_FILES['image']['name']); 
-    $target_dir = "../../Images/";
+    $image = basename($_FILES['img']['name']); 
+    $target_dir = "../../../FE/images/";
     $target_file = $target_dir . $image;
 
-    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) { 
-        $sql = "INSERT INTO db_homestay(homestay_id, homestay_name, homestay_type, homestay_status, room_number, home_price, phone_owner, email, homestay_address, `describe`, amenities, `policy`, `image`, home_rating, rating_number)
-        VALUES ('$homestay_id','$homestay_name','$homestay_type','$homestay_status','$room_number','$home_price','$phone_owner','$email','$homestay_address','$describe','$amenities','$policy','$image','$home_rating','$rating_number')";
+    $image1 = basename($_FILES['img1']['name']); 
+    $target_dir = "../../../FE/images/";
+    $target_file1 = $target_dir . $image1;
+
+    $image2 = basename($_FILES['img2']['name']); 
+    $target_dir = "../../../FE/images/";
+    $target_file2 = $target_dir . $image2;
+
+    $image3 = basename($_FILES['img3']['name']); 
+    $target_dir = "../../../FE/images/";
+    $target_file3 = $target_dir . $image3;
+
+    if ((move_uploaded_file($_FILES["img"]["tmp_name"], $target_file))
+        &&(move_uploaded_file($_FILES["img1"]["tmp_name"], $target_file1))
+        &&(move_uploaded_file($_FILES["img2"]["tmp_name"], $target_file2))
+        &&(move_uploaded_file($_FILES["img3"]["tmp_name"], $target_file3))) { 
+        $sql = "INSERT INTO db_homestay( homestay_name, room_type, `status`, price, checkin, checkout, homestay_phone, homestay_email, `address`, `description`,guests,`policy`, img, img1, img2, img3, rating, reviews_count)
+        VALUES ('$homestay_name','$room_type','$status','$price','$checkin','$checkout','$homestay_phone','$homestay_email','$homestay_address','$description','$guests','$policy','$image','$image1','$image2','$image3','$rating','$reviews_count')";
         $query = mysqli_query($conn, $sql);
         
         if ($query) {
@@ -125,57 +209,6 @@ if (isset($_POST['submit_homestay'])) {
 ?>
 
 
-<!-- Add Rooms -->
-<?php
-include "../../config/connect.php";
-
-$sql_room = "SELECT * FROM db_room"; 
-$result_room = mysqli_query($conn, $sql_room);
-
-if (isset($_POST['submit_room'])) {
-    $room_id = $_POST['room_id'];
-    
-    // Kiểm tra mã phòng đã tồn tại chưa
-    $check_room = "SELECT room_id FROM db_room WHERE room_id = '$room_id'";
-    $check_result = mysqli_query($conn, $check_room);
-    
-    if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=rooms&action=add_room&status=exists");
-        exit();
-    }
-    
-    $room_name = $_POST['room_name'];
-    $room_type = $_POST['room_type'];
-    $temp = $_POST['homestay_name'];
-    $homestay_name = mysqli_real_escape_string($conn, $temp);
-    $room_describe = $_POST['room_describe'];
-    $room_people = $_POST['room_people'];
-    $room_price = $_POST['room_price'];
-    $room_status = $_POST['room_status'];
-    
-    $image_room = basename($_FILES['image_room']['name']); 
-    $target_dir = "../../Images/";
-    $target_file = $target_dir . $image_room;
-    
-    if (move_uploaded_file($_FILES["image_room"]["tmp_name"], $target_file)) {
-        $sql = "INSERT INTO db_room(room_id, room_name, room_type, homestay_name, room_describe, room_people, room_status, room_price, image_room)
-        VALUES ('$room_id','$room_name','$room_type','$homestay_name','$room_describe','$room_people','$room_status','$room_price','$image_room')";
-        
-        $query = mysqli_query($conn, $sql);
-        
-        if ($query&& mysqli_affected_rows($conn) > 0) {
-            header("Location: ../home/home.php?page=rooms&status=add_success");
-            exit();
-        } else {
-            header("Location: ../home/home.php?page=rooms&status=add_error");
-            exit();
-        }
-    } else {
-        header("Location: ../home/home.php?page=rooms&status=error_upload");
-        exit();
-    }
-}
-?>
 
 <!-- Add Booking -->
 <?php
@@ -185,28 +218,29 @@ $sql_booking = "SELECT * FROM db_booking";
 $result_booking = mysqli_query($conn, $sql_booking);
 
 if (isset($_POST['submit_booking'])) {
-    $booking_id = $_POST['booking_id']; 
-
-    $check_booking = "SELECT booking_id FROM db_booking WHERE booking_id = '$booking_id'";
-    $check_result = mysqli_query($conn, $check_booking);
-    if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=booking&action=add_booking&status=exists");
-        exit();
+    $homestay_id = $_POST['homestay_id'];
+    $temp = $_POST['customer_id'];
+    if ($temp == '' || $temp == null) {
+        $customer_id = "NULL";
+    } else {
+        $customer_id = (int)$temp;
     }
-    $customer_id = $_POST['customer_id'];
     $customer_name = $_POST['customer_name'];
-    $homestay_id = $_POST['homestay_id']; 
-    $room_id = $_POST['room_id'];
-    $date_booking = $_POST['date_booking']; 
-    $date_checkin = $_POST['date_checkin']; 
-    $date_checkout = $_POST['date_checkout']; 
-    $booking_people = $_POST['booking_people'];
-    $booking_price = $_POST['booking_price']; 
-    $booking_status = $_POST['booking_status']; 
+    $customer_email = $_POST['customer_email'];
+    $customer_phone = $_POST['customer_phone'];
+    $date_booking = $_POST['created_at']; 
+    $date_checkin = $_POST['checkin_date']; 
+    $date_checkout = $_POST['checkout_date']; 
+    $guests = $_POST['guests'];
+    $payment_method = $_POST['payment_method'];
+    $booking_price = $_POST['total_price']; 
+    $booking_status = $_POST['status']; 
+    $payment_status = $_POST['payment_status'];
+    $payment_date = $_POST['payment_date'];  
     $note = $_POST['note']; 
 
-    $sql = "INSERT INTO db_booking(booking_id, customer_id, customer_name, homestay_id, room_id, date_booking, date_checkin, date_checkout, booking_people, booking_price, booking_status, note)
-    VALUES ('$booking_id','$customer_id','$customer_name','$homestay_id','$room_id','$date_booking','$date_checkin','$date_checkout','$booking_people','$booking_price','$booking_status','$note')";
+    $sql = "INSERT INTO db_booking(homestay_id, customer_id, customer_name, customer_email, customer_phone, created_at, checkin_date, checkout_date, guests, payment_method, total_price, status, note)
+    VALUES ('$homestay_id',$customer_id,'$customer_name','$customer_email','$customer_phone','$date_booking','$date_checkin','$date_checkout','$guests','$payment_method','$booking_price','$booking_status','$note')";
     
     $query = mysqli_query($conn, $sql);
     

@@ -75,16 +75,18 @@ $total_pages = ceil($total_records / $limit);
                     <tr>
                         <th><input type="checkbox" id="select-all"></th>
                         <th>Mã đơn đặt phòng</th>
-                        <th>Mã khách hàng</th>
-                        <th>Tên khách hàng</th>
                         <th>Mã Homestay</th>
-                        <th>Mã phòng</th>
+                        <th>Tên khách hàng</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
                         <th>Ngày đặt phòng</th>
                         <th>Ngày nhận phòng</th>
                         <th>Ngày trả phòng</th>
                         <th>Số người</th>
+                        <th>Trạng thái đặt phòng</th>
+                        <th>Phương thức thanh toán</th>
                         <th>Tổng tiền</th>
-                        <th>Trạng thái</th>
+                        <th>Trạng thái thanh toán</th>
                         <th>Chú thích của khách hàng</th>
                         <th>Thao tác</th>
                     </tr>
@@ -97,17 +99,21 @@ $total_pages = ceil($total_records / $limit);
                             $search = "%".$search_query."%";
 
                             $sql = "SELECT * FROM db_booking WHERE booking_id LIKE '$search' 
-                                OR customer_id LIKE '$search' 
-                                OR customer_name LIKE '$search' 
                                 OR homestay_id LIKE '$search' 
-                                OR room_id LIKE '$search' 
-                                OR booking_people LIKE '$search' 
-                                OR date_booking LIKE '$search' 
-                                OR date_checkin LIKE '$search' 
-                                OR date_checkout LIKE '$search' 
+                                OR customer_name LIKE '$search' 
+                                OR customer_email LIKE '$search' 
+                                OR customer_phone LIKE '$search' 
+                                OR created_at LIKE '$search' 
+                                OR checkin_date LIKE '$search' 
+                                OR checkout_date LIKE '$search' 
+                                OR guests LIKE '$search'
+                                OR payment_method LIKE '$search'
+                                OR payment_status LIKE '$search'
+                                OR payment_date LIKE '$search'  
+                                OR total_price LIKE '$search' 
+                                OR `status` LIKE '$search'
+                                OR `payment_status` LIKE '$search'
                                 OR note LIKE '$search' 
-                                OR booking_price LIKE '$search' 
-                                OR booking_status LIKE '$search'
                                 LIMIT $limit OFFSET $offset "; 
                             $result = $conn->query($sql);
                         }else{
@@ -118,16 +124,18 @@ $total_pages = ceil($total_records / $limit);
                         while ($row = mysqli_fetch_assoc($result)) { ?>
                             <td><input type="checkbox" class="row-checkbox" value="<?php echo $row['booking_id']; ?>"></td> 
                             <td><?php echo $row['booking_id'] ?></td>
-                            <td><?php echo $row['customer_id'] ?></td>
-                            <td><?php echo $row['customer_name'] ?></td>
                             <td><?php echo $row['homestay_id'] ?></td>
-                            <td><?php echo $row['room_id'] ?></td>
-                            <td><?php echo $row['date_booking'] ?></td>
-                            <td><?php echo $row['date_checkin'] ?></td>
-                            <td><?php echo $row['date_checkout'] ?></td>
-                            <td><?php echo $row['booking_people'] ?></td>
-                            <td><?php echo $row['booking_price'] ?></td>
-                            <td><?php echo $row['booking_status'] ?></td>
+                            <td><?php echo $row['customer_name'] ?></td>
+                            <td><?php echo $row['customer_email'] ?></td>
+                            <td><?php echo $row['customer_phone'] ?></td>
+                            <td><?php echo $row['created_at'] ?></td>
+                            <td><?php echo $row['checkin_date'] ?></td>
+                            <td><?php echo $row['checkout_date'] ?></td>
+                            <td><?php echo $row['guests'] ?></td>
+                            <td><?php echo $row['status'] ?></td>
+                            <td><?php echo $row['payment_method'] ?></td>
+                            <td><?php echo $row['total_price'] ?></td>
+                            <td><?php echo $row['payment_status'] ?></td>
                             <td class="truncate-text"><?php echo $row['note'] ?></td>
                             <td class="actions">
                                 <button class="detail-btn" title="Chi tiết" onclick="showFormBooking('detail-form', '<?php echo $row['booking_id']; ?>')"><i class='bx bx-detail'></i></button>
@@ -181,32 +189,44 @@ $total_pages = ceil($total_records / $limit);
                 <div class="form-section">
                     <h3>Thông tin cơ bản về đơn đặt phòng</h3>
                     <div class="form-group">
-                        <label for="booking_id">Mã đơn đặt phòng:</label>
-                        <input type="text" id="booking_id" name="booking_id" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_id">Mã Khách hàng:</label>
-                        <input type="text" id="customer_id" name="customer_id" required>
-                    </div>
-                    <div class="form-group">
                         <label for="homestay_id">Mã homestay:</label>
-                        <input type="text" id="homestay_id" name="homestay_id" required>
+                        <select id="homestay_id" name="homestay_id" required>
+                            <?php
+                                $hst_sql = "SELECT homestay_id, homestay_name FROM db_homestay";
+                                $hst_result = mysqli_query($conn, $hst_sql);
+
+                                if ($hst_result && mysqli_num_rows($hst_result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($hst_result)) {
+                                        $selected = ($row['homestay_id'] == $booking['homestay_id']) ? 'selected' : '';
+                                        echo "<option value='{$row['homestay_id']}' $selected>{$row['homestay_id']} - {$row['homestay_name']}</option>";
+                                    }
+                                } else {
+                                    echo "<option value=''>Không có dữ liệu homestay</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>                 
+                    <div class="form-group">
+                        <label for="created_at">Ngày đặt phòng</label>
+                        <input type="datetime-local" id="created_at" name="created_at" required>
                     </div>
                     <div class="form-group">
-                        <label for="room_id">Mã phòng:</label>
-                        <input type="text" id="room_id" name="room_id" required>
+                        <label for="checkin_date">Ngày nhận phòng:</label>
+                        <input type="date" id="checkin_date" name="checkin_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="date_booking">Ngày đặt phòng</label>
-                        <input type="date" id="date_booking" name="date_booking" required>
+                        <label for="checkout_date">Ngày trả phòng:</label>
+                        <input type="date" id="checkout_date" name="checkout_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="booking_status">Trạng thái:</label>
-                        <select id="booking_status" name="booking_status">
+                        <label for="guests">Số người:</label>
+                        <input type="number" id="guests" name="guests" required></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Trạng thái đặt phòng:</label>
+                        <select id="status" name="status">
                             <option value="Đã xác nhận">Đã xác nhận</option>
                             <option value="Chờ xác nhận" >Chờ xác nhận</option>
-                            <option value="Chờ thanh toán" >Chờ thanh toán</option>
-                            <option value="Đã thanh toán" >Đã thanh toán</option>
                             <option value="Đã hủy" >Đã hủy</option>
                         </select>
                     </div>
@@ -215,30 +235,56 @@ $total_pages = ceil($total_records / $limit);
                 <div class="form-section">
                     <h3>Thông tin khách hàng đặt phòng</h3>
                     <div class="form-group">
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <input type="text" id="customer_id" name="customer_id" placeholder="Bỏ qua nếu là khách hàng mới">
+                    </div>
+                    <div class="form-group">
                         <label for="customer_name">Tên Khách hàng:</label>
                         <input type="text" id="customer_name" name="customer_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="date_checkin">Ngày nhận phòng:</label>
-                        <input type="date" id="date_checkin" name="date_checkin" required>
+                        <label for="customer_email">Email:</label>
+                        <input type="text" id="customer_email" name="customer_email" required>
                     </div>
                     <div class="form-group">
-                        <label for="date_checkout">Ngày trả phòng:</label>
-                        <input type="date" id="date_checkout" name="date_checkout" required>
+                        <label for="customer_phone">Số điện thoại:</label>
+                        <input type="text" id="customer_phone" name="customer_phone" required>
                     </div>
-                    <div class="form-group">
-                        <label for="booking_people">Số người:</label>
-                        <input type="number" id="booking_people" name="booking_people" required></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
-                        <input type="number" id="booking_price" name="booking_price" required>
-                    </div>
+                    
                     <div class="form-group">
                         <label for="note">Chú thích:</label>
                         <input type="text" id="note" name="note" required>
                     </div>
                 </div>
+                <div class="form-section">
+                    <h3>Thông tin thanh toán</h3>
+                    <div class="form-group">
+                        <label for="payment_method">Phương thức thanh toán:</label>
+                        <select id="payment_method" name="payment_method">
+                            <option value="Thanh toán khi trả phòng">Thanh toán khi nhận phòng</option>
+                            <option value="VNPay" >VNPay</option>
+                            <option value="Momo" >Momo</option>
+                            <option value="Tiền mặt" >Tiền mặt</option>
+                            <option value="Đặt cọc" >Đặt cọc</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="total_price">Tổng số tiền(VNĐ):</label>
+                        <input type="number" id="total_price" name="total_price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_status">Trạng thái thanh toán:</label>
+                        <select id="payment_status" name="payment_status">
+                            <option value="Chờ thanh toán">Chờ thanh toán</option>
+                            <option value="Đã thanh toán" >Đã thanh toán</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_date">Ngày thanh toán:</label>
+                        <input type="date" id="payment_date" name="payment_date" placeholder="Bỏ qua nếu khách hàng chưa thanh toán">
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" name="submit_booking" class="add-btn">Thêm đơn đặt phòng</button>
                     <button type="reset" class="cancel-btn">Hủy</button>
@@ -260,10 +306,6 @@ $total_pages = ceil($total_records / $limit);
             </div>
         </div>
         <h2>Sửa thông tin đơn đặt phòng</h2>
-        <?php 
-                $th_sql = "SELECT DISTINCT TRIM(booking_status) as booking_status FROM `db_booking`";
-                $th_result = mysqli_query($conn, $th_sql);
-            ?>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="booking_id" value="<?php echo $booking['booking_id']; ?>">
                 <div class="form-section">
@@ -273,59 +315,115 @@ $total_pages = ceil($total_records / $limit);
                         <input type="text" id="booking_id" name="booking_id" value="<?php echo $booking['booking_id']; ?>" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="customer_id">Mã Khách hàng:</label>
-                        <input type="text" id="customer_id" name="customer_id" value="<?php echo $booking['customer_id']; ?>" required>
-                    </div>
-                    <div class="form-group">
                         <label for="homestay_id">Mã homestay:</label>
-                        <input type="text" id="homestay_id" name="homestay_id" value="<?php echo $booking['homestay_id']; ?>" required>
+                        <select id="homestay_id" name="homestay_id" required>
+                            <?php
+                                $hst_sql = "SELECT homestay_id, homestay_name FROM db_homestay";
+                                $hst_result = mysqli_query($conn, $hst_sql);
+
+                                if ($hst_result && mysqli_num_rows($hst_result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($hst_result)) {
+                                        $selected = ($row['homestay_id'] == $booking['homestay_id']) ? 'selected' : '';
+                                        echo "<option value='{$row['homestay_id']}' $selected>{$row['homestay_id']} - {$row['homestay_name']}</option>";
+                                    }
+                                } else {
+                                    echo "<option value=''>Không có dữ liệu homestay</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>          
+                    <div class="form-group">
+                        <label for="created_at">Ngày đặt phòng:</label>
+                        <input type="datetime-local" id="created_at" name="created_at" value="<?php echo $booking['created_at']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="room_id">Mã phòng:</label>
-                        <input type="text" id="room_id" name="room_id" value="<?php echo $booking['room_id']; ?>" required>
+                        <label for="checkin_date">Ngày nhận phòng:</label>
+                        <input type="date" id="checkin_date" name="checkin_date" value="<?php echo $booking['checkin_date']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="date_booking">Ngày đặt phòng:</label>
-                        <input type="date" id="date_booking" name="date_booking" value="<?php echo $booking['date_booking']; ?>" required>
+                        <label for="checkout_date">Ngày trả phòng:</label>
+                        <input type="date" id="checkout_date" name="checkout_date" value="<?php echo $booking['checkout_date']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="booking_status">Trạng thái:</label>
-                        <select id="booking_status" name="booking_status">
-                            <option value="Đã xác nhận" <?php echo ($booking['booking_status'] == 'Đã xác nhận') ? 'selected' : ''; ?>>Đã xác nhận</option>
-                            <option value="Chờ xác nhận" <?php echo ($booking['booking_status'] == 'Chờ xác nhận') ? 'selected' : ''; ?>>Chờ xác nhận</option>
-                            <option value="Chờ thanh toán" <?php echo ($booking['booking_status'] == 'Chờ thanh toán') ? 'selected' : ''; ?>>Chờ thanh toán</option>
-                            <option value="Đã thanh toán" <?php echo ($booking['booking_status'] == 'Đã thanh toán') ? 'selected' : ''; ?>>Đã thanh toán</option>
-                            <option value="Đã hủy" <?php echo ($booking['booking_status'] == 'Đã hủy') ? 'selected' : ''; ?>>Đã hủy</option>
+                        <label for="guests">Số người:</label>
+                        <input type="number" id="guests" name="guests" value="<?php echo $booking['guests']; ?>" required></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Trạng thái:</label>
+                        <select id="status" name="status">
+                            <option value="Đã xác nhận" <?php echo ($booking['status'] == 'Đã xác nhận') ? 'selected' : ''; ?>>Đã xác nhận</option>
+                            <option value="Chờ xác nhận" <?php echo ($booking['status'] == 'Chờ xác nhận') ? 'selected' : ''; ?>>Chờ xác nhận</option>
+                            <option value="Đã hủy" <?php echo ($booking['status'] == 'Đã hủy') ? 'selected' : ''; ?>>Đã hủy</option>
                         </select>
                     </div>
                 </div>
-
                 <div class="form-section">
                     <h3>Thông tin khách hàng đặt phòng</h3>
+                    <div class="form-group">
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <select id="customer_id" name="customer_id" >
+                        <option value="">Khách hàng mới chưa có mã</option>
+                            <?php
+                                $user_sql = "SELECT customer_id, fullname FROM db_customer";
+                                $user_result = mysqli_query($conn, $user_sql);
+
+                                if ($user_result && mysqli_num_rows($user_result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($user_result)) {
+                                        $selected = ($row['customer_id'] == $booking['customer_id']) ? 'selected' : '';
+                                        echo "<option value='{$row['customer_id']}' $selected>{$row['customer_id']} - {$row['fullname']}</option>";
+                                    }
+                                } else {
+                                    echo "<option value=''>Khách hàng chưa có tài khoản</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="customer_name">Tên Khách hàng:</label>
                         <input type="text" id="customer_name" name="customer_name" value="<?php echo $booking['customer_name']; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="date_checkin">Ngày nhận phòng:</label>
-                        <input type="date" id="date_checkin" name="date_checkin" value="<?php echo $booking['date_checkin']; ?>" required>
-                    </div>
+                        <label for="customer_email">Email:</label>
+                        <input type="text" id="customer_email" name="customer_email" value="<?php echo $booking['customer_email']; ?>" required>
+                    </div>   
                     <div class="form-group">
-                        <label for="date_checkout">Ngày trả phòng:</label>
-                        <input type="date" id="date_checkout" name="date_checkout" value="<?php echo $booking['date_checkout']; ?>" required>
+                        <label for="customer_phone">Số điện thoại:</label>
+                        <input type="text" id="customer_phone" name="customer_phone" value="<?php echo $booking['customer_phone']; ?>" required>
                     </div>
-                    <div class="form-group">
-                        <label for="booking_people">Số người:</label>
-                        <input type="number" id="booking_people" name="booking_people" value="<?php echo $booking['booking_people']; ?>" required></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
-                        <input type="number" id="booking_price" name="booking_price" value="<?php echo $booking['booking_price']; ?>" required>
-                    </div>
+                    
                     <div class="form-group">
                         <label for="note">Chú thích:</label>
                         <input type="text" id="note" name="note" value="<?php echo $booking['note']; ?>" required>
                     </div>
+                </div>
+                <div class="form-section">
+                    <h3>Thông tin thanh toán</h3>
+                    <div class="form-group">
+                        <label for="payment_method">Phương thức thanh toán:</label>
+                        <select id="payment_method" name="payment_method">
+                           <option value="Thanh toán khi trả phòng" <?php echo ($booking['payment_method'] == 'Thanh toán khi trả phòng') ? 'selected' : ''; ?>>Thanh toán khi nhận phòng</option>
+                            <option value="VNPay" <?php echo ($booking['payment_method'] == 'VNPay') ? 'selected' : ''; ?> >VNPay</option>
+                            <option value="Momo" <?php echo ($booking['payment_method'] == 'Momo') ? 'selected' : ''; ?> >Momo</option>
+                            <option value="Tiền mặt" <?php echo ($booking['payment_method'] == 'Tiền mặt') ? 'selected' : ''; ?> >Tiền mặt</option>
+                            <option value="Đặt cọc"<?php echo ($booking['payment_method'] == 'Đặt cọc') ? 'selected' : ''; ?> >Đặt cọc</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="total_price">Tổng số tiền(VNĐ):</label>
+                        <input type="number" id="total_price" name="total_price" value="<?php echo $booking['total_price']; ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_status">Trạng thái thanh toán:</label>
+                        <select id="payment_status" name="payment_status">
+                            <option value="Đã thanh toán" <?php echo ($booking['payment_status'] == 'Đã thanh toán') ? 'selected' : ''; ?>>Đã thanh toán</option>
+                            <option value="Chờ thanh toán" <?php echo ($booking['payment_status'] == 'Chờ thanh toán') ? 'selected' : ''; ?>>Chờ thanh toán</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_date">Ngày thanh toán:</label>
+                        <input type="datetime-local" id="payment_date" name="payment_date" value="<?php echo $booking['payment_date']; ?>">
+                    </div>
+                    
                 </div>
                     <div class="form-actions">
                     <button type="submit" name="submit_booking" class="edit-btn">Cập Nhật thông tin</button>
@@ -359,40 +457,40 @@ $total_pages = ceil($total_records / $limit);
                         <label for="booking_id">Mã đơn đặt phòng:</label>
                         <p> <?php echo $booking['booking_id']; ?> </p>
                     </div>
-                    <div class="info-group">
-                        <label for="customer_id">Mã Khách hàng:</label>
-                        <p> <?php echo $booking['customer_id']; ?> </p>
-                    </div>
+                    
                     <div class="info-group">
                         <label for="homestay_id">Mã homestay:</label>
                         <p> <?php echo $booking['homestay_id']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="room_id">Mã phòng:</label>
-                        <p> <?php echo $booking['room_id']; ?> </p>
+                        <label for="created_at">Ngày đặt phòng:</label>
+                        <p> <?php echo $booking['created_at']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="date_booking">Ngày đặt phòng:</label>
-                        <p> <?php echo $booking['date_booking']; ?> </p>
+                        <label for="checkin_date">Ngày nhận phòng:</label>
+                        <p> <?php echo $booking['checkin_date']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="booking_status" >Trạng thái:</label>
+                        <label for="checkout_date">Ngày trả phòng:</label>
+                        <p> <?php echo $booking['checkout_date']; ?> </p>
+                    </div>
+                    <div class="info-group">
+                        <label for="guests">Số người:</label>
+                        <p> <?php echo $booking['guests']; ?> </p>
+                    </div>
+                    
+                    <div class="info-group">
+                        <label for="status" >Trạng thái:</label>
                         <p> <?php 
                             $text='';
                             $style='';
-                            if($booking['booking_status'] ==='Đã xác nhận'){
+                            if($booking['status'] ==='Đã xác nhận'){
                                 $text=  'Đã xác nhận';
                                 $style= 'status-actived';
-                            }else if($booking['booking_status'] === 'Chờ xác nhận'){
+                            }else if($booking['status'] === 'Chờ xác nhận'){
                                 $text=  'Chờ xác nhận';
                                 $style= 'status-pending';
-                            }else if($booking['booking_status'] === 'Chưa thanh toán'){
-                                $text=  'Chưa thanh toán';
-                                $style= 'status-pending';
-                            }else if($booking['booking_status'] === 'Đã hoàn tất'){
-                                $text=  'Đã thanh toán';
-                                $style= 'status-completed';
-                            }else if($booking['booking_status'] === 'Đã hủy'){
+                            }else if($booking['status'] === 'Đã hủy'){
                                 $text=  'Đã hủy';
                                 $style= 'status-cancel';
                             }echo "<span class='" . $style . "'>" . $text . "</span>";?> </p>
@@ -402,28 +500,52 @@ $total_pages = ceil($total_records / $limit);
                 <div class="detail-section ">
                     <h3>Thông tin khách hàng </h3>
                     <div class="info-group">
+                        <label for="customer_id">Mã Khách hàng:</label>
+                        <p> <?php echo $booking['customer_id']; ?> </p>
+                    </div>
+                    <div class="info-group">
                         <label for="customer_name">Tên Khách hàng:</label>
                         <p> <?php echo $booking['customer_name']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="date_checkin">Ngày nhận phòng:</label>
-                        <p> <?php echo $booking['date_checkin']; ?> </p>
+                        <label for="customer_email">Email:</label>
+                        <p> <?php echo $booking['customer_email']; ?> </p>
                     </div>
                     <div class="info-group">
-                        <label for="date_checkout">Ngày trả phòng:</label>
-                        <p> <?php echo $booking['date_checkout']; ?> </p>
-                    </div>
-                    <div class="info-group">
-                        <label for="booking_people">Số người:</label>
-                        <p> <?php echo $booking['booking_people']; ?> </p>
-                    </div>
-                    <div class="info-group">
-                        <label for="booking_price">Tổng số tiền(VNĐ):</label>
-                        <p> <?php echo $booking['booking_price']; ?> </p>
+                        <label for="customer_phone">Số điện thoại:</label>
+                        <p> <?php echo $booking['customer_phone']; ?> </p>
                     </div>
                     <div class="info-group">
                         <label for="note">Chú thích:</label>
                         <p> <?php echo $booking['note']; ?> </p>
+                    </div>
+                </div>
+                <div class="detail-section ">
+                    <h3>Thông tin thanh toán </h3>
+                    <div class="info-group">
+                        <label for="payment_method">Phương thức thanh toán:</label>
+                        <p> <?php echo $booking['payment_method']; ?> </p>
+                    </div>
+                    <div class="info-group">
+                        <label for="total_price">Tổng số tiền(VNĐ):</label>
+                        <p> <?php echo $booking['total_price']; ?> </p>
+                    </div>
+                    <div class="info-group">
+                        <label for="payment_status">Trạng thái thanh toán:</label>
+                        <p><?php 
+                            $text='';
+                            $style='';
+                            if($booking['payment_status'] ==='Đã thanh toán'){
+                                $text=  'Đã thanh toán';
+                                $style= 'status-completed';
+                            }else if($booking['payment_status'] === 'Chờ thanh toán'){
+                                $text=  'Chờ thanh toán';
+                                $style= 'status-pending';
+                            }echo "<span class='" . $style . "'>" . $text . "</span>";?>  </p>
+                    </div>
+                    <div class="info-group">
+                        <label for="payment_date">Ngày thanh toán:</label>
+                        <p> <?php echo $booking['payment_date']; ?> </p>
                     </div>
                 </div>
 
