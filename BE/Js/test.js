@@ -276,7 +276,7 @@ function showFormReview(formId, review_id = null) {
     if (formId === 'review-form') {
         showInternalForm(formId);
     } else if (formId === 'edit-form' && review_id) {
-        navigateToUrl(`home.php?page=reviews&action=edit_review`);
+        navigateToUrl(`home.php?page=reviews&action=edit_review&id=${review_id}`);
     }else if (formId === 'search-form') {
         navigateToUrl(`home.php?page=reviews&action=search_review&content=${search}`);
     } else if (formId === 'detail-form' && review_id) {
@@ -302,6 +302,118 @@ handlePopState('payment', 'payment-form');
 handlePopState('reviews', 'review-form'); 
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    var btnBulkPay = document.getElementById('btn-bulk-pay');
+    if (!btnBulkPay) return;
+
+    btnBulkPay.addEventListener('click', function () {
+        var checked = document.querySelectorAll('.row-checkbox:checked');
+        if (!checked || checked.length === 0) {
+            alert('Vui lòng chọn ít nhất 1 đơn đặt phòng để thanh toán.');
+            return;
+        }
+
+        if (checked.length > 1) {
+            if (!confirm('Bạn đã chọn ' + checked.length + ' đơn. Hệ thống sẽ xử lý đơn đầu tiên. Tiếp tục?')) {
+                return;
+            }
+        }
+
+        var bookingId = checked[0].value;
+        if (!bookingId) {
+            alert('Không lấy được mã đơn đặt phòng. Vui lòng thử lại.');
+            return;
+        }
+
+        var url = 'home.php?page=payment&action=action_payment&id=' + encodeURIComponent(bookingId);
+        window.location.href = url;
+    });
+});
+
+
+function showProfileTab(tab) {
+    document.getElementById('profile-info').classList.remove('active');
+    document.getElementById('profile-password').classList.remove('active');
+    document.getElementById('btn-info').classList.remove('active');
+    document.getElementById('btn-password').classList.remove('active');
+    if(tab === 'info') {
+        document.getElementById('profile-info').classList.add('active');
+        document.getElementById('btn-info').classList.add('active');
+    } else {
+        document.getElementById('profile-password').classList.add('active');
+        document.getElementById('btn-password').classList.add('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const btnEdit = document.getElementById('btn-edit-profile');
+    const btnCancel = document.getElementById('btn-cancel-update');
+    const profileForm = document.querySelector('.profile-form');
+    const updateForm = document.getElementById('updateProfileForm');
+    const profileInfoContainer = document.getElementById('profile-info');
+
+    if (btnEdit && updateForm && profileForm) {
+        btnEdit.addEventListener('click', function() {
+            profileForm.style.display = 'none';
+            updateForm.style.display = 'block';
+            updateForm.scrollIntoView({behavior: 'smooth'});
+            const firstInput = updateForm.querySelector('input, select, textarea');
+            if (firstInput) firstInput.focus();
+        });
+    }
+
+    if (btnCancel && updateForm && profileForm) {
+        btnCancel.addEventListener('click', function() {
+            updateForm.style.display = 'none';
+            profileForm.style.display = 'flex';
+            profileForm.scrollIntoView({behavior: 'smooth'});
+        });
+    }
+
+    if (updateForm) {
+        updateForm.addEventListener('submit', function() {
+            const saveBtn = updateForm.querySelector('button[type="submit"]');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Đang lưu...';
+            }
+        });
+    }
+
+    const changePassForm = document.getElementById('changePasswordForm');
+    if (changePassForm) {
+        changePassForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+            var oldPass = document.getElementById('old-password').value;
+            var newPass = document.getElementById('new-password').value;
+            var confirmPass = document.getElementById('confirm-password').value;
+            var msg = document.getElementById('password-message');
+            msg.style.color = "#dc3545";
+            if (newPass !== confirmPass) {
+                msg.textContent = "Mật khẩu mới và xác nhận không khớp!";
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'profile.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        msg.textContent = res.message;
+                        msg.style.color = res.success ? "#28a745" : "#dc3545";
+                        if (res.success) {
+                            changePassForm.reset();
+                        }
+                    } catch (e) {
+                        msg.textContent = "Có lỗi xảy ra!";
+                    }
+                }
+            };
+            xhr.send('action=change_password&old_password=' + encodeURIComponent(oldPass) + '&new_password=' + encodeURIComponent(newPass));
+        });
+    }
+});
 
 //-----Hiển thị thông báo sau khi thực hiện thay đổi trên DB----- 
 document.addEventListener('DOMContentLoaded', function() {
@@ -374,6 +486,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (page === 'user' && action === 'add_user' && status === 'exists') {
         showMessage('Mã khách hàng đã tồn tại. Vui lòng sử dụng mã khác.');
+    }
+
+     // Admin
+    if (page === 'admin') {
+        if (status === 'add_success') {
+            showMessage('Thêm quản trị viên mới thành công!');
+        } else if (status === 'add_error') {
+            showMessage('Thêm quản trị viên mới thất bại. Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+        if (status === 'delete_success') {
+            showMessage('Xóa quản trị viên thành công!');
+        } else if (status === 'delete_error') {
+            showMessage('Xóa quản trị viên thất bại! Kiểm tra lại thao tác xóa.');
+        }
+        if (status === 'update_success') {
+            showMessage('Cập nhật thông tin quản trị viên thành công!');
+        } else if (status === 'update_error') {
+            showMessage('Cập nhật thông tin quản trị viên thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+    }
+    if (page === 'admin' && action === 'add_admin' && status === 'exists') {
+        showMessage('Mã quản trị viên đã tồn tại. Vui lòng sử dụng mã khác.');
+    }
+
+     // Owner
+    if (page === 'owner') {
+        if (status === 'add_success') {
+            showMessage('Thêm chủ homestay thành công!');
+        } else if (status === 'add_error') {
+            showMessage('Thêm chủ homestay thất bại. Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+        if (status === 'delete_success') {
+            showMessage('Xóa chủ homestay thành công!');
+        } else if (status === 'delete_error') {
+            showMessage('Xóa chủ homestay thất bại! Kiểm tra lại thao tác xóa.');
+        }
+        if (status === 'update_success') {
+            showMessage('Cập nhật thông tin chủ homestay thành công!');
+        } else if (status === 'update_error') {
+            showMessage('Cập nhật thông tin chủ homestay thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
+        }
+    }
+    if (page === 'owner' && action === 'add_owner' && status === 'exists') {
+        showMessage('Mã chủ homestay đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
     // Homestay

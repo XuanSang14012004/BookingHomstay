@@ -68,6 +68,102 @@ if (isset($_POST['submit_user'])) {
 }
 ?>
 
+<?php
+include "../../config/connect.php";
+
+if (isset($_POST['submit_admin'])) {
+    $admin_id = $_POST['admin_id'];
+    $temp = $_POST['account_id'];
+    $account_id = ($temp == '' || $temp == null) ? "NULL" : (int)$temp;
+
+    $fullname = $_POST['fullname'];
+    $birthday = $_POST['birthday'];
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    $image = null;
+    if (isset($_FILES['image'])) {
+        $image = basename($_FILES['image']['name']);
+        $target_dir = "../../Images/";
+        $target_file = $target_dir . $image;
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+    }
+    if (!empty($image)) {
+        $sql = "UPDATE db_admin SET 
+                    account_id=$account_id,
+                    fullname='$fullname', 
+                    birthday='$birthday', 
+                    gender='$gender', 
+                    email='$email', 
+                    phone='$phone', 
+                    `address`='$address',
+                    `image`='$image'
+                WHERE admin_id='$admin_id'";
+    } else {
+        $sql = "UPDATE db_admin SET 
+                    account_id=$account_id,
+                    fullname='$fullname', 
+                    birthday='$birthday', 
+                    gender='$gender', 
+                    email='$email', 
+                    phone='$phone', 
+                    `address`='$address'
+                WHERE admin_id='$admin_id'";
+    }
+
+    $query = mysqli_query($conn, $sql);
+
+    if ($query && mysqli_affected_rows($conn) > 0) {
+        header("Location: ../home/home.php?page=admin&status=update_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=admin&status=update_error");
+        exit();
+    }
+}
+?>
+
+<?php
+include "../../config/connect.php";
+// ------------ Owner ------------
+if (isset($_POST['submit_owner'])) {
+    $owner_id = $_POST['owner_id'];
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
+    }
+    $fullname = $_POST['fullname'];
+    $birthday = $_POST['birthday'];
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    
+    $sql = "UPDATE db_owner SET 
+                account_id=$account_id,
+                fullname='$fullname', 
+                birthday='$birthday', 
+                gender='$gender', 
+                email='$email', 
+                phone='$phone', 
+                address='$address' 
+            WHERE owner_id='$owner_id'";
+            
+    $query = mysqli_query($conn, $sql);
+    if ($query&& mysqli_affected_rows($conn) > 0) {
+        header("Location: ../home/home.php?page=owner&status=update_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=owner&status=update_error");
+        exit();
+    }
+}
+?>
+
 
 <?php
 include "../../config/connect.php";
@@ -81,6 +177,12 @@ if (isset($_POST['submit_homestay'])) {
     $price = $_POST['price'];
     $checkin = $_POST['checkin'];
     $checkout = $_POST['checkout'];
+    $temp = $_POST['owner_id'];
+    if ($temp == '' || $temp == null) {
+        $owner_id = "NULL";
+    } else {
+        $owner_id = (int)$temp;
+    }
     $homestay_phone = $_POST['homestay_phone'];
     $homestay_email = $_POST['homestay_email'];
     $address = $_POST['address'];
@@ -94,6 +196,7 @@ if (isset($_POST['submit_homestay'])) {
         room_type='$room_type',
         `status`='$status',
         price='$price',
+        owner_id=$owner_id,
         homestay_phone='$homestay_phone',
         homestay_email='$homestay_email',
         `address`='$address',
@@ -202,9 +305,9 @@ include "../../config/connect.php";
 // ------------ Payment ------------
 $action = isset($_GET['action']) ? $_GET['action'] :'';
 if (isset($_POST['done_payment'])) {
-    $payment_id = $_POST['payment_id'];
+    $booking_id = $_POST['booking_id'];
     $payment_status = "Đã thanh toán";
-    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE payment_id = '$payment_id'";
+    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE booking_id = '$booking_id'";
     $query = mysqli_query($conn, $sql);
     if ($query) {
         header("Location: ../home/home.php?page=payment&status=success_payment");
@@ -216,20 +319,24 @@ if (isset($_POST['done_payment'])) {
 }
 
 if (isset($_POST['submit_payment'])) {
-    $payment_id = $_POST['payment_id'];
     $booking_id = $_POST['booking_id'];
-    $method = $_POST['method'];
-    $payment_price = $_POST['payment_price'];
-    $date = $_POST['date'];
+    $customer_name = $_POST['customer_name'];
+    $customer_email = $_POST['customer_email'];
+    $customer_phone = $_POST['customer_phone'];
+    $payment_method = $_POST['payment_method'];
+    $total_price = $_POST['total_price'];
+    $payment_date = $_POST['payment_date'];
     $payment_status = $_POST['payment_status'];
     
-    $sql = "UPDATE db_payment SET 
-                booking_id='$booking_id', 
-                method='$method', 
-                payment_price='$payment_price', 
-                date='$date', 
-                payment_status='$payment_status' 
-            WHERE payment_id='$payment_id'";
+    $sql = "UPDATE db_booking SET
+                customer_name ='$customer_name',
+                customer_email ='$customer_email',
+                customer_phone ='$customer_phone',
+                payment_method = '$payment_method',
+                total_price = '$total_price',
+                payment_date = '$payment_date',
+                payment_status = '$payment_status' 
+            WHERE booking_id='$booking_id'";
             
     $query = mysqli_query($conn, $sql);
     if ($query) {

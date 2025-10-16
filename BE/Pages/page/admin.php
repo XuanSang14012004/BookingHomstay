@@ -38,10 +38,27 @@ $pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
 if ($pagetable < 1) $pagetable = 1;
 $offset = ($pagetable - 1) * $limit;
 
-$total_result = $conn->query("SELECT COUNT(*) as total FROM db_admin");
-$total_row = $total_result->fetch_assoc();
-$total_records = $total_row['total'];
-$total_pages = ceil($total_records / $limit);
+if (isset($_GET['content']) && $_GET['content'] !== '') {
+    $search_query = trim($_GET['content']);
+    $search = "%".$search_query."%";
+    $count_sql = "SELECT COUNT(*) as total FROM db_admin WHERE admin_id LIKE '$search'
+        OR account_id LIKE '$search'
+        OR fullname LIKE '$search' 
+        OR birthday LIKE '$search' 
+        OR gender LIKE '$search' 
+        OR email LIKE '$search' 
+        OR phone LIKE '$search' 
+        OR address LIKE '$search'";
+    $total_result = $conn->query($count_sql);
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+} else {
+    $total_result = $conn->query("SELECT COUNT(*) as total FROM db_admin");
+    $total_row = $total_result->fetch_assoc();
+    $total_records = $total_row['total'];
+    $total_pages = ceil($total_records / $limit);
+}
 ?>
 <!-------------------------------- Giao diện chính ------------------------------------>
 <div class="form-container" id="admin-form" style="display:<?php echo $is_view_form ? 'block' : 'none'; ?>;"> 
@@ -61,6 +78,9 @@ $total_pages = ceil($total_records / $limit);
                 <label for="limit">Hiển thị</label>
                 <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
                 <input type="hidden" name="pagetable" value="1">
+                <?php if(isset($_GET['content'])): ?>
+                    <input type="hidden" name="content" value="<?= htmlspecialchars($_GET['content']) ?>">
+                <?php endif; ?>
                 <button type="submit">Xem</button>
             </form>
         </div>
@@ -98,7 +118,7 @@ $total_pages = ceil($total_records / $limit);
                                 OR birthday LIKE '$search' 
                                 OR gender LIKE '$search' 
                                 OR email LIKE '$search' 
-                                OR customer_phone LIKE '$search' 
+                                OR phone LIKE '$search' 
                                 OR address LIKE '$search'
                                 LIMIT $limit OFFSET $offset ";
                             $result = $conn->query($sql); 
@@ -140,22 +160,25 @@ $total_pages = ceil($total_records / $limit);
             </table>
         </div>
         <div class="pagination">
+            <?php
+                $contentParam = isset($_GET['content']) ? '&content='.urlencode($_GET['content']) : '';
+            ?>
             <?php if ($pagetable > 1): ?>
-                <a href="home.php?page=admin&pagetable&limit=<?= $limit ?>">&laquo;</a>
-                <a href="home.php?page=admin&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+                <a href="home.php?page=admin&pagetable&limit=<?= $limit . $contentParam ?>">&laquo;</a>
+                <a href="home.php?page=admin&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit . $contentParam ?>">&lt;</a>
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                 <?php if ($i == $pagetable): ?>
                     <span><?= $i ?></span>
                 <?php else: ?>
-                    <a href="home.php?page=admin&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                    <a href="home.php?page=admin&pagetable=<?= $i ?>&limit=<?= $limit . $contentParam ?>"><?= $i ?></a>
                 <?php endif; ?>
             <?php endfor; ?>
 
             <?php if ($pagetable < $total_pages): ?>
-                <a href="home.php?page=admin&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
-                <a href="home.php?page=admin&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+                <a href="home.php?page=admin&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit . $contentParam ?>"> &gt;</a>
+                <a href="home.php?page=admin&pagetable=<?= $total_pages ?>&limit=<?= $limit . $contentParam ?>"> &raquo;</a>
             <?php endif; ?>
         </div>
     </div>
@@ -169,53 +192,55 @@ $total_pages = ceil($total_records / $limit);
         <div class="toolbar">
            <a href="#" onclick="window.history.back();" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
         </div>
-        <h2>Thêm khách hàng mới </h2>
-        <form action="../modules/add_function.php" method="POST">
-            <div class="form-section">
-                <h3>Thông tin cá nhân</h3>
-                <div class="form-group">
-                    <label for="account_id">Mã tài khoản:</label>
-                    <input type="number" id="account_id" name="account_id" placeholder="Bỏ qua nếu khách hàng chưa có tài khoản">
+        <h2>Thêm quản trị viên mới</h2>
+        <form action="../modules/add_function.php" method="POST" enctype="multipart/form-data">
+            <div class="form-section" style="display: flex; gap: 32px;">
+                <div style="flex:1;">
+                    <h3>Thông tin cá nhân</h3>
+                    <div class="form-group">
+                        <label for="account_id">Mã tài khoản:</label>
+                        <input type="number" id="account_id" name="account_id" placeholder="Nhập mã tài khoản (nếu có)">
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname">Họ và Tên:</label>
+                        <input type="text" id="fullname" name="fullname" placeholder="Nhập họ tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Hình ảnh đại diện:</label>
+                        <input type="file" id="image" name="image" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Ngày sinh:</label>
+                        <input type="date" id="birthday" name="birthday" placeholder="dd/mm/yyyy" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Giới tính:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="" disabled selected>Chọn giới tính</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="fullname">Họ và Tên:</label>
-                    <input type="text" id="fullname" name="fullname" required>
-                </div>
-                <div class="form-group">
-                    <label for="image">Hình ảnh đại diện:</label>
-                    <input type="file" id="image" name="image" multiple accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label for="birthday">Ngày sinh:</label>
-                    <input type="date" id="birthday" name="birthday" required>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Giới tính :</label>
-                    <select id="gender" name="gender" required>
-                        <option value="Nam">Nam</option>
-                        <option value="Nữ" >Nữ</option>
-                        <option value="Khác" >Khác</option>
-                    </select>
+                <div style="flex:1;">
+                    <h3>Thông tin liên hệ</h3>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Nhập email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại:</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ:</label>
+                        <textarea id="address" name="address" rows="2" placeholder="Nhập địa chỉ" required></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="form-section">
-                <h3>Thông tin liên hệ </h3>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Số điện thoại:</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Địa chỉ:</label>
-                    <textarea id="address" name="address" rows="3" required></textarea>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" name="submit_admin" class="add-btn">Thêm khách hàng</button>
+            <div class="form-actions" style="text-align:right;">
+                <button type="submit" name="submit_admin" class="add-btn">Thêm quản trị viên</button>
                 <button type="reset" class="cancel-btn">Hủy</button>
             </div>
         </form>
@@ -223,140 +248,149 @@ $total_pages = ceil($total_records / $limit);
 </div>
 
 <!-------------------------------- Giao diện cập nhật ------------------------------------>
-<div class="form-container" id="update" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
-    <?php if ($user) { ?>
+<div class="form-container" id="update-form" style="display:<?php echo $is_edit_form ? 'block' : 'none'; ?>;">
+    <?php if ($admin) { ?>
     <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=user" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="home.php?page=admin" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="detail-btn" title="Chi tiết" onclick="showFormUser('detail-form', '<?php echo $user['customer_id']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $user['customer_id']; ?>')"></i> Xóa thông tin</button>
+                <button class="detail-btn" title="Chi tiết" onclick="showFormAdmin('detail-form', '<?php echo $admin['admin_id']; ?>')"><i class='bx bx-detail'></i> Xem thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteAdmin('<?php echo $admin['admin_id']; ?>')"></i> Xóa thông tin</button>
             </div>
         </div>
-        <h2>Cập Nhật Thông Tin Khách Hàng</h2>
-        
+        <h2>Cập Nhật Thông Tin Quản trị viên</h2>
         <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="customer_id" value="<?php echo $user['customer_id']; ?>">
-
-            <div class="form-section">
-                <h3>Thông tin cá nhân</h3>
-                <div class="form-group">
-                    <label for="account_id">Mã tài khoản:</label>
-                    <select id="account_id" name="account_id" >
-                        <option value="">Khách hàng chưa có tài khoản</option>
+            <input type="hidden" name="admin_id" value="<?php echo $admin['admin_id']; ?>">
+            <div class="form-section" style="display: flex; gap: 32px;">
+                <div style="flex:1;">
+                    <h3>Thông tin cá nhân</h3>
+                    <div class="form-group">
+                        <label for="account_id">Mã tài khoản:</label>
+                        <select id="account_id" name="account_id">
+                            <option value="">Quản trị viên chưa có tài khoản</option>
                             <?php
-                                $user_sql = "SELECT account_id, fullname FROM db_account";
-                                $user_result = mysqli_query($conn, $user_sql);
+                                $admin_sql = "SELECT account_id, fullname FROM db_account";
+                                $admin_result = mysqli_query($conn, $admin_sql);
 
-                                if ($user_result && mysqli_num_rows($user_result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($user_result)) {
-                                        $selected = ($row['account_id'] == $user['account_id']) ? 'selected' : '';
+                                if ($admin_result && mysqli_num_rows($admin_result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($admin_result)) {
+                                        $selected = ($row['account_id'] == $admin['account_id']) ? 'selected' : '';
                                         echo "<option value='{$row['account_id']}' $selected>{$row['account_id']} - {$row['fullname']}</option>";
                                     }
                                 } else {
-                                    echo "<option value=''>Khách hàng chưa có tài khoản</option>";
+                                    echo "<option value=''>Chưa có tài khoản nào của quản trị viên</option>";
                                 }
                             ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname">Họ và Tên:</label>
+                        <input type="text" id="fullname" name="fullname" value="<?php echo $admin['fullname']; ?>" placeholder="Nhập họ tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Hình ảnh hiện tại:</label>
+                        <img src="../../Images/<?php echo $admin['image']; ?>" alt="Hình ảnh đại diện" style="width: 120px; height: auto; display: block; margin-bottom: 10px;">
+                        <label for="image">Chọn ảnh mới:</label>
+                        <input type="file" id="image" name="image" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Ngày sinh:</label>
+                        <input type="date" id="birthday" name="birthday" value="<?php echo $admin['birthday']; ?>" placeholder="dd/mm/yyyy" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Giới tính:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="Nam" <?php echo ($admin['gender'] == 'Nam') ? 'selected' : ''; ?>>Nam</option>
+                            <option value="Nữ" <?php echo ($admin['gender'] == 'Nữ') ? 'selected' : ''; ?>>Nữ</option>
+                            <option value="Khác"<?php echo ($admin['gender'] == 'Khác') ? 'selected' : ''; ?>>Khác</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="fullname">Họ và Tên:</label>
-                    <input type="text" id="fullname" name="fullname" value="<?php echo $user['fullname']; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="birthday">Ngày sinh:</label>
-                    <input type="date" id="birthday" name="birthday" value="<?php echo $user['birthday']; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Giới tính :</label>
-                    <select id="gender" name="gender" required>
-                        <option value="Nam" <?php echo ($user['gender'] == 'Nam') ? 'selected' : ''; ?>>Nam</option>
-                        <option value="Nữ" <?php echo ($user['gender'] == 'Nữ') ? 'selected' : ''; ?>>Nữ</option>
-                        <option value="Khác"<?php echo ($user['gender'] == 'Khác') ? 'selected' : ''; ?>>Khác</option>
-                    </select>
+                <div style="flex:1;">
+                    <h3>Thông tin liên hệ</h3>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="<?php echo $admin['email']; ?>" placeholder="Nhập email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại:</label>
+                        <input type="tel" id="phone" name="phone" value="<?php echo $admin['phone']; ?>" placeholder="Nhập số điện thoại" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ:</label>
+                        <textarea id="address" name="address" rows="2" placeholder="Nhập địa chỉ" required><?php echo $admin['address']; ?></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="form-section">
-                <h3>Thông tin liên hệ </h3>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Số điện thoại:</label>
-                    <input type="tel" id="phone" name="phone" value="<?php echo $user['phone']; ?>" required>
-                </div>
-                <div class="form-group"> 
-                    <label for="address">Địa chỉ:</label>
-                    <input type="text" id="address" name="address" rows="3" value="<?php echo $user['address']; ?>" required></input>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button type="submit" name="submit_user" class="edit-btn">Cập nhật thông tin</button>
+            <div class="form-actions" style="text-align:right;">
+                <button type="submit" name="submit_admin" class="edit-btn">Cập nhật thông tin</button>
                 <button type="reset" class="cancel-btn">Hủy</button>
             </div>
         </form>
     </div>
     <?php } else if ($is_edit_form) { ?>
-        <p>Không tìm thấy thông tin khách hàng để sửa.</p>
+        <p>Không tìm thấy thông tin quản trị viên để sửa.</p>
     <?php } ?>
 </div>
 
 <!-------------------------------- Giao diện thông tin chi tiết ------------------------------------>
-<div class="form-container"id="detail" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
-    <?php if ($user) { ?>
+<div class="form-container"id="detail-form" style="display:<?php echo $is_detail_form ? 'block' : 'none'; ?>;">
+    <?php if ($admin) { ?>
 <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <div class="toolbar">
-            <a href="home.php?page=user" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
+            <a href="home.php?page=admin" class="back-btn"><i class='bx bx-arrow-back'></i> Quay lại</a>
             <div class="action-buttons">
-                <button class="edit-btn" title="Sửa" onclick="showFormUser('edit-form', '<?php echo $user['customer_id']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
-                <button class="delete-btn" title="Xóa" onclick="deleteUser('<?php echo $user['customer_id']; ?>')"></i> Xóa thông tin</button>
+                <button class="edit-btn" title="Sửa" onclick="showFormAdmin('edit-form', '<?php echo $admin['admin_id']; ?>')"><i class='bx bx-edit-alt'></i> Sửa thông tin</button>
+                <button class="delete-btn" title="Xóa" onclick="deleteAdmin('<?php echo $admin['admin_id']; ?>')"></i> Xóa thông tin</button>
             </div>
         </div>
         
-        <h2>Chi tiết thông tin khách hàng</h2>
-
-        <div class="detail-grid">
-            <div class="detail-section">
+        <h2>Chi tiết thông tin quản trị viên</h2>
+        <div class="detail-flex" style="display: flex; gap: 40px; align-items: flex-start;">
+            <div class="detail-section" style="flex:2;">
                 <h3>Thông tin cá nhân</h3>
                 <div class="info-group">
-                    <label for="customer_id">Mã Khách hàng:</label>
-                    <p><?php echo $user['customer_id']; ?></p>
+                    <label for="admin_id">Mã quản trị viên:</label>
+                    <p><?php echo $admin['admin_id']; ?></p>
                 </div>
                 <div class="info-group">
                     <label for="fullname">Họ và Tên:</label>
-                    <p><?php echo $user['fullname']; ?></p>
+                    <p><?php echo $admin['fullname']; ?></p>
                 </div>
                 <div class="info-group">
                     <label for="birthday">Ngày sinh:</label>
-                    <p><?php echo $user['birthday']; ?></p>
+                    <p><?php echo $admin['birthday']; ?></p>
                 </div>
                 <div class="info-group">
                     <label for="gender">Giới tính :</label>
-                    <p><?php echo $user['gender']; ?></p>
+                    <p><?php echo $admin['gender']; ?></p>
                 </div>
-            </div>
-            <div class="detail-section">
                 <h3>Thông tin liên hệ </h3>
                 <div class="info-group">
                     <label for="email">Email:</label>
-                    <p><?php echo $user['email']; ?></p>
+                    <p><?php echo $admin['email']; ?></p>
                 </div>
                 <div class="info-group">
                     <label for="phone">Số điện thoại:</label>
-                    <p><?php echo $user['phone']; ?></p>
+                    <p><?php echo $admin['phone']; ?></p>
                 </div>
                 <div class="info-group"> 
                     <label for="address">Địa chỉ:</label>
-                    <p><?php echo $user['address']; ?></p>
+                    <p><?php echo $admin['address']; ?></p>
+                </div>
+            </div>
+            <div class="detail-section" style="flex:1; display: flex; flex-direction: column; align-items: center;">
+                <h3>Ảnh đại diện</h3>
+                <div class="info-group" style="text-align:center;">
+                    <img src="../../Images/<?php echo $admin['image']; ?>" alt="Hình ảnh đại diện" style="max-width:220px; width:100%; height:auto; border-radius:8px; border:1px solid #eee; box-shadow:0 2px 8px #eee;">
                 </div>
             </div>
         </div>
     </div>
     <?php } else if ($is_detail_form) { ?>
-        <p>Không tìm thấy thông tin khách hàng.</p>
+        <p>Không tìm thấy thông tin quản trị viên.</p>
     <?php } ?>
 </div>
-<script src="../../Js/test.js"></script> 
+<script src="../../Js/test.js"></script>

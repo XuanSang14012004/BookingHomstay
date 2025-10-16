@@ -86,27 +86,40 @@ if (isset($_POST['submit_admin'])) {
     $birthday = $_POST['birthday'];          
     $gender = $_POST['gender']; 
     $email = $_POST['email'];    
-    $customer_phone = $_POST['phone']; 
+    $phone = $_POST['phone']; 
     $address = $_POST['address'];  
     
-    $image = basename($_FILES['image']['name']); 
+    $image = null;
     $target_dir = "../../Images/";
-    $target_file = $target_dir . $image;
-    
-    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)){
-    $sql = "INSERT INTO db_admin( account_id,fullname, birthday, gender, email, phone, `address`,`image`)
-    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$customer_phone','$address','$image')";
+
+    if (isset($_FILES['image'])) {
+        $image = basename($_FILES['image']['name']);
+        $target_file = $target_dir . $image;
+
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+        } else {
+            $image = null;
+        }
     }
-    $query = mysqli_query($conn, $sql);
-    
-    if ($query) {
-        header("Location: ../home/home.php?page=admin&status=add_success");
-        exit();
+    if ($image) {
+        $sql = "INSERT INTO db_admin (account_id, fullname, birthday, gender, email, phone, address, image)
+                VALUES ($account_id, '$fullname', '$birthday', '$gender', '$email', '$phone', '$address', '$image')";
     } else {
-        header("Location: ../home/home.php?page=admin&status=add_error");
-        exit();
+        $sql = "INSERT INTO db_admin (account_id, fullname, birthday, gender, email, phone, address)
+                VALUES ($account_id, '$fullname', '$birthday', '$gender', '$email', '$phone', '$address')";
     }
 
+    if (!empty($sql)) {
+        $query = mysqli_query($conn, $sql);
+
+        if ($query) {
+            header("Location: ../home/home.php?page=admin&status=add_success");
+            exit();
+        } else {
+            header("Location: ../home/home.php?page=admin&status=add_error");
+            exit();
+        }
+    } 
 }
 ?>
 
@@ -115,9 +128,9 @@ if (isset($_POST['submit_admin'])) {
 include "../../config/connect.php";
 
 $sql_owner = "SELECT * FROM db_owner";
-$result_owner = mysqli_query($conn, $sql_ower);
+$result_owner = mysqli_query($conn, $sql_owner);
 
-if (isset($_POST['submit_user'])) {
+if (isset($_POST['submit_owner'])) {
     $temp = $_POST['account_id'];
     if ($temp == '' || $temp == null) {
         $account_id = "NULL";
@@ -128,19 +141,19 @@ if (isset($_POST['submit_user'])) {
     $birthday = $_POST['birthday'];          
     $gender = $_POST['gender']; 
     $email = $_POST['email'];    
-    $customer_phone = $_POST['phone']; 
+    $phone = $_POST['phone']; 
     $address = $_POST['address'];   
     
-    $sql = "INSERT INTO db_customer( account_id,fullname, birthday, gender, email, phone, address)
-    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$customer_phone','$address')";
+    $sql = "INSERT INTO db_owner( account_id,fullname, birthday, gender, email, phone, address)
+    VALUES ($account_id,'$fullname','$birthday','$gender','$email','$phone','$address')";
     
     $query = mysqli_query($conn, $sql);
     
     if ($query) {
-        header("Location: ../home/home.php?page=user&status=add_success");
+        header("Location: ../home/home.php?page=owner&status=add_success");
         exit();
     } else {
-        header("Location: ../home/home.php?page=user&status=add_error");
+        header("Location: ../home/home.php?page=owner&status=add_error");
         exit();
     }
 
@@ -161,6 +174,12 @@ if (isset($_POST['submit_homestay'])) {
     $price = $_POST['price'];
     $checkin = $_POST['checkin'];
     $checkout = $_POST['checkout'];
+    $temp = $_POST['owner_id'];
+    if ($temp == '' || $temp == null) {
+        $owner_id = "NULL";
+    } else {
+        $owner_id = (int)$temp;
+    }
     $homestay_phone = $_POST['homestay_phone'];
     $homestay_email = $_POST['homestay_email'];
     $homestay_address = $_POST['address'];
@@ -170,19 +189,19 @@ if (isset($_POST['submit_homestay'])) {
     $rating = $_POST['rating'];
     $reviews_count = $_POST['reviews_count'];
     
-    $image = basename($_FILES['img']['name']); 
+    $image ="../images/". basename($_FILES['img']['name']); 
     $target_dir = "../../../FE/images/";
     $target_file = $target_dir . $image;
 
-    $image1 = basename($_FILES['img1']['name']); 
+    $image1 = "../images/". basename($_FILES['img1']['name']); 
     $target_dir = "../../../FE/images/";
     $target_file1 = $target_dir . $image1;
 
-    $image2 = basename($_FILES['img2']['name']); 
+    $image2 = "../images/".basename($_FILES['img2']['name']); 
     $target_dir = "../../../FE/images/";
     $target_file2 = $target_dir . $image2;
 
-    $image3 = basename($_FILES['img3']['name']); 
+    $image3 = "../images/".basename($_FILES['img3']['name']); 
     $target_dir = "../../../FE/images/";
     $target_file3 = $target_dir . $image3;
 
@@ -190,8 +209,8 @@ if (isset($_POST['submit_homestay'])) {
         &&(move_uploaded_file($_FILES["img1"]["tmp_name"], $target_file1))
         &&(move_uploaded_file($_FILES["img2"]["tmp_name"], $target_file2))
         &&(move_uploaded_file($_FILES["img3"]["tmp_name"], $target_file3))) { 
-        $sql = "INSERT INTO db_homestay( homestay_name, room_type, `status`, price, checkin, checkout, homestay_phone, homestay_email, `address`, `description`,guests,`policy`, img, img1, img2, img3, rating, reviews_count)
-        VALUES ('$homestay_name','$room_type','$status','$price','$checkin','$checkout','$homestay_phone','$homestay_email','$homestay_address','$description','$guests','$policy','$image','$image1','$image2','$image3','$rating','$reviews_count')";
+        $sql = "INSERT INTO db_homestay( homestay_name, room_type, `status`, price, checkin, checkout, homestay_phone,owner_id, homestay_email, `address`, `description`,guests,`policy`, img, img1, img2, img3, rating, reviews_count)
+        VALUES ('$homestay_name','$room_type','$status','$price','$checkin','$checkout','$homestay_phone',$owner_id,'$homestay_email','$homestay_address','$description','$guests','$policy','$image','$image1','$image2','$image3','$rating','$reviews_count')";
         $query = mysqli_query($conn, $sql);
         
         if ($query) {

@@ -44,6 +44,19 @@ if ($action === 'delete_user') {
 // ---------------------- Xóa admin -------------------
 if ($action === 'delete_admin') {
     $delete_admin = isset($_GET['id']) ? $_GET['id'] : null;
+    if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+
+    $sql_select = "SELECT `image` FROM db_admin WHERE admin_id = $id";
+    $result = mysqli_query($conn, $sql_select);
+    $row = mysqli_fetch_assoc($result);
+    if ($row) {
+        $image_path = '../../Images/' . $row['image'];
+        if (file_exists($image_path) && is_file($image_path)) {
+            unlink($image_path);
+        }
+    }
+}
     if ($delete_admin) {
         $sql = "DELETE FROM db_admin WHERE admin_id = ?";
         
@@ -64,6 +77,7 @@ if ($action === 'delete_admin') {
 // ---------------------- Xóa owner -------------------
 if ($action === 'delete_owner') {
     $delete_owner = isset($_GET['id']) ? $_GET['id'] : null;
+
     if ($delete_owner) {
         $sql = "DELETE FROM db_owner WHERE owner_id = ?";
         

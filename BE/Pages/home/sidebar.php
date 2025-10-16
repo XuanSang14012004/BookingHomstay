@@ -19,19 +19,19 @@
         </li>
         <li class="<?= ($page == 'admin') ? 'active' : '' ?>">
             <a href="home.php?page=admin">
-                <i class='bx bx-user'></i>
+                <i class='bx bx-user-pin' ></i>
                 <span class="text">Quản lí quản trị viên</span>
             </a>
         </li>
         <li class="<?= ($page == 'user') ? 'active' : '' ?>">
             <a href="home.php?page=user">
-                <i class='bx bx-user'></i>
+                <i class='bx bx-user-plus'></i>
                 <span class="text">Quản lí khách hàng</span>
             </a>
         </li>
         <li class="<?= ($page == 'owner') ? 'active' : '' ?>">
             <a href="home.php?page=owner">
-                <i class='bx bx-user'></i>
+                <i class='bx bx-user-voice' ></i>
                 <span class="text">Quản lí chủ homestay</span>
             </a>
         </li>

@@ -28,6 +28,10 @@ if (($is_edit_form || $is_detail_form) && $review_id) {
         $review = mysqli_fetch_assoc($result);
     }
 }
+$where = [];
+if (isset($_GET['status_review']) && $_GET['status_review'] !== '') $where[] = "status_review = '".mysqli_real_escape_string($conn, $_GET['status_review'])."'";
+$where_sql = $where ? 'WHERE '.implode(' AND ', $where) : '';
+
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
 if ($limit <= 0) $limit = 10;
 
@@ -35,7 +39,8 @@ $pagetable = isset($_GET['pagetable']) ? (int)$_GET['pagetable'] : 1;
 if ($pagetable < 1) $pagetable = 1;
 $offset = ($pagetable - 1) * $limit;
 
-$total_result = $conn->query("SELECT COUNT(*) as total FROM db_review");
+$count_sql = "SELECT COUNT(*) as total FROM db_review $where_sql";
+$total_result = $conn->query($count_sql);
 $total_row = $total_result->fetch_assoc();
 $total_records = $total_row['total'];
 $total_pages = ceil($total_records / $limit);
@@ -45,6 +50,21 @@ $total_pages = ceil($total_records / $limit);
     <?php include "../home/header_content.php"; ?>
     <div class="management-container">
         <h2>Quản lý Đánh giá</h2>
+        <div class="filter-bar">
+            <a href="home.php?page=reviews<?=
+                isset($_GET['status_review']) ? '&status_review='.urlencode($_GET['status_review']) : ''
+            ?>" title="Lọc dữ liệu">
+                <i class='bx bx-filter'></i>
+            </a>
+            <form class="filter-form" method="get">
+                <input type="hidden" name="page" value="reviews">
+                <select name="status_review" onchange="this.form.submit()">
+                    <option value="">-- Trạng thái đánh giá --</option>
+                    <option value="Đã phản hồi" <?= (isset($_GET['status_review']) && $_GET['status_review']=='Đã phản hồi')?'selected':''; ?>>Đã phản hồi</option>
+                    <option value="Chưa phản hồi" <?= (isset($_GET['status_review']) && $_GET['status_review']=='Chưa phản hồi')?'selected':''; ?>>Chưa phản hồi</option>
+                </select>
+            </form>
+        </div>
         <div class="toolbar">
             <div class="search-box">
                 <input type="text" class="search" id="search" name="timkiem" placeholder="Tìm kiếm đánh giá...">
@@ -57,6 +77,9 @@ $total_pages = ceil($total_records / $limit);
                 <label for="limit">Hiển thị</label>
                 <input type="number" name="limit" id="limit" min="1" value="<?= $limit ?>">
                 <input type="hidden" name="pagetable" value="1">
+                <?php if(isset($_GET['content'])): ?>
+                    <input type="hidden" name="content" value="<?= htmlspecialchars($_GET['content']) ?>">
+                <?php endif; ?>
                 <button type="submit">Xem</button>
             </form>
         </div>
@@ -84,26 +107,29 @@ $total_pages = ceil($total_records / $limit);
                 </thead>
                 <tbody>
                     <?php
-                    if (isset($_GET['content']) ? $_GET['content'] : '') {
+                    if (isset($_GET['content']) && $_GET['content'] !== '') {
                         $search_query = trim($_GET['content']);
-                        $search = "%$search_query%";
+                        $search = "%".$conn->real_escape_string($search_query)."%";
 
-                        $sql = "SELECT * FROM db_review JOIN db_booking ON db_review.booking_id = db_booking.booking_id  WHERE review_id LIKE '$search' 
-                        OR customer_id LIKE '$search' 
-                        OR homestay_id LIKE '$search'
-                        OR db_review.booking_id LIKE '$search'  
-                        OR customer_name LIKE '$search'
-                        OR content_review LIKE '$search'
-                        OR content_feedback LIKE '$search'   
-                        OR rating LIKE '$search' 
-                        OR status_review LIKE '$search'
-                        OR update_at LIKE '$search'  
-                        LIMIT $limit OFFSET $offset";
+                        $search_where = "(review_id LIKE '$search' 
+                            OR customer_id LIKE '$search' 
+                            OR homestay_id LIKE '$search'
+                            OR db_review.booking_id LIKE '$search'  
+                            OR customer_name LIKE '$search'
+                            OR review LIKE '$search'
+                            OR content_feedback LIKE '$search'   
+                            OR rating LIKE '$search' 
+                            OR status_review LIKE '$search'
+                            OR update_at LIKE '$search')";
+                        $full_where = $where ? $search_where . " AND " . implode(" AND ", $where) : $search_where;
+                        $sql = "SELECT * FROM db_review JOIN db_booking ON db_review.booking_id = db_booking.booking_id WHERE $full_where LIMIT $limit OFFSET $offset";
                         $result = $conn->query($sql);
-                    }else{
-                        $result = $conn->query("SELECT * FROM db_review  
-                        JOIN db_booking ON db_review.booking_id = db_booking.booking_id 
-                        LIMIT $limit OFFSET $offset");
+                    } else if ($where_sql) {
+                        $sql = "SELECT * FROM db_review JOIN db_booking ON db_review.booking_id = db_booking.booking_id $where_sql LIMIT $limit OFFSET $offset";
+                        $result = $conn->query($sql);
+                    } else {
+                        $sql = "SELECT * FROM db_review JOIN db_booking ON db_review.booking_id = db_booking.booking_id LIMIT $limit OFFSET $offset";
+                        $result = $conn->query($sql);
                     }
                     if ($result && mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -113,7 +139,7 @@ $total_pages = ceil($total_records / $limit);
                             <td><?php echo $row['booking_id'] ?></td>
                             <td><?php echo $row['homestay_id'] ?></td>
                             <td><?php echo $row['customer_name'] ?></td>
-                            <td class="truncate-text"><?php echo $row['content_review'] ?></td>
+                            <td class="truncate-text"><?php echo $row['review'] ?></td>
                             <td><?php echo $row['rating'] ?></td>
                             <td><?php echo $row['created_at'] ?></td>
                             <td class="truncate-text"><?php echo $row['content_feedback'] ?></td>
@@ -137,22 +163,25 @@ $total_pages = ceil($total_records / $limit);
             </table>
         </div>
         <div class="pagination">
+            <?php
+                $contentParam = isset($_GET['content']) ? '&content='.urlencode($_GET['content']) : '';
+            ?>
             <?php if ($pagetable > 1): ?>
-                <a href="home.php?page=reviews&pagetable&limit=<?= $limit ?>">&laquo;</a>
-                <a href="home.php?page=reviews&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit ?>">&lt;</a>
+                <a href="home.php?page=reviews&pagetable&limit=<?= $limit . $contentParam ?>">&laquo;</a>
+                <a href="home.php?page=reviews&pagetable=<?= $pagetable-1 ?>&limit=<?= $limit . $contentParam ?>">&lt;</a>
             <?php endif; ?>
 
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                 <?php if ($i == $pagetable): ?>
                     <span><?= $i ?></span>
                 <?php else: ?>
-                    <a href="home.php?page=reviews&pagetable=<?= $i ?>&limit=<?= $limit ?>"><?= $i ?></a>
+                    <a href="home.php?page=reviews&pagetable=<?= $i ?>&limit=<?= $limit . $contentParam ?>"><?= $i ?></a>
                 <?php endif; ?>
             <?php endfor; ?>
 
             <?php if ($pagetable < $total_pages): ?>
-                <a href="home.php?page=reviews&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit ?>"> &gt;</a>
-                <a href="home.php?page=reviews&pagetable=<?= $total_pages ?>&limit=<?= $limit ?>"> &raquo;</a>
+                <a href="home.php?page=reviews&pagetable=<?= $pagetable+1 ?>&limit=<?= $limit . $contentParam ?>"> &gt;</a>
+                <a href="home.php?page=reviews&pagetable=<?= $total_pages ?>&limit=<?= $limit . $contentParam ?>"> &raquo;</a>
             <?php endif; ?>
         </div>  
     </div>
@@ -173,57 +202,61 @@ $total_pages = ceil($total_records / $limit);
             <h2>Phản hồi đánh giá</h2>
             <form action="../modules/update_function.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="review_id" value="<?php echo $review['review_id']; ?>">
-
-                <div class="form-section">
-                    <h3>Thông tin bài đánh giá</h3>
-                    <div class="info-group">
-                        <label for="review_id">Mã đánh giá:</label>
-                        <p><?php echo $review['review_id']; ?></p>
+                <div class="form-section" style="display: flex; gap: 32px;">
+                    <div style="flex:1;">
+                        <h3>Thông tin bài đánh giá</h3>
+                        <div class="info-group">
+                            <label for="review_id">Mã đánh giá:</label>
+                            <p><?php echo $review['review_id']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="booking_id">Mã đơn đặt phòng:</label>
+                            <p><?php echo $review['booking_id']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="homestay_id">Mã homestay:</label>
+                            <p><?php echo $review['homestay_id']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="customer_name">Tên khách hàng:</label>
+                            <p><?php echo $review['customer_name']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="content_review">Nội dung đánh giá:</label>
+                            <p><?php echo $review['review']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="rating">Điểm đánh giá:</label>
+                            <p><?php echo $review['rating']; ?></p>
+                        </div>
+                        <div class="info-group">
+                            <label for="created_at">Thời gian gửi:</label>
+                            <p><?php echo $review['created_at']; ?></p>
+                        </div>
                     </div>
-                    <div class="info-group">
-                        <label for="booking_id">Mã đơn đặt phòng:</label>
-                        <p><?php echo $review['booking_id']; ?></p>
+                    <div style="flex:1;">
+                        <h3>Phản hồi</h3>
+                        <div class="form-group">
+                            <label for="content_feedback">Nội dung phản hồi:</label>
+                            <input type="text" id="content_feedback" name="content_feedback" placeholder="Nhập nội dung phản hồi">
+                        </div>
+                        <div class="form-group">
+                            <label for="status_review">Trạng thái:</label>
+                            <select id="status_review" name="status_review">
+                                <option value="Đã phản hồi" <?php echo ($review['status_review'] == 'Đã phản hồi') ? 'selected' : ''; ?>>Đã phản hồi</option>
+                                <option value="Chưa phản hồi" <?php echo ($review['status_review'] == 'Chờ phản hồi') ? 'selected' : ''; ?>>Chưa phản hồi</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="info-group">
-                        <label for="homestay_id">Mã homestay:</label>
-                        <p><?php echo $review['homestay_id']; ?></p>
-                    </div>
-                    <div class="info-group">
-                        <label for="customer_name">Tên khách hàng:</label>
-                        <p><?php echo $review['customer_name']; ?></p>
-                    </div>
-                    <div class="info-group">
-                        <label for="content_review">Nội dung đánh giá:</label>
-                        <p><?php echo $review['content_review']; ?></p>
-                    </div>
-                    <div class="info-group">
-                        <label for="rating">Điểm đánh giá:</label>
-                        <p><?php echo $review['rating']; ?></p>
-                    </div>
-                    <div class="info-group">
-                        <label for="created_at">Thời gian gửi:</label>
-                        <p><?php echo $review['created_at']; ?></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="content_feedback">Nội dung phản hồi:</label>
-                        <input type="text" id="content_feedback" name="content_feedback">
-                    </div>
-                    <div class="form-group">
-                        <label for="status_review">Trạng thái:</label>
-                        <select id="status_review" name="status_review">
-                            <option value="Đã phản hồi" <?php echo ($review['status_review'] == 'Đã phản hồi') ? 'selected' : ''; ?>>Đã phản hồi</option>
-                            <option value="Chưa phản hồi" <?php echo ($review['status_review'] == 'Chờ phản hồi') ? 'selected' : ''; ?>>Chưa phản hồi</option>
-                        </select>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" name="submit_review" class="edit-btn">Cập nhật phản hồi</button>
-                        <button type="reset" class="cancel-btn">Hủy</button>
-                    </div>
+                </div>
+                <div class="form-actions" style="text-align:right;">
+                    <button type="submit" name="submit_review" class="edit-btn">Cập nhật phản hồi</button>
+                    <button type="reset" class="cancel-btn">Hủy</button>
                 </div>
             </form>
         </div>
     <?php } else if ($is_edit_form) { ?>
-        <p>Không tìm thấy thông tin đánh giá để duyệt.</p>
+        <p>Không tìm thấy thông tin đánh giá để phản hồi.</p>
     <?php } ?>
 </div>
 
@@ -263,7 +296,7 @@ $total_pages = ceil($total_records / $limit);
                     </div>
                     <div class="info-group">
                         <label for="content_review">Nội dung đánh giá:</label>
-                        <p><?php echo $review['content_review']; ?></p>
+                        <p><?php echo $review['review']; ?></p>
                     </div>
                     <div class="info-group">
                         <label for="rating">Điểm đánh giá:</label>
@@ -286,7 +319,7 @@ $total_pages = ceil($total_records / $limit);
                                 $text=  'Đã duyệt';
                                 $style= 'status-completed';
                             }else if($review['status_review'] === 'Chưa phản hồi'){
-                                $text=  'Chờ duyệt';
+                                $text=  'Chưa phản hồi';
                                 $style= 'status-pending';
                             }
                             echo "<span class='" . $style . "'>" . $text . "</span>";?></p>
