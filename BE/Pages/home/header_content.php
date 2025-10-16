@@ -46,42 +46,42 @@
             if ($page == 'account') { ?>
                 <a href="../modules/export.php?page=account" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'user') { ?>
                 <a href="../modules/export.php?page=user" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'admin') { ?>
                 <a href="../modules/export.php?page=admin" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'owner') { ?>
                 <a href="../modules/export.php?page=owner" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'homestay') { ?>
                 <a href="../modules/export.php?page=homestay" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'booking') { ?>
                 <a href="../modules/export.php?page=booking" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'payment') { ?>
                 <a href="../modules/export.php?page=payment" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a>
             <?php } else if ($page == 'reviews') { ?>
                 <a href="../modules/export.php?page=reviews" class="btn-download">
                     <i class='bx bxs-cloud-download'></i>
-                    <span class="text">Download PDF</span>
+                    <span class="text">Download</span>
                 </a> 
             <?php }
             }

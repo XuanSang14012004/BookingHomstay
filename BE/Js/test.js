@@ -421,6 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const action= urlParams.get('action');
     const status = urlParams.get('status');
     const page = urlParams.get('page');
+    const action_status = urlParams.get('action_status');
 
 
     function showMessage(msg) {
@@ -534,47 +535,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Homestay
     if (page === 'homestay') {
-        if (status === 'add_success') {
+        if (action_status === 'add_success') {
             showMessage('Thêm homestay thành công!');
-        } else if (status === 'add_error') {
+        } else if (action_status === 'add_error') {
             showMessage('Thêm homestay thất bại. Vui lòng kiểm tra lại thông tin đã nhập.');
-        } else if (status === 'error_upload') {
+        } else if (action_status === 'error_upload') {
             showMessage('Thêm homestay thất bại. Hình ảnh chưa được chọn hoặc không đúng định dạng.');
         }
-        if (status === 'delete_success') {
+        if (action_status === 'delete_success') {
             showMessage('Xóa homestay thành công!');
-        } else if (status === 'delete_error') {
+        } else if (action_status === 'delete_error') {
             showMessage('Xóa homestay thất bại! Kiểm tra lại thao tác xóa.');
         }
-        if (status === 'update_success') {
+        if (action_status === 'update_success') {
             showMessage('Cập nhật homestay thành công!');
-        } else if (status === 'update_error') {
+        } else if (action_status === 'update_error') {
             showMessage('Cập nhật homestay thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'homestay' && action === 'add_homestay' && status === 'exists') {
+    if (page === 'homestay' && action === 'add_homestay' && action_status === 'exists') {
         showMessage('Mã homestay đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 
     // Booking
     if (page === 'booking') {
-        if (status === 'add_success') {
+        if (action_status === 'add_success') {
             showMessage('Thêm đơn đặt phòng thành công!');
-        } else if (status === 'add_error') {
+        } else if (action_status === 'add_error') {
             showMessage('Thêm đơn đặt phòng thất bại. Vui lòng kiểm tra lại thông tin đã nhập.');
         }
-        if (status === 'delete_success') {
+        if (action_status === 'delete_success') {
             showMessage('Xóa đơn đặt phòng thành công!');
-        } else if (status === 'delete_error') {
+        } else if (action_status === 'delete_error') {
             showMessage('Xóa đơn đặt phòng thất bại! Kiểm tra lại thao tác xóa.');
         }
-        if (status === 'update_success') {
+        if (action_status === 'update_success') {
             showMessage('Cập nhật đơn đặt phòng thành công!');
-        } else if (status === 'update_error') {
+        } else if (action_status === 'update_error') {
             showMessage('Cập nhật đơn đặt phòng thất bại! Vui lòng kiểm tra lại thông tin đã nhập.');
         }
     }
-    if (page === 'booking' && action === 'add_booking' && status === 'exists') {
+    if (page === 'booking' && action === 'add_booking' && action_status === 'exists') {
         showMessage('Mã đơn đặt phòng đã tồn tại. Vui lòng sử dụng mã khác.');
     }
 

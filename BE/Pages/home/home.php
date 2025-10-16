@@ -9,11 +9,11 @@ if (
 ) {
     // Cho phép vào trang admin
 } else {
-    header("Location: /BS/Login/login.php");
+    header("Location: ../../../Login/login.php");
     exit();
 }
 if ($_SESSION['role'] !== 'admin') {
-    header("Location: /BS/Login/login.php");
+    header("Location: ../../../Login/login.php");
     exit();
 }
 

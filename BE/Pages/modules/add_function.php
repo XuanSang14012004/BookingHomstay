@@ -214,14 +214,14 @@ if (isset($_POST['submit_homestay'])) {
         $query = mysqli_query($conn, $sql);
         
         if ($query) {
-            header("Location: ../home/home.php?page=homestay&status=add_success");
+            header("Location: ../home/home.php?page=homestay&action_status=add_success");
             exit();
         } else {
-            header("Location: ../home/home.php?page=homestay&status=add_error");
+            header("Location: ../home/home.php?page=homestay&action_status=add_error");
             exit();
         }
     } else {
-        header("Location: ../home/home.php?page=homestay&status=error_upload");
+        header("Location: ../home/home.php?page=homestay&action_status=error_upload");
         exit();
     }
 }
@@ -264,52 +264,14 @@ if (isset($_POST['submit_booking'])) {
     $query = mysqli_query($conn, $sql);
     
     if ($query) {
-        header("Location: ../home/home.php?page=booking&status=add_success");
+        header("Location: ../home/home.php?page=booking&action_status=add_success");
         exit();
     } else {
-        header("Location: ../home/home.php?page=booking&status=add_error");
+        header("Location: ../home/home.php?page=booking&action_status=add_error");
         exit();
     }
 }
 ?>
 
-<!-- Add Payment -->
-<?php
-include "../../config/connect.php";
-
-$sql_payment = "SELECT * FROM db_payment";
-$result_payment = mysqli_query($conn, $sql_payment);
-
-if (isset($_POST['submit_payment'])) {
-    $payment_id = $_POST['payment_id'];
-
-    $check_payment = "SELECT payment_id FROM db_payment WHERE payment_id = '$payment_id'";
-    $check_result = mysqli_query($conn, $check_payment);
-    
-    if (mysqli_num_rows($check_result) > 0) {
-        header("Location: ../home/home.php?page=payment&action=add_payment&status=exists");
-        exit();
-    }
-    
-    $booking_id = $_POST['booking_id']; 
-    $method = $_POST['method'];
-    $payment_price = $_POST['payment_price'];  
-    $date = $_POST['date']; 
-    $payment_status = $_POST['payment_status']; 
-
-    $sql = "INSERT INTO db_payment(payment_id, booking_id, method, payment_price, date, payment_status)
-    VALUES ('$payment_id','$booking_id','$method','$payment_price','$date','$payment_status')";
-    
-    $query = mysqli_query($conn, $sql);
-    
-    if ($query) {
-        header("Location: ../home/home.php?page=account&status=add_success");
-        exit();
-    } else {
-        header("Location: ../home/home.php?page=account&status=add_error");
-        exit();
-    }
-}
-?>
 
 

@@ -232,10 +232,10 @@ if (isset($_POST['submit_homestay'])) {
     $query = mysqli_query($conn, $sql);
 
     if ($query && mysqli_affected_rows($conn) >= 0) {
-        header("Location: ../home/home.php?page=homestay&status=update_success");
+        header("Location: ../home/home.php?page=homestay&action_status=update_success");
         exit();
     } else {
-        header("Location: ../home/home.php?page=homestay&status=update_error");
+        header("Location: ../home/home.php?page=homestay&action_status=update_error");
         exit();
     }
 }
@@ -291,10 +291,10 @@ if (isset($_POST['submit_booking'])) {
             
     $query = mysqli_query($conn, $sql);
     if ($query) {
-        header("Location: ../home/home.php?page=booking&status=update_success");
+        header("Location: ../home/home.php?page=booking&action_status=update_success");
         exit();
     } else {
-        header("Location: ../home/home.php?page=booking&status=update_error");
+        header("Location: ../home/home.php?page=booking&action_status=update_error");
         exit();
     }
 }
@@ -305,9 +305,16 @@ include "../../config/connect.php";
 // ------------ Payment ------------
 $action = isset($_GET['action']) ? $_GET['action'] :'';
 if (isset($_POST['done_payment'])) {
-    $booking_id = $_POST['booking_id'];
-    $payment_status = "Đã thanh toán";
-    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE booking_id = '$booking_id'";
+    $booking_id = $_POST['payment_id'];
+    $payment_method = $_POST['payment_method'];
+    $total_price = $_POST['total_price'];
+    $payment_status = $_POST['payment_status'];
+    $payment_date = $_POST['payment_date'];
+    $sql = "UPDATE db_booking SET 
+                payment_method = '$payment_method',
+                total_price = '$total_price',
+                payment_date = '$payment_date',
+                payment_status = '$payment_status' WHERE booking_id = '$booking_id'";
     $query = mysqli_query($conn, $sql);
     if ($query) {
         header("Location: ../home/home.php?page=payment&status=success_payment");
@@ -319,7 +326,7 @@ if (isset($_POST['done_payment'])) {
 }
 
 if (isset($_POST['submit_payment'])) {
-    $booking_id = $_POST['booking_id'];
+    $booking_id = $_POST['payment_id'];
     $customer_name = $_POST['customer_name'];
     $customer_email = $_POST['customer_email'];
     $customer_phone = $_POST['customer_phone'];
