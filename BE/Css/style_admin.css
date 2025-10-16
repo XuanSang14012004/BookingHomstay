@@ -37,7 +37,7 @@ li {
     --shadow: rgba(0,0,0,0.08);
     --border: #e6e6e6;
     --text-dark: #333;
-    --light-warm: #fff8f5;
+    --light-warm: #f9986e;
     --light-red: #f2dede;
     --danger: #dc3545;
     --dark-danger: #b02a37;
@@ -1863,7 +1863,7 @@ h2 {
     gap: 25px;
 }
 
-/* --- Khối bên trái (thông tin chi tiết) --- */
+/* --- Khối thông tin chi tiết --- */
 #pay-form .detail-section {
     background-color: var(--offwhite);
     border: 1px solid var(--light-border);
@@ -1899,10 +1899,10 @@ h2 {
     text-align: right;
 }
 
-/* --- Khu vực tổng tiền (bên phải) --- */
+/* --- Khu vực tổng tiền --- */
 #pay-form .summary-box {
-    background: var(--light-warm);
-    border: 1px solid var(--light-red);
+    background-color: var(--offwhite);
+    border: 1px solid var(--light-border);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 3px 8px var(--shadow);

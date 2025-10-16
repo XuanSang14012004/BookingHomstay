@@ -71,8 +71,8 @@ $total_pages = ceil($total_records / $limit);
                 <select name="status" onchange="this.form.submit()">
                     <option value="">-- Trạng thái --</option>
                     <option value="còn phòng" <?= (isset($_GET['status']) && $_GET['status']=='còn phòng')?'selected':''; ?>>Còn phòng</option>
-                    <option value="Đã đặt" <?= (isset($_GET['status']) && $_GET['status']=='Đã đặt')?'selected':''; ?>>Đã đặt</option>
-                    <option value="Đang bảo trì" <?= (isset($_GET['status']) && $_GET['status']=='Đang bảo trì')?'selected':''; ?>>Đang bảo trì</option>
+                    <option value="hết phòng" <?= (isset($_GET['status']) && $_GET['status']=='hết phòng')?'selected':''; ?>>Hết phòng</option>
+                    <option value="đang bảo trì" <?= (isset($_GET['status']) && $_GET['status']=='đang bảo trì')?'selected':''; ?>>Đang bảo trì</option>
                 </select>
                 <select name="room_type" onchange="this.form.submit()">
                     <option value="">-- Loại phòng --</option>
@@ -264,8 +264,8 @@ $total_pages = ceil($total_records / $limit);
                         <label for="status">Trạng thái</label>
                         <select id="status" name="status">
                             <option value="còn phòng">Còn phòng</option>
-                            <option value="Đã đặt">Đã đặt</option>
-                            <option value="Đang bảo trì">Đang bảo trì</option>
+                            <option value="hết phòng">Hết phòng</option>
+                            <option value="đang bảo trì">Đang bảo trì</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -414,9 +414,9 @@ $total_pages = ceil($total_records / $limit);
                             <div class="form-group">
                                 <label>Trạng thái</label>
                                 <select name="status">
-                                    <option value="Đang bảo trì" <?php echo ($homestay['status']=='Đang bảo trì')?'selected':''; ?>>Đang bảo trì</option>
-                                    <option value="Còn trống" <?php echo ($homestay['status']=='Còn trống')?'selected':''; ?>>Còn trống</option>
-                                    <option value="Đã đặt" <?php echo ($homestay['status']=='Đã đặt')?'selected':''; ?>>Đã đặt</option>
+                                    <option value="còn phòng" <?php echo ($homestay['status']=='còn phòng')?'selected':''; ?>>Còn phòng</option>
+                                    <option value="hết phòng" <?php echo ($homestay['status']=='hết phòng')?'selected':''; ?>>Hết phòng</option>
+                                    <option value="Đang bảo trì" <?php echo ($homestay['status']=='đang bảo trì')?'selected':''; ?>>Đang bảo trì</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -506,7 +506,7 @@ $total_pages = ceil($total_records / $limit);
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="edit-btn">Cập nhật</button>
+                <button type="submit" name="submit_homestay" class="edit-btn">Cập nhật</button>
                 <button type="reset" class="cancel-btn">Hủy</button>
             </div>
         </form>

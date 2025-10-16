@@ -221,8 +221,9 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
                     <div class="form-group">
                         <label for="method">Hình thức thanh toán:</label>
                         <select id="payment_method" name="payment_method">
+                            <option value="Thanh toán khi trả phòng" <?php echo ($payment['payment_method'] == 'Thanh toán khi trả phòng') ? 'selected' : ''; ?>>Thanh toán khi trả phòng</option>
+                            <option value="Đặt cọc" <?php echo ($payment['payment_method'] == 'Đặt cọc') ? 'selected' : ''; ?>>Đặt cọc</option>
                             <option value="Thẻ tín dụng" <?php echo ($payment['payment_method'] == 'Thẻ tín dụng') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
-                            <option value="Chuyển khoản ngân hàng" <?php echo ($payment['payment_method'] == 'Chuyển khoản ngân hàng') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
                             <option value="Tiền mặt" <?php echo ($payment['payment_method'] == 'Tiền mặt') ? 'selected' : ''; ?>>Tiền mặt</option>
                             <option value="Momo" <?php echo ($payment['payment_method'] == 'Momo') ? 'selected' : ''; ?>>Momo</option>
                             <option value="VNpay" <?php echo ($payment['payment_method'] == 'VNpay') ? 'selected' : ''; ?>>VNpay</option>
@@ -234,7 +235,7 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
                     </div>
                     <div class="form-group">
                         <label for="payment_date">Ngày thanh toán:</label>
-                        <input type="datetime-local" id="payment_date" name="payment_date" value="<?php echo $payment['payment_date']; ?>" required>
+                        <input type="datetime-local" id="payment_date" name="payment_date" value="<?php echo $payment['payment_date']; ?>">
                     </div>
                     <div class="form-group">
                         <label for="payment_status">Trạng thái:</label>
@@ -329,7 +330,7 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
     <?php } ?>
 </div>
 
-<!-- Giao diện form thanh toán -->
+<!------------------------------ Giao diện form thanh toán ------------------------------->
 <div class="form-container" id="pay-form" style="display:<?php echo $is_pay_form ? 'block' : 'none'; ?>;">
     <?php if ($payment) { ?>
     <?php include "../home/header_content.php"; ?>
@@ -342,7 +343,6 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
             <input type="hidden" name="payment_id" value="<?php echo htmlspecialchars($payment['booking_id']); ?>">
 
             <div class="detail-grid">
-                <!-- LEFT: hiển thị các khối thông tin theo yêu cầu -->
                 <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
                     <div class="detail-section">
                         <h3>Thông tin đơn đặt phòng</h3>
@@ -422,12 +422,12 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
 
                     <div class="form-group">
                         <label for="payment_method">Phương thức thanh toán</label>
-                        <select id="payment_method" name="payment_method" required>
-                            <option value="Thẻ tín dụng" <?php echo ($payment['payment_method']=='Thẻ tín dụng') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
-                            <option value="Chuyển khoản ngân hàng" <?php echo ($payment['payment_method']=='Chuyển khoản ngân hàng') ? 'selected' : ''; ?>>Chuyển khoản ngân hàng</option>
-                            <option value="Tiền mặt" <?php echo ($payment['payment_method']=='Tiền mặt') ? 'selected' : ''; ?>>Tiền mặt</option>
-                            <option value="Momo" <?php echo ($payment['payment_method']=='Momo') ? 'selected' : ''; ?>>Momo</option>
-                            <option value="VNpay" <?php echo ($payment['payment_method']=='VNpay') ? 'selected' : ''; ?>>VNpay</option>
+                        <select id="payment_method" name="payment_method">
+                            <option value="Thanh toán khi trả phòng" <?php echo ($payment['payment_method'] == 'Thanh toán khi trả phòng') ? 'selected' : ''; ?>>Thanh toán khi trả phòng</option>
+                            <option value="Thẻ tín dụng" <?php echo ($payment['payment_method'] == 'Thẻ tín dụng') ? 'selected' : ''; ?>>Thẻ tín dụng</option>
+                            <option value="Tiền mặt" <?php echo ($payment['payment_method'] == 'Tiền mặt') ? 'selected' : ''; ?>>Tiền mặt</option>
+                            <option value="Momo" <?php echo ($payment['payment_method'] == 'Momo') ? 'selected' : ''; ?>>Momo</option>
+                            <option value="VNpay" <?php echo ($payment['payment_method'] == 'VNpay') ? 'selected' : ''; ?>>VNpay</option>
                         </select>
                     </div>
 
@@ -441,7 +441,6 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
                         <select id="payment_status" name="payment_status" required>
                             <option value="">-- Chọn trạng thái --</option>
                             <option value="Đã thanh toán" <?php echo ($payment['payment_status']=='Đã thanh toán') ? 'selected' : ''; ?>>Đã thanh toán</option>
-                            <option value="Đã đặt cọc" <?php echo ($payment['payment_status']=='Đã đặt cọc') ? 'selected' : ''; ?>>Đã đặt cọc</option>
                             <option value="Chờ thanh toán" <?php echo ($payment['payment_status']=='Chờ thanh toán') ? 'selected' : ''; ?>>Chờ thanh toán</option>
                         </select>
                     </div>
@@ -462,7 +461,7 @@ if (isset($_GET['content']) && $_GET['content'] !== '') {
 
                     <div class="form-actions" style="margin-top:12px; display:flex; justify-content:flex-end; gap:10px;">
                         <button type="submit" name="done_payment" class="edit-btn">Xác nhận thanh toán</button>
-                        <button type="button" class="cancel-btn" onclick="window.history.back();">Hủy</button>
+                        <button type="button" class="cancel-btn" onclick="history.back();">Hủy</button>
                     </div>
                 </div>
             </div>
