@@ -1,0 +1,57 @@
+{
+  // 🧭 Lưu tự động khi dừng gõ
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+
+  // ✍️ Format code khi lưu
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+
+  // 🌐 Tắt minimap cho gọn
+  "editor.minimap.enabled": false,
+
+  // 🐘 PHP - từ XAMPP
+  "php.validate.executablePath": "C:/xampp/php/php.exe",
+  "php.validate.run": "onType",
+  "php.suggest.basic": true,
+
+  // 🧰 Cấu hình C/C++
+  "C_Cpp.default.compilerPath": "C:/mingw64/bin/g++.exe",
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.intelliSenseEngine": "default",
+  "C_Cpp.errorSquiggles": "enabled",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+
+  // 🌐 Live Server
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.root": "/",
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.scss",
+    "**/*.sass"
+  ],
+
+  // 📌 Định dạng file
+  "files.associations": {
+    "*.php": "php",
+    "*.html": "html",
+    "*.css": "css",
+    "*.js": "javascript",
+    "*.cpp": "cpp",
+    "*.h": "cpp",
+    "*.c": "c"
+  },
+
+  // 💻 Terminal mặc định là CMD
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+
+  // 🖋 Font dễ đọc
+  "editor.fontFamily": "Consolas, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "editor.tabSize": 4,
+  "editor.wordWrap": "on",
+
+  // 🔕 Tắt telemetry (ẩn bớt cảnh báo deprecated)
+  "telemetry.telemetryLevel": "off"
+}
