@@ -2,12 +2,21 @@
 session_start();
 require_once('../../Config/connect.php');
 if (
-   isset($_SESSION['fullname']) && isset($_SESSION['email']) && isset($_SESSION['password']) && isset($_SESSION['role']) ) { ?>
-    
-<?php } else {
-    header("Location: Pages/Login/login.php");
+    isset($_SESSION['account_id']) &&
+    isset($_SESSION['fullname']) &&
+    isset($_SESSION['email']) &&
+    isset($_SESSION['role'])
+) {
+    // Cho phép vào trang admin
+} else {
+    header("Location: /BS/Login/login.php");
     exit();
 }
+if ($_SESSION['role'] !== 'admin') {
+    header("Location: /BS/Login/login.php");
+    exit();
+}
+
 ?>
 <?php
 $page = $_GET['page'] ?? 'home';
@@ -20,13 +29,14 @@ ob_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../Css/style_admin.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../../Css/style_admin.css">
     <link rel="icon" href="../../Images/logo.jpg">
-    <link rel="stylesheet" href="../../Css/test.css">
     <script src="../../Js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../Js/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
     <title>ADMIN DASHBOARD</title>
 </head>
 

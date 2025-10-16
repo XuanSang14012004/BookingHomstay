@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 02, 2025 lúc 06:00 AM
+-- Thời gian đã tạo: Th10 15, 2025 lúc 04:11 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `db_account` (
+  `account_id` int(11) NOT NULL,
   `fullname` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` int(11) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(12) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `role` enum('admin','user','owner') DEFAULT 'user',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -40,11 +41,62 @@ CREATE TABLE `db_account` (
 -- Đang đổ dữ liệu cho bảng `db_account`
 --
 
-INSERT INTO `db_account` (`fullname`, `email`, `phone`, `password`, `role`, `created_at`) VALUES
-('Cao Văn Quyết', 'cvquyet0103@gmail.com', 975456878, '12345', 'user', '2025-10-01 15:38:33'),
-('CaoVanQuyet', 'NVA13@gmail.com', 945561241, '12345', 'admin', '2025-10-01 15:38:33'),
-('Cao Văn Quyết', 'user01@gmail.com', 2147483647, '12345', 'customer', '2025-10-02 03:04:07'),
-('Cao Văn Quyết', 'user02@gmail.com', 941246235, '123456', 'user', '2025-10-02 03:39:02');
+INSERT INTO `db_account` (`account_id`, `fullname`, `email`, `phone`, `password`, `role`, `created_at`) VALUES
+(1, 'Cao Văn Quyết', 'NVA13@gmail.com', '0944724089', '12345', 'admin', '2025-10-08 01:44:56'),
+(5, 'Cao Văn Quyết', 'user01@gmail.com', '5465612131', '12345', 'user', '2025-10-08 01:44:56'),
+(7, 'Khúc Trường Giang', 'Truonggiang01@gmail.com', '0945781245', '123456', 'admin', '2025-10-01 05:02:34'),
+(8, 'Khúc Trường Giang', 'truonggiang02@gmail.com', '0954721548', '012345', 'user', '2025-10-09 05:12:14'),
+(9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '12345', 'user', '2025-10-11 18:22:42'),
+(10, 'Nguyễn Xuân Sáng', '1234@gmail.com', '0328947360', '12345', 'user', '2025-10-11 18:51:12'),
+(11, 'Nguyễn Xuân Sáng', 'xuansang@gmail.com', '093741874018', '12345', 'admin', '2025-10-13 11:19:51'),
+(12, 'Nguyễn Xuân Sáng', 'nguyenxuansang@gmail.com', '0973026671', '12345', 'user', '2025-10-13 11:24:49'),
+(13, 'Phạm Thị Huyền', 'huyenpham@gmail.com', '0912457890', '12345', 'user', '2025-10-14 08:15:00'),
+(14, 'Lê Văn Nam', 'levannam01@gmail.com', '0968745123', 'abc123', 'owner', '2025-10-14 09:20:00'),
+(15, 'Trần Minh Hoàng', 'hoangtran@gmail.com', '0932548710', 'pass123', 'user', '2025-10-14 10:05:00'),
+(16, 'Nguyễn Thị Mai', 'mainguyen@gmail.com', '0945126309', 'maimai', 'user', '2025-10-14 11:45:00'),
+(17, 'Đặng Quang Huy', 'huydang@gmail.com', '0985123456', '123456', 'admin', '2025-10-14 12:00:00'),
+(18, 'Hoàng Anh Tuấn', 'tuanhoang@gmail.com', '0978456123', 'tuan123', 'owner', '2025-10-14 12:30:00'),
+(19, 'Ngô Thị Lan', 'lanngo@gmail.com', '0923457810', 'lanlan', 'user', '2025-10-14 13:10:00'),
+(20, 'Phan Văn Đức', 'phanvanduc@gmail.com', '0906784512', 'duc123', 'user', '2025-10-14 14:00:00'),
+(21, 'Vũ Thị Hoa', 'vuhoa@gmail.com', '0912233445', 'hoavt', 'owner', '2025-10-14 15:20:00'),
+(22, 'Nguyễn Tuấn Kiệt', 'tuan.kiet@gmail.com', '0938123456', 'kiet123', 'admin', '2025-10-14 16:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `db_admin`
+--
+
+CREATE TABLE `db_admin` (
+  `admin_id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `birthday` date NOT NULL,
+  `gender` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(12) NOT NULL,
+  `address` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `db_admin`
+--
+
+INSERT INTO `db_admin` (`admin_id`, `account_id`, `image`, `fullname`, `birthday`, `gender`, `email`, `phone`, `address`) VALUES
+(1, 1, 'user.jpg', 'Cao Văn Quyết', '2004-03-01', 'Nam', 'cvquyet0103@gmail.com', '0944724089', 'Nam Định'),
+(2, 7, 'doctor2.jpg\r\n', 'Khúc Trường Giang', '2004-02-15', 'Nam', 'truonggiang01@gmail.com', '0945124875', 'Long biên'),
+(6, 7, 'user.jpg', 'Nguyễn Xuân Sáng', '2004-01-01', 'Nam', 'xuansang@gmail.com', '093741874018', 'Nghệ An'),
+(7, 11, 'user.jpg', 'Nguyễn Thị Hồng', '1999-06-12', 'Nữ', 'hong.nguyen@gmail.com', '0901234567', 'Hà Nội'),
+(8, 13, 'user.jpg', 'Phạm Minh Đức', '2000-09-23', 'Nam', 'duc.pham@gmail.com', '0912345678', 'Hải Phòng'),
+(9, 14, 'user.jpg', 'Trần Thị Thu', '1998-04-18', 'Nữ', 'thu.tran@gmail.com', '0923456789', 'Thái Bình'),
+(10, 15, 'user.jpg', 'Vũ Văn Long', '1997-08-10', 'Nam', 'long.vu@gmail.com', '0934567890', 'Bắc Ninh'),
+(11, 16, 'user.jpg', 'Nguyễn Hữu Toàn', '2001-11-05', 'Nam', 'toan.nguyen@gmail.com', '0945678901', 'Thanh Hóa'),
+(12, 17, 'user.jpg', 'Lê Thị Hương', '1999-03-14', 'Nữ', 'huong.le@gmail.com', '0956789012', 'Nghệ An'),
+(13, 18, 'user.jpg', 'Đặng Văn Quân', '2002-12-09', 'Nam', 'quan.dang@gmail.com', '0967890123', 'Hà Tĩnh'),
+(14, 19, 'user.jpg', 'Hoàng Thị Mai', '2000-05-26', 'Nữ', 'mai.hoang@gmail.com', '0978901234', 'Hà Nội'),
+(15, 20, 'user.jpg', 'Phan Quốc Bảo', '2003-07-02', 'Nam', 'bao.phan@gmail.com', '0989012345', 'Đà Nẵng'),
+(16, 22, 'user.jpg', 'Nguyễn Tuấn Kiệt', '2001-01-25', 'Nam', 'kiet.nguyen@gmail.com', '0990123456', 'TP. Hồ Chí Minh');
 
 -- --------------------------------------------------------
 
@@ -53,37 +105,74 @@ INSERT INTO `db_account` (`fullname`, `email`, `phone`, `password`, `role`, `cre
 --
 
 CREATE TABLE `db_booking` (
-  `booking_id` varchar(10) NOT NULL,
-  `customer_id` varchar(10) NOT NULL,
-  `customer_name` varchar(255) NOT NULL,
-  `homestay_id` varchar(255) NOT NULL,
-  `room_id` varchar(10) NOT NULL,
-  `date_booking` date NOT NULL,
-  `date_checkin` date NOT NULL,
-  `date_checkout` date NOT NULL,
-  `booking_people` int(10) NOT NULL,
-  `booking_price` decimal(10,0) NOT NULL,
-  `booking_status` varchar(255) NOT NULL,
-  `note` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `booking_id` int(11) NOT NULL,
+  `homestay_id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `customer_email` varchar(100) NOT NULL,
+  `customer_phone` varchar(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `checkin_date` date NOT NULL,
+  `checkout_date` date NOT NULL,
+  `guests` int(11) DEFAULT 1,
+  `payment_method` varchar(50) NOT NULL,
+  `total_price` decimal(12,0) NOT NULL DEFAULT 0,
+  `payment_date` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `status` enum('Đã hủy','Đã xác nhận','Chờ xác nhận') NOT NULL DEFAULT 'Chờ xác nhận',
+  `payment_status` enum('Đã thanh toán','Đã đặt cọc','Chờ thanh toán') NOT NULL DEFAULT 'Chờ thanh toán',
+  `note` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `db_booking`
 --
 
-INSERT INTO `db_booking` (`booking_id`, `customer_id`, `customer_name`, `homestay_id`, `room_id`, `date_booking`, `date_checkin`, `date_checkout`, `booking_people`, `booking_price`, `booking_status`, `note`, `created_at`) VALUES
-('B_001', 'KH001', 'Nguyễn Văn An', 'HST_001', 'P_01', '2024-10-18', '2024-10-20', '2024-10-23', 2, 3600000, 'Đã xác nhận', 'Yêu cầu phòng tầng cao, view đẹp.', '2025-10-01 15:38:50'),
-('B_002', 'KH002', 'Trần Thị Bình', 'HST_002', 'P_02', '2024-11-03', '2024-11-05', '2024-11-07', 4, 3000000, 'Chờ thanh toán', 'Cần thêm một chiếc nệm phụ.', '2025-10-01 15:59:29'),
-('B_003', 'KH003', 'Lê Văn Cường', 'HST_003', 'P_03', '2024-12-08', '2024-12-10', '2024-12-12', 1, 1600000, 'Đã hoàn tất', 'Không có yêu cầu đặc biệt.', '2025-10-01 15:38:50'),
-('B_004', 'KH004', 'Phạm Thị Dung', 'HST_004', 'P_04', '2024-10-23', '2024-10-25', '2024-10-28', 2, 7500000, 'Đã xác nhận', 'Đặt thêm dịch vụ đưa đón sân bay.', '2025-10-01 15:38:50'),
-('B_005', 'KH005', 'Hoàng Văn Giang', 'HST_005', 'P_05', '2024-11-13', '2024-11-15', '2024-11-18', 2, 9000000, 'Đã xác nhận', 'Cần chuẩn bị một chai rượu vang và hoa hồng.', '2025-10-01 15:38:50'),
-('B_006', 'KH006', 'Đỗ Thị Hương', 'HST_006', 'P_06', '2024-11-29', '2024-12-01', '2024-12-03', 8, 1500000, 'Đã hủy', 'Hủy do thay đổi lịch trình cá nhân.', '2025-10-01 15:38:50'),
-('B_007', 'KH007', 'Vũ Văn Khang', 'HST_007', 'P_07', '2024-11-18', '2024-11-20', '2024-11-21', 3, 1000000, 'Đã hoàn tất', 'Không có yêu cầu đặc biệt.', '2025-10-01 15:38:50'),
-('B_008', 'KH008', 'Bùi Thị Lan', 'HST_008', 'P_08', '2024-12-23', '2024-12-25', '2024-12-28', 2, 5400000, 'Chờ thanh toán', 'Sẽ thanh toán sau khi đến nơi.', '2025-10-01 15:59:46'),
-('B_009', 'KH009', 'Lý Văn Minh', 'HST_009', 'P_09', '2024-10-28', '2024-10-30', '2024-11-05', 2, 9600000, 'Đã xác nhận', 'Cần được hỗ trợ mang hành lý.', '2025-10-01 15:38:50'),
-('B_010', 'KH010', 'Ngô Thị Oanh', 'HST_010', 'P_10', '2024-11-20', '2024-11-22', '2024-11-25', 10, 30000000, 'Đã xác nhận', 'Chuẩn bị tiệc BBQ ngoài trời.', '2025-10-01 15:38:50'),
-('B_0510', 'KH13', 'Nguyễn Văn An', 'HST_001', 'P_01', '2025-10-08', '2025-10-09', '2025-10-11', 4, 2400000, 'Đã xác nhận', 'Yêu cầu phòng tầng cao, view đẹp.', '2025-10-01 16:16:24');
+INSERT INTO `db_booking` (`booking_id`, `homestay_id`, `customer_id`, `customer_name`, `customer_email`, `customer_phone`, `created_at`, `checkin_date`, `checkout_date`, `guests`, `payment_method`, `total_price`, `payment_date`, `status`, `payment_status`, `note`) VALUES
+(1, 6, 10, 'Nguyễn Xuân Sáng', '1234@gmail.com', '0328947360', '2025-06-01 14:30:00', '2025-06-10', '2025-06-15', 5, 'Thanh toán khi trả phòng', 4500000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Đi cùng gia đình.'),
+(2, 7, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-06-05 09:00:00', '2025-06-09', '2025-06-11', 2, 'Momo', 1900000, '2025-06-06 09:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu check-in sớm.'),
+(3, 9, 11, 'Nguyễn Xuân Sáng', 'nguyenxuansang@gmail.com', '0973026671', '2025-06-20 08:00:00', '2025-06-25', '2025-06-27', 6, 'VNPay', 6000000, '2025-06-21 09:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng rộng, có bếp riêng.'),
+(10, 7, 1, 'Khúc Trường Giang', 'truonggiang02@gmail.com', '0948174672', '2025-09-26 02:50:27', '2025-10-03', '2025-10-05', 4, 'Momo', 1500000, '2025-10-11 20:43:00', 'Đã xác nhận', 'Đã thanh toán', 'tôi muốn có xe đưa đón'),
+(13, 16, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-10-02 01:25:00', '2025-10-03', '2025-10-05', 5, 'Đặt cọc', 1752000, '2025-10-13 12:22:12', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(14, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-11 13:26:32', '2025-10-12', '2025-10-13', 8, 'Thanh toán khi trả phòng', 910000, '2025-10-11 21:42:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(16, 1, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0973026671', '2025-10-11 13:44:39', '2025-10-19', '2025-10-20', 1, 'Thanh toán khi trả phòng', 910000, '2025-10-11 21:44:00', 'Đã xác nhận', 'Đã thanh toán', 'Tôi muốn có xe đưa đón'),
+(17, 17, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-12 01:39:32', '2025-10-12', '2025-10-13', 1, 'VNPay', 1120000, '2025-10-11 20:43:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(18, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-12 11:26:11', '2025-10-12', '2025-10-13', 1, 'Thanh toán khi trả phòng', 910000, '2025-10-11 17:36:00', 'Đã xác nhận', 'Đã thanh toán', 'Tôi muốn có xe đưa đón'),
+(19, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-12 12:52:26', '2025-10-19', '2025-10-20', 1, 'Thanh toán khi trả phòng', 910000, '2025-10-13 08:07:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(20, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-12 13:04:33', '2025-10-13', '2025-10-14', 1, 'Thanh toán khi trả phòng', 910000, '2025-10-13 08:08:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(21, 29, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-12 13:05:39', '2025-10-18', '2025-10-26', 1, 'Thanh toán khi trả phòng', 8800000, '2025-10-13 09:09:00', 'Đã xác nhận', 'Đã thanh toán', 'Tôi muốn có xe đưa đón'),
+(22, 1, 8, 'Khúc Trường Giang', 'truonggiang02@gmail.com', '0328947360', '2025-10-13 06:33:06', '2025-10-14', '2025-10-15', 7, 'Thanh toán khi trả phòng', 910000, '2025-10-17 01:36:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu phòng tầng cao, view đẹp.'),
+(23, 3, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-05-05 09:10:00', '2025-05-10', '2025-05-12', 2, 'Momo', 1800000, '2025-05-06 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần thêm 1 gối phụ.'),
+(24, 4, 8, 'Khúc Trường Giang', 'truonggiang02@gmail.com', '0954721548', '2025-05-15 11:22:00', '2025-05-20', '2025-05-22', 3, 'VNPay', 2750000, '2025-05-16 09:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Muốn ở phòng gần hồ bơi.'),
+(25, 5, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-05-20 15:10:00', '2025-05-25', '2025-05-27', 4, 'Đặt cọc', 3200000, '2025-05-21 08:00:00', 'Đã xác nhận', 'Đã đặt cọc', 'Mang theo thú cưng nhỏ.'),
+(26, 4, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-05-05 09:10:00', '2025-05-10', '2025-05-12', 2, 'Momo', 1800000, '2025-05-06 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần thêm 1 gối phụ.'),
+(27, 5, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-05-05 09:10:00', '2025-05-10', '2025-05-12', 2, 'Momo', 1800000, '2025-05-06 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần thêm 1 gối phụ.'),
+(28, 6, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0945127846', '2025-05-05 09:10:00', '2025-05-10', '2025-05-12', 2, 'Momo', 1800000, '2025-05-06 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần thêm 1 gối phụ.'),
+(29, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-10 09:15:00', '2025-06-15', '2025-06-17', 2, 'VNPAY', 1200000, '2025-10-10 09:16:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng đôi, tầng 2'),
+(30, 2, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-12 14:30:00', '2025-06-20', '2025-06-22', 4, 'VNPAY', 2500000, '2025-10-12 14:31:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng gia đình view biển'),
+(31, 3, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-14 10:05:00', '2025-06-18', '2025-06-19', 1, 'VNPAY', 800000, '2025-10-14 10:06:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng đơn, gần hồ bơi'),
+(32, 4, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-15 08:45:00', '2025-06-25', '2025-06-28', 3, 'VNPAY', 2100000, '2025-10-15 08:46:00', 'Chờ xác nhận', 'Đã đặt cọc', 'Phòng 3 người, giường lớn'),
+(33, 5, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-16 12:10:00', '2025-06-29', '0000-00-00', 2, 'VNPAY', 1700000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Phòng tiêu chuẩn, hướng vườn'),
+(34, 6, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-17 15:00:00', '2025-07-01', '2025-07-03', 2, 'VNPAY', 2200000, '2025-10-17 15:01:00', 'Đã xác nhận', 'Đã thanh toán', 'Có ban công riêng'),
+(35, 7, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-06-18 09:45:00', '2025-07-05', '2025-07-07', 5, 'VNPAY', 3500000, '2025-10-18 09:46:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng lớn, có bếp riêng'),
+(36, 8, 1, 'Khúc Trường Giang', 'user02@gmail.com', '0954721548', '2025-07-02 09:00:00', '2025-07-05', '2025-07-08', 3, 'Momo', 2500000, '2025-07-03 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Muốn phòng gần hồ bơi.'),
+(37, 9, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0328947360', '2025-07-10 08:30:00', '2025-07-15', '2025-07-18', 2, 'Thanh toán khi trả phòng', 1800000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Check-in trễ lúc 9h tối.'),
+(38, 10, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-07-20 11:15:00', '2025-07-25', '2025-07-28', 4, 'VNPay', 3200000, '2025-07-21 09:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần thêm nệm phụ.'),
+(39, 5, 10, 'Nguyễn Xuân Sáng', '1234@gmail.com', '0328947360', '2025-07-25 10:00:00', '2025-07-30', '2025-08-01', 3, 'Đặt cọc', 2100000, '2025-07-26 12:00:00', 'Đã xác nhận', 'Đã đặt cọc', 'Đi công tác, cần yên tĩnh.'),
+(40, 6, 11, 'Nguyễn Xuân Sáng', 'nguyenxuansang@gmail.com', '0973026671', '2025-08-02 09:00:00', '2025-08-05', '2025-08-07', 2, 'VNPay', 1700000, '2025-08-03 10:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng có cửa sổ lớn.'),
+(41, 2, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0328947360', '2025-08-08 15:00:00', '2025-08-10', '2025-08-12', 4, 'Momo', 2500000, '2025-08-09 09:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng có view biển.'),
+(42, 3, 8, 'Khúc Trường Giang', 'truonggiang02@gmail.com', '0328947360', '2025-08-15 14:30:00', '2025-08-18', '2025-08-20', 2, 'Thanh toán khi trả phòng', 1600000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Mang theo thú cưng nhỏ.'),
+(43, 4, 1, 'Khúc Trường Giang', 'user02@gmail.com', '0954721548', '2025-08-20 09:00:00', '2025-08-22', '2025-08-24', 5, 'VNPay', 3000000, '2025-08-21 08:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng tầng cao, có ban công.'),
+(44, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-09-02 10:10:00', '2025-09-05', '2025-09-07', 2, 'VNPay', 1800000, '2025-09-03 09:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Check-out sớm lúc 7h sáng.'),
+(45, 7, 10, 'Nguyễn Xuân Sáng', '1234@gmail.com', '0328947360', '2025-09-08 11:45:00', '2025-09-12', '2025-09-14', 6, 'Momo', 4200000, '2025-09-09 12:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần xe đưa đón.'),
+(46, 9, 6, 'Cao Văn Quyết', 'user05@gmail.com', '0945725842', '2025-09-15 08:30:00', '2025-09-18', '2025-09-20', 1, 'Đặt cọc', 1300000, '2025-09-16 09:00:00', 'Đã xác nhận', 'Đã đặt cọc', 'Phòng đơn nhỏ.'),
+(47, 8, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-09-22 09:00:00', '2025-09-25', '2025-09-27', 3, 'VNPay', 2100000, '2025-09-23 08:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Yêu cầu thêm gối và chăn.'),
+(48, 3, 5, 'Cao Văn Quyết', 'user01@gmail.com', '0328947360', '2025-10-01 09:00:00', '2025-10-03', '2025-10-05', 2, 'Thanh toán khi trả phòng', 1900000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Muốn ở phòng tầng 3.'),
+(49, 5, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-08 08:00:00', '2025-10-10', '2025-10-12', 2, 'VNPay', 1700000, '2025-10-09 08:30:00', 'Đã xác nhận', 'Đã thanh toán', 'Có chỗ đỗ xe.'),
+(50, 9, 1, 'Khúc Trường Giang', 'user02@gmail.com', '0954721548', '2025-10-14 09:00:00', '2025-10-16', '2025-10-18', 1, 'Momo', 1200000, '2025-10-15 08:45:00', 'Đã xác nhận', 'Đã thanh toán', 'Cần hóa đơn đỏ.'),
+(51, 6, 10, 'Nguyễn Xuân Sáng', '1234@gmail.com', '0328947360', '2025-10-20 10:00:00', '2025-10-23', '2025-10-25', 5, 'Đặt cọc', 3100000, NULL, 'Chờ xác nhận', 'Đã đặt cọc', 'Gia đình có trẻ nhỏ.'),
+(52, 2, 11, 'Nguyễn Xuân Sáng', 'nguyenxuansang@gmail.com', '0973026671', '2025-10-27 08:00:00', '2025-10-30', '2025-11-01', 2, 'VNPay', 2100000, '2025-10-28 09:00:00', 'Đã xác nhận', 'Đã thanh toán', 'Phòng gần thang máy.'),
+(53, 4, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-29 09:30:00', '2025-10-31', '2025-11-02', 3, 'Momo', 2200000, '2025-10-30 09:45:00', 'Đã xác nhận', 'Đã thanh toán', 'View biển, phòng rộng.'),
+(54, 1, 9, 'Khúc Trường Giang', 'khucgiang58@gmail.com', '0328947360', '2025-10-30 10:00:00', '2025-10-31', '2025-11-02', 4, 'Thanh toán khi trả phòng', 2500000, NULL, 'Chờ xác nhận', 'Chờ thanh toán', 'Mang theo vật nuôi nhỏ.');
 
 -- --------------------------------------------------------
 
@@ -92,63 +181,29 @@ INSERT INTO `db_booking` (`booking_id`, `customer_id`, `customer_name`, `homesta
 --
 
 CREATE TABLE `db_customer` (
-  `customer_id` varchar(10) NOT NULL,
-  `customer_name` varchar(255) NOT NULL,
-  `birthday` date NOT NULL,
-  `gender` varchar(10) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `customer_phone` int(11) NOT NULL,
-  `address` varchar(255) NOT NULL
+  `customer_id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT '../images/user.jpg',
+  `fullname` varchar(100) NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `db_customer`
 --
 
-INSERT INTO `db_customer` (`customer_id`, `customer_name`, `birthday`, `gender`, `email`, `customer_phone`, `address`) VALUES
-('KH01', 'Nguyễn Văn An', '1990-05-15', 'Nam', 'nguyenvanan@gmail.com', 2147483647, 'Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh'),
-('KH02', 'Trần Thị Bình', '1985-11-20', 'Nữ', 'tranthibinh@gmail.com', 2147483647, 'Phường Quán Thánh, Quận Ba Đình, Thành phố Hà Nội'),
-('KH03', 'Lê Văn Cường', '1992-03-10', 'Nam', 'levancuong@gmail.com', 2147483647, 'Phường Vĩnh Hải, Thành phố Nha Trang, Tỉnh Khánh Hòa'),
-('KH04', 'Phạm Thị Dung', '1995-07-25', 'Nữ', 'phamthidung@gmail.com', 2147483647, 'Phường Thạc Gián, Quận Thanh Khê, Thành phố Đà Nẵng'),
-('KH05', 'Hoàng Văn Giang', '1988-09-01', 'Nam', 'hoangvangiang@gmail.com', 2147483647, 'Xã Vĩnh Ngọc, Huyện Đông Anh, Thành phố Hà Nội'),
-('KH06', 'Đỗ Thị Hương', '1993-02-14', 'Nữ', 'dothihuong@gmail.com', 2147483647, 'Xã Phước Kiển, Huyện Nhà Bè, Thành phố Hồ Chí Minh'),
-('KH07', 'Vũ Văn Khang', '1991-06-30', 'Nam', 'vuvankhang@gmail.com', 2147483647, 'Phường Xuân Hòa, Thành phố Long Khánh, Tỉnh Đồng Nai'),
-('KH08', 'Bùi Thị Lan', '1996-08-05', 'Nữ', 'buithilan@gmail.com', 2147483647, 'Xã Hòa Sơn, Huyện Hòa Vang, Thành phố Đà Nẵng'),
-('KH09', 'Lý Văn Minh', '1987-12-18', 'Nam', 'lyvanminh@gmail.com', 2147483647, 'Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh'),
-('KH10', 'Ngô Thị Oanh', '1994-04-22', 'Nữ', 'ngothioanh@gmail.com', 2147483647, 'Phường Ngô Quyền, Thành phố Vĩnh Yên, Tỉnh Vĩnh Phúc');
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `db_feedback`
---
-
-CREATE TABLE `db_feedback` (
-  `feedback_id` varchar(255) NOT NULL,
-  `customer_id` varchar(255) NOT NULL,
-  `customer_name` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `content` varchar(255) NOT NULL,
-  `date` date NOT NULL,
-  `feedback_status` varchar(255) NOT NULL,
-  `reply` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `db_feedback`
---
-
-INSERT INTO `db_feedback` (`feedback_id`, `customer_id`, `customer_name`, `title`, `content`, `date`, `feedback_status`, `reply`) VALUES
-('PH_001', 'KH001', 'Nguyễn Văn An', 'Vấn đề Wifi', 'Wifi trong phòng đôi view biển rất yếu, khó sử dụng.', '2024-10-23', 'Đã phản hồi', 'Chào anh/chị, chúng tôi rất tiếc về sự bất tiện này. Chúng tôi đã liên hệ với bộ phận kỹ thuật để kiểm tra và khắc phục ngay lập tức.'),
-('PH_002', 'KH002', 'Trần Thị Bình', 'Thiếu chăn', 'Phòng gia đình thiếu chăn, buổi tối hơi lạnh.', '2024-11-07', 'Đã phản hồi', 'Chào anh/chị, chúng tôi đã yêu cầu nhân viên mang thêm chăn lên phòng. Cảm ơn phản hồi kịp thời của bạn.'),
-('PH_003', 'KH003', 'Lê Văn Cường', 'Dịch vụ tốt', 'Tôi rất hài lòng với sự hỗ trợ của lễ tân.', '2024-12-12', 'Đã phản hồi', 'Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi. Chúng tôi sẽ truyền đạt lời khen này đến đội ngũ nhân viên.'),
-('PH_004', 'KH004', 'Phạm Thị Dung', 'Bồn tắm bị tắc', 'Bồn tắm trong phòng suite tầm nhìn thành phố bị tắc, cần kiểm tra lại.', '2024-10-28', 'Chưa phản hồi', 'Vui lòng chờ phản hồi từ chủ Homestay'),
-('PH_005', 'KH005', 'Hoàng Văn Giang', 'Phòng thiếu đồ', 'Phòng bungalow bể bơi riêng thiếu khăn tắm.', '2024-11-18', 'Đã phản hồi', 'Chúng tôi xin lỗi về sự thiếu sót này và đã bổ sung khăn tắm cho phòng của bạn.'),
-('PH_006', 'KH006', 'Đỗ Thị Hương', 'Hủy phòng', 'Tôi muốn hủy đơn đặt phòng vì có việc đột xuất.', '2024-12-01', 'Chưa phản hồi', ' '),
-('PH_007', 'KH007', 'Vũ Văn Khang', 'Dịch vụ giặt ủi', 'Không có dịch vụ giặt ủi như đã quảng cáo.', '2024-11-21', 'Chưa phản hồi', 'Vui lòng chờ phản hồi từ chủ Homestay'),
-('PH_008', 'KH008', 'Bùi Thị Lan', 'Tiếng ồn ban đêm', 'Phòng có tiếng ồn từ bên ngoài vào ban đêm, gây khó ngủ.', '2024-12-28', 'Đã phản hồi', 'Chúng tôi rất tiếc về sự bất tiện này. Chúng tôi sẽ có biện pháp để giảm thiểu tiếng ồn và đảm bảo sự thoải mái cho khách hàng.'),
-('PH_009', 'KH009', 'Lý Văn Minh', 'Hài lòng với dịch vụ', 'Dịch vụ dọn phòng rất chu đáo.', '2024-11-05', 'Đã phản hồi', 'Chúng tôi rất vui khi bạn hài lòng với dịch vụ. Hy vọng được đón tiếp bạn lần tới.'),
-('PH_010', 'KH010', 'Ngô Thị Oanh', 'Vấn đề vệ sinh', 'Phòng không được dọn dẹp sạch sẽ trước khi nhận phòng.', '2024-11-25', 'Đã phản hồi', 'Vui lòng chờ phản hồi từ chủ Homestay');
+INSERT INTO `db_customer` (`customer_id`, `account_id`, `avatar`, `fullname`, `birthday`, `gender`, `email`, `phone`, `address`) VALUES
+(1, 1, '../images/user.jpg', 'Khúc Trường Giang', '2004-03-18', 'Nam', 'user02@gmail.com', '0954721548', 'Long Biên'),
+(5, 5, '../images/user.jpg', 'Cao Văn Quyết', '2000-01-01', 'Nam', 'user01@gmail.com', '0328947360', 'Nam Định'),
+(6, NULL, '../images/user.jpg', 'Cao Văn Quyết', '2000-03-01', 'Nam', 'user05@gmail.com', '0945725842', 'Nam Định'),
+(8, 9, '../uploads/avatar/user_9_1760285774.jpg', 'Khúc Trường Giang', '2025-10-18', 'Nam', 'khucgiang58@gmail.com', '0328947360', 'Hà Nội'),
+(9, 8, '../images/user.jpg', 'Khúc Trường Giang', '2000-01-01', 'Nam', 'khucgiang58@gmail.com', '0328947360', 'Long Biên,Hà Nội'),
+(10, 10, '../images/user.jpg', 'Nguyễn Xuân Sáng', '2025-05-16', 'Nam', '1234@gmail.com', '0328947360', 'Nghệ An'),
+(11, NULL, '../images/user.jpg', 'Nguyễn Xuân Sáng', '2004-05-02', 'Nam', 'nguyenxuansang@gmail.com', '0973026671', 'Nghệ An');
 
 -- --------------------------------------------------------
 
@@ -157,71 +212,88 @@ INSERT INTO `db_feedback` (`feedback_id`, `customer_id`, `customer_name`, `title
 --
 
 CREATE TABLE `db_homestay` (
-  `homestay_id` varchar(10) NOT NULL,
+  `homestay_id` int(11) NOT NULL,
   `homestay_name` varchar(255) NOT NULL,
-  `homestay_type` varchar(255) NOT NULL,
-  `homestay_status` varchar(255) NOT NULL,
-  `describe` varchar(255) NOT NULL,
-  `room_number` int(10) NOT NULL,
-  `amenities` varchar(255) NOT NULL,
-  `homestay_address` varchar(255) NOT NULL,
-  `phone_owner` int(15) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `home_price` varchar(255) NOT NULL,
-  `policy` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `home_rating` float NOT NULL,
-  `rating_number` int(10) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `address` varchar(255) DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'còn phòng',
+  `description` text DEFAULT NULL,
+  `room_type` varchar(50) NOT NULL,
+  `policy` text NOT NULL,
+  `price` decimal(12,0) NOT NULL,
+  `guests` int(11) DEFAULT 2,
+  `img` varchar(255) DEFAULT NULL,
+  `img1` varchar(255) DEFAULT NULL,
+  `img2` varchar(255) DEFAULT NULL,
+  `img3` varchar(255) DEFAULT NULL,
+  `checkin` varchar(50) DEFAULT '14:00 - 22:00',
+  `checkout` varchar(50) DEFAULT 'Trước 12:00 trưa',
+  `owner_id` int(11) DEFAULT NULL,
+  `homestay_email` varchar(50) NOT NULL,
+  `homestay_phone` varchar(15) NOT NULL,
+  `rating` decimal(3,0) DEFAULT 5,
+  `reviews_count` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `db_homestay`
 --
 
-INSERT INTO `db_homestay` (`homestay_id`, `homestay_name`, `homestay_type`, `homestay_status`, `describe`, `room_number`, `amenities`, `homestay_address`, `phone_owner`, `email`, `home_price`, `policy`, `image`, `home_rating`, `rating_number`, `created_at`) VALUES
-('HST_001', 'Nhà của Bố', 'Căn hộ', 'Đang hoạt động', 'Một căn hộ ấm cúng, thoáng đãng, nằm trong khu vực yên tĩnh, rất phù hợp cho gia đình nhỏ.', 2, 'WiFi, điều hòa, bếp đầy đủ, máy giặt', '20 Nguyễn Thiện Thuật, Quận 3, TP.HCM', 2147483647, 'nhacuabo@gmail.com', '1.000.000 VND/đêm', 'Check-in 14:00, check-out 12:00, hủy phòng trước 48 giờ để được hoàn tiền.', 'https://example.com/images/nha-cua-bo-1.jpg', 5, 25, '2025-10-01 15:39:31'),
-('HST_002', 'Gác Mơ Đà Lạt', 'Biệt thự', 'Đang hoạt động', 'Biệt thự cổ kính giữa đồi thông, mang đến không gian lãng mạn, yên bình cho các cặp đôi và nhóm bạn.', 3, 'WiFi, máy sưởi, khu vực nướng BBQ, lò sưởi, sân vườn', '100 Yersin, TP. Đà Lạt', 2147483647, 'gacmoda@gmail.com', '2.500.000 VND/đêm', 'Cần đặt cọc 50% khi booking, không hoàn tiền nếu hủy trong vòng 24 giờ.', 'https://example.com/images/gac-mo-da-lat-1.jpg', 5, 40, '2025-10-01 15:39:31'),
-('HST_003', 'Ngôi Nhà Biển', 'Nhà riêng', 'Tạm ngưng', 'Ngôi nhà nhỏ xinh ven biển, cách bãi tắm chỉ 5 phút đi bộ. Sân hiên rộng rãi lý tưởng để ngắm bình minh.', 4, 'WiFi, điều hòa, bếp đầy đủ, vòi sen nước nóng, sân hiên', 'Thôn Cửa Dương, Phú Quốc', 2147483647, 'ngoinhathu@gmail.com', '1.800.000 VND/đêm', 'Check-in sau 15:00, check-out trước 11:00. Khách tự dọn dẹp sau khi trả phòng.', 'https://example.com/images/ngoi-nha-bien-1.jpg', 4, 15, '2025-10-01 15:39:31'),
-('HST_004', 'Bungalow Vườn Xanh', 'Bungalow', 'Đang hoạt động', 'Những bungalow gỗ mộc mạc ẩn mình trong vườn cây ăn trái, không gian riêng tư và gần gũi với thiên nhiên.', 1, 'WiFi, quạt trần, phòng tắm riêng, xe đạp miễn phí, sân vườn', 'Xã Tản Lĩnh, Ba Vì, Hà Nội', 2147483647, 'bungalowvuon@gmail.com', '1.200.000 VND/đêm', 'Yêu cầu đặt cọc 30%, hủy trước 3 ngày sẽ được hoàn lại tiền cọc.', 'https://example.com/images/bungalow-vuon-xanh-1.jpg', 5, 30, '2025-10-01 15:39:31'),
-('HST_005', 'Sun View Villa', 'Biệt thự', 'Đang hoạt động', 'Villa sang trọng, có bể bơi riêng, view thung lũng tuyệt đẹp. Thích hợp cho kỳ nghỉ dưỡng cao cấp.', 5, 'WiFi, điều hòa, bể bơi riêng, bếp đầy đủ, sân BBQ', '20 Vườn Đào, TP. Vũng Tàu', 2147483647, 'sunview@gmail.com', '4.000.000 VND/đêm', 'Không hoàn tiền khi hủy phòng. Đặt cọc 50% trước khi nhận phòng.', 'https://example.com/images/sun-view-villa-1.jpg', 5, 50, '2025-10-01 15:39:31'),
-('HST_006', 'The Forest House', 'Nhà riêng', 'Đã xóa', 'Ngôi nhà gỗ đơn giản nằm sâu trong rừng, dành cho những ai muốn tìm về sự bình yên.', 1, 'Không có WiFi, bếp củi, phòng tắm riêng, lều trại', 'Hòa Sơn, Hòa Vang, TP. Đà Nẵng', 2147483647, 'foresthouse@gmail.com', '800.000 VND/đêm', 'Chính sách đặc biệt do chủ nhà quy định.', 'https://example.com/images/the-forest-house-1.jpg', 4, 10, '2025-10-01 15:39:31'),
-('HST_007', 'Urban Escape', 'Căn hộ', 'Đang hoạt động', 'Căn hộ studio hiện đại, phong cách tối giản, tọa lạc ngay trung tâm thành phố, tiện lợi cho việc di chuyển.', 1, 'WiFi, TV thông minh, bếp nhỏ, máy giặt, phòng gym chung', '50 Lê Lợi, Quận 1, TP.HCM', 2147483647, 'urban@gmail.com', '1.500.000 VND/đêm', 'Không được phép hút thuốc trong phòng. Check-in tự động.', 'https://example.com/images/urban-escape-1.jpg', 5, 35, '2025-10-01 15:39:31'),
-('HST_008', 'Tâm An Homestay', 'Nhà riêng', 'Đang hoạt động', 'Ngôi nhà cổ kính mang đậm nét truyền thống, không gian tĩnh lặng, phù hợp cho những chuyến đi tìm về giá trị xưa cũ.', 3, 'WiFi, máy lạnh, bếp chung, sân hiên rộng, máy sưởi', 'Làng cổ Đường Lâm, Hà Nội', 2147483647, 'taman@gmail.com', '1.100.000 VND/đêm', 'Không nhận khách sau 22:00. Khách tự giữ gìn vệ sinh chung.', 'https://example.com/images/tam-an-homestay-1.jpg', 4, 20, '2025-10-01 15:39:31'),
-('HST_009', 'Tropical Nest', 'Bungalow', 'Đang hoạt động', 'Bungalow lợp lá dừa, nằm giữa khu vườn nhiệt đới, mang đến cảm giác thư giãn và gần gũi với thiên nhiên.', 2, 'WiFi, quạt trần, võng, bếp chung, xe đạp miễn phí', '150 Trần Hưng Đạo, Côn Đảo', 2147483647, 'tropicalnest@gmail.com', '1.700.000 VND/đêm', 'Không hoàn tiền cọc nếu hủy đặt phòng. Được phép mang theo thú cưng.', 'https://example.com/images/tropical-nest-1.jpg', 5, 18, '2025-10-01 15:39:31'),
-('HST_010', 'Hana\'s Tiny House', 'Nhà riêng', 'Đang hoạt động', 'Ngôi nhà nhỏ xinh xắn với phong cách Nhật Bản, không gian tối giản, lý tưởng cho các bạn trẻ và cặp đôi.', 1, 'WiFi, điều hòa, bếp nhỏ, máy pha cà phê, TV', '10 Phan Chu Trinh, TP. Hội An', 2147483647, 'hanatin@gmail.com', '950.000 VND/đêm', 'Đặt cọc 50% để giữ phòng. Hủy trước 24 giờ sẽ bị mất phí 30%.', 'https://example.com/images/hana-tiny-house-1.jpg', 4, 22, '2025-10-01 15:39:31'),
-('HST_011', 'Nhà của ai', 'Căn hộ', 'Đang hoạt động', 'Thêm dữ liệu', 2, 'wifi đầy đủ, có hồ bơi trước nhà, khu vực cắm trại, nhà tắm hơi', 'Bắc từ liêm, Hà nội', 944875145, 'NVA13@gmail.com', '500.000', 'đặt cọc trước 50%, hạn chế làm ồn sau 23h, giữ gìn về sinh chung', '5.jpg', 9, 50, '2025-10-01 15:39:31');
+INSERT INTO `db_homestay` (`homestay_id`, `homestay_name`, `address`, `status`, `description`, `room_type`, `policy`, `price`, `guests`, `img`, `img1`, `img2`, `img3`, `checkin`, `checkout`, `owner_id`, `homestay_email`, `homestay_phone`, `rating`, `reviews_count`) VALUES
+(1, 'Amaya Home Deluxe', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Homestay yên tĩnh, gần rừng thông, thích hợp nghỉ dưỡng.', 'Deluxe', '', 1300000, 8, '../images/SS1.jpg', '../images/Amayahome-deluxe1.jpg', '../images/amayahome-deluxe2.jpg', '../images/amayahome-deluxe3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(2, 'Amaya Home Family', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Phòng tiêu chuẩn, đầy đủ tiện nghi.', 'Family', '', 950000, 6, '../images/SS1.1.webp', '../images/amaya-family1.jpg', '../images/amaya-family2.jpg', '../images/amaya-family3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(3, 'Cerf Volant Soc Son Deluxe', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Khu nghỉ dưỡng với view núi.', 'Deluxe', '', 1500000, 5, '../images/SS2.jpg', '../images/CerfVolantSocSonResort-deluxe1.jpg', '../images/CerfVolantSocSonResort-deluxe2.jpg', '../images/CerfVolantSocSonResort-deluxe3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(4, 'Cerf Volant Soc Son Standard', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Phòng standard gần hồ.', 'Standard', '', 1100000, 4, '../images/Cerf Volant Soc Son Resort-standard3.jpg', '../images/Cerf Volant Soc Son Resort-standard1.jpg', '../images/Cerf Volant Soc Son Resort-standard2.jpg', '../images/SS2.1.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(5, 'Debay Retreat Deluxe', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Phong cách hiện đại, gần hồ nước.', 'Deluxe', '', 1200000, 7, '../images/SS3.jpg', '../images/Debay Retreat-deluxe1.webp', '../images/Debay Retreat-deluxe2.webp', '../images/Debay Retreat-deluxe3.webp', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(6, 'Debay Retreat Standard', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Phòng standard giá rẻ.', 'Standard', '', 850000, 5, '../images/Debay Retreat-Standard1.webp', '../images/Debay Retreat-Standar2.webp', '../images/Debay Retreat-Standard3.webp', '../images/SS3.1.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 3, 0),
+(7, 'Amaya Retreat Family', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Biệt thự nghỉ dưỡng sang trọng.', 'Family', '', 1400000, 6, '../images/SS5.jpg', '../images/Amaya Retreat-Family1.jpg', '../images/Amaya Retreat-Family2.jpg', '../images/Amaya Retreat-Family3.webp', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(8, 'Amaya Retreat Standard', 'Sóc Sơn, Hà Nội', 'còn phòng', 'Phòng tiêu chuẩn tiện nghi.', 'Standard', '', 1000000, 4, '../images/SS5.1.webp', '../images/Amaya Retreat-Standard1.webp', '../images/Amaya Retreat-Standard3.webp', '../images/Amaya Retreat-Standard2.webp', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(9, 'BaVi Padme Deluxe', 'Ba Vì, Hà Nội', 'còn phòng', 'Homestay gần vườn quốc gia Ba Vì.', 'Deluxe', '', 1250000, 6, '../images/BV1.jpg', '../images/BV1.1.jpg', '../images/BV1.3.jpg', '../images/BV1.4.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(10, 'BaVi Padme Standard', 'Ba Vì, Hà Nội', 'còn phòng', 'Phòng standard đầy đủ tiện nghi.', 'Standard', '', 900000, 5, '../images/BV1.5.jpg', '../images/BV1.6.jpg', '../images/BV1.7.jpg', '../images/BV1.8.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(11, 'Melia Bavi Mountain Retreat Deluxe', 'Ba Vì, Hà Nội', 'còn phòng', 'Resort cao cấp giữa núi rừng.', 'Deluxe', '', 1350000, 8, '../images/BV2.jpg', '../images/BV2.1.jpg', '../images/BV2.3.jpg', '../images/BV2.4.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(12, 'Melia Bavi Mountain Retreat Standard', 'Ba Vì, Hà Nội', 'còn phòng', 'Phòng nghỉ đơn giản, thoáng mát.', 'Standard', '', 950000, 6, '../images/BV2.5.jpg', '../images/BV2.6.jpg', '../images/BV2.7.jpg', '../images/BV2.8.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(13, 'Mely Farm Standard', 'Ba Vì, Hà Nội', 'còn phòng', 'Trải nghiệm nông trại độc đáo.', 'Standard', '', 950000, 6, '../images/BV3.jpg', '../images/3.1.jpg', '../images/3.3.jpg', '../images/3.4.webp', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(14, 'Mely Farm Deluxe', 'Ba Vì, Hà Nội', 'còn phòng', 'Phòng deluxe rộng rãi.', 'Deluxe', '', 1250000, 7, '../images/BV3.8.jpg', '../images/BV3.6.jpg', '../images/BV3.7.jpg', '../images/3.5.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(15, 'Family Homestay Deluxe', 'Ba Vì, Hà Nội', 'còn phòng', 'Thích hợp cho gia đình.', 'Deluxe', '', 1450000, 6, '../images/BV4.jpg', '../images/BV4.1.jpg', '../images/BV4.3.jpg', '../images/BV4.4.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(16, 'Family Homestay Standard', 'Ba Vì, Hà Nội', 'còn phòng', 'Phòng gia đình tiêu chuẩn.', 'Standard', '', 1050000, 5, '../images/BV4.5.jpg', '../images/BV4.6.jpg', '../images/BV4.7.jpg', '../images/BV4.8.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(17, 'Dream House Deluxe', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'View núi đẹp, không khí mát mẻ.', 'Deluxe', '', 1600000, 7, '../images/TD1.jpg', '../images/TD1.4.jpg', '../images/TD1.5.png', '../images/TD1.3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(18, 'Dream House Standard', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Phòng tiêu chuẩn, tiện nghi.', 'Standard', '', 1150000, 5, '../images/Dream1.webp', '../images/dream1.1.webp', '../images/Dream2.jpg', '../images/dream2.1.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(19, 'Le Bleu Floating Cloud Deluxe', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Homestay nổi tiếng view mây.', 'Deluxe', '', 1450000, 6, '../images/TD2.jpg', '../images/Le_Bleu_Tam_Dao_1.jpg', '../images/Le_Bleu_Tam_Dao_2.jpg', '../images/Le_Bleu_Tam_Dao_3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(20, 'Le Bleu Floating Cloud Standard', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Phòng standard xinh xắn.', 'Standard', '', 1000000, 4, '../images/Dream3.jpg', '../images/Le_Bleu_Tam_Dao_5.jpg', '../images/Le_Bleu_Tam_Dao_6.jpg', '../images/Le_Bleu_Tam_Dao_7.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(21, 'Up In The Air Homestay Deluxe', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Phòng cao tầng nhìn toàn cảnh.', 'Deluxe', '', 1550000, 7, '../images/TD3.jpg', '../images/up6.jpg', '../images/up5.jpg', '../images/up4.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(22, 'Up In The Air Homestay Family', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Phòng family tiện nghi.', 'Family', '', 1050000, 5, '../images/up7.jpg', '../images/up1.jpg', '../images/up2.jpg', '../images/up3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(23, 'Cloudy Garden Deluxe', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Homestay giữa vườn hoa.', 'Deluxe', '', 1500000, 6, '../images/TD4.jpg', '../images/cl3.jpg', '../images/cl1.jpg', '../images/cl2.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(24, 'Cloudy Garden Standard', 'Tam Đảo, Vĩnh Phúc', 'còn phòng', 'Phòng standard gần vườn.', 'Standard', '', 1100000, 5, '../images/cl6.jpeg', '../images/cl7.jpg', '../images/cl4.jpg', '../images/cl8.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(25, 'Phoenix Bungalow Family', 'Mộc Châu, Sơn La', 'còn phòng', 'Bungalow đẹp, view vườn.', 'Family', '', 1400000, 6, '../images/MC.jpg', '../images/MC1.1.jpg', '../images/MC1.2.webp', '../images/MC1.3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(26, 'Phoenix Bungalow Standard', 'Mộc Châu, Sơn La', 'còn phòng', 'Phòng standard ấm cúng.', 'Standard', '', 950000, 5, '../images/MC1.8.jpg', '../images/MC1.4.jpeg', '../images/MC1.5.jpeg', '../images/MC1.6.jpeg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0),
+(27, 'Mộc Châu Eco-garden Deluxe', 'Mộc Châu, Sơn La', 'còn phòng', 'Homestay giữa vườn cây.', 'Deluxe', '', 1550000, 7, '../images/mcc2.webp', '../images/MC2.1.jpg', '../images/MC2.2.webp', '../images/MC2.3.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(28, 'Mộc HomeStay Family', 'Mộc Châu, Sơn La', 'còn phòng', 'Không gian ấm áp, gần thiên nhiên.', 'Family', '', 1500000, 6, '../images/MC3.webp', '../images/mcc.webp', '../images/mcc1.webp', '../images/mcc2.webp', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 5, 0),
+(29, 'Mama House Standard', 'Mộc Châu, Sơn La', 'còn phòng', 'Phòng standard tiện nghi.', 'Standard', '', 1100000, 5, '../images/MC4.webp', '../images/MC4.1.jpg', '../images/MC4.3.jpg', '../images/MC4.4.jpg', '14:00 - 22:00', 'Trước 12:00 trưa', NULL, '', '', 4, 0);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `db_payment`
+-- Cấu trúc bảng cho bảng `db_owner`
 --
 
-CREATE TABLE `db_payment` (
-  `payment_id` varchar(10) NOT NULL,
-  `booking_id` varchar(10) NOT NULL,
-  `method` varchar(255) NOT NULL,
-  `payment_price` decimal(10,0) NOT NULL,
-  `date` date NOT NULL,
-  `payment_status` varchar(255) NOT NULL
+CREATE TABLE `db_owner` (
+  `owner_id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `gender` varchar(10) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `address` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `db_payment`
+-- Đang đổ dữ liệu cho bảng `db_owner`
 --
 
-INSERT INTO `db_payment` (`payment_id`, `booking_id`, `method`, `payment_price`, `date`, `payment_status`) VALUES
-('TT_001', 'B_001', 'Thẻ tín dụng', 3600000, '2024-10-20', 'Đã thanh toán'),
-('TT_002', 'B_002', 'Thẻ tín dụng', 1500000, '2024-11-05', 'Đã đặt cọc'),
-('TT_003', 'B_003', 'Tiền mặt', 1600000, '2024-12-10', 'Đã thanh toán'),
-('TT_004', 'B_004', 'Thẻ tín dụng', 7500000, '2024-10-25', 'Đã thanh toán'),
-('TT_005', 'B_005', 'Chuyển khoản ngân hàng', 9000000, '2024-11-15', 'Đã thanh toán'),
-('TT_006', 'B_006', 'Tiền mặt', 1500000, '2024-12-01', 'Chưa thanh toán'),
-('TT_007', 'B_007', 'Thẻ tín dụng', 1000000, '2024-11-20', 'Đã thanh toán'),
-('TT_008', 'B_008', 'Chuyển khoản ngân hàng', 5400000, '2024-12-25', 'Đang chờ'),
-('TT_009', 'B_009', 'Tiền mặt', 9600000, '2024-10-30', 'Đã thanh toán'),
-('TT_010', 'B_010', 'Thẻ tín dụng', 30000000, '2024-11-22', 'Đã thanh toán');
+INSERT INTO `db_owner` (`owner_id`, `account_id`, `fullname`, `birthday`, `gender`, `email`, `phone`, `address`) VALUES
+(3, 1, 'Khúc Trường Giang', '2000-01-01', 'Nam', '12345678@gmail.com', '0964645393', 'Hà Nội'),
+(4, 10, 'Nguyễn Xuân Sáng', '2000-01-02', 'Nam', '2345678@gmail.com', '0945725842', 'Nghệ An'),
+(6, 5, 'Cao Văn Quyết', '2000-01-13', 'Nam', '3456789@gmail.com', '0397282143', 'Nam Định');
 
 -- --------------------------------------------------------
 
@@ -230,66 +302,81 @@ INSERT INTO `db_payment` (`payment_id`, `booking_id`, `method`, `payment_price`,
 --
 
 CREATE TABLE `db_review` (
-  `review_id` varchar(10) NOT NULL,
-  `customer_id` varchar(10) NOT NULL,
-  `room_id` varchar(10) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `content` varchar(255) NOT NULL,
-  `rating` float NOT NULL,
-  `date` date NOT NULL,
-  `review_status` varchar(255) NOT NULL
+  `review_id` int(11) NOT NULL,
+  `booking_id` int(11) DEFAULT NULL,
+  `homestay_id` int(11) DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `review` text DEFAULT NULL,
+  `rating` decimal(3,0) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `content_feedback` text DEFAULT NULL,
+  `status_review` enum('Đã phản hồi','Chưa phản hồi') DEFAULT 'Chưa phản hồi',
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `db_review`
 --
 
-INSERT INTO `db_review` (`review_id`, `customer_id`, `room_id`, `title`, `content`, `rating`, `date`, `review_status`) VALUES
-('DG_001', 'KH001', 'HST_001', 'Rất hài lòng', 'Căn hộ sạch sẽ, tiện nghi đầy đủ và vị trí rất thuận lợi để di chuyển.', 9.5, '2024-10-25', 'Chờ duyệt'),
-('DG_002', 'KH002', 'HST_002', 'Trải nghiệm tuyệt vời', 'Biệt thự rất đẹp, không gian lãng mạn, yên tĩnh, đúng như mong đợi.', 10, '2024-11-08', 'Đã duyệt'),
-('DG_003', 'KH003', 'HST_003', 'Sạch sẽ và thoải mái', 'Mặc dù homestay tạm ngưng nhưng trải nghiệm trước đó rất tốt, sạch sẽ và thoải mái.', 8, '2024-12-15', 'Đã ẩn'),
-('DG_004', 'KH004', 'HST_004', 'Tuyệt vời cho kỳ nghỉ', 'Bungalow rất dễ thương, gần gũi thiên nhiên, chủ nhà thân thiện.', 9, '2024-10-28', 'Đã duyệt'),
-('DG_005', 'KH005', 'HST_005', 'Sang trọng và tiện nghi', 'Villa có bể bơi riêng, rất sang trọng và đẳng cấp.', 9.8, '2024-11-20', 'Đã duyệt'),
-('DG_006', 'KH006', 'HST_006', 'Trải nghiệm đáng nhớ', 'Một nơi tuyệt vời để trốn khỏi cuộc sống ồn ào.', 8.5, '2024-12-05', 'Đã ẩn'),
-('DG_007', 'KH007', 'HST_007', 'Vị trí đắc địa', 'Căn hộ nằm ở trung tâm, rất thuận tiện để đi lại, phòng ốc sạch sẽ.', 9.3, '2024-11-22', 'Đang chờ duyệt'),
-('DG_008', 'KH008', 'HST_008', 'Đậm chất truyền thống', 'Homestay mang phong cách cổ xưa rất ấn tượng.', 8.8, '2024-12-27', 'Đã duyệt'),
-('DG_009', 'KH009', 'HST_009', 'Rất thư giãn', 'Bungalow rất phù hợp cho những ai muốn hòa mình với thiên nhiên.', 9.6, '2024-11-02', 'Đã duyệt'),
-('DG_010', 'KH010', 'HST_010', 'Độc đáo và xinh xắn', 'Ngôi nhà nhỏ nhưng đầy đủ tiện nghi, thiết kế rất độc đáo.', 9.4, '2024-11-25', 'Đang chờ duyệt');
+INSERT INTO `db_review` (`review_id`, `booking_id`, `homestay_id`, `customer_id`, `review`, `rating`, `created_at`, `content_feedback`, `status_review`, `update_at`, `updated_at`) VALUES
+(3, 10, NULL, NULL, 'Tôi đã có một trải nghiệm rất thú vị tại đây', 5, '2025-10-08 07:30:57', 'Tôi cảm ơn bạn khi đã để lại đánh giá này cho chúng tôi', 'Đã phản hồi', '2025-10-09 08:15:28', NULL),
+(4, 10, NULL, NULL, 'Tôi đã có một trải nghiệm tệ hại tại homestay', 1, '2025-10-08 08:02:35', NULL, 'Chưa phản hồi', '2025-10-09 08:03:17', NULL),
+(6, 13, NULL, NULL, 'tôi không thích dịch vụ ở đây', 3, '2025-10-07 08:24:49', '', 'Chưa phản hồi', '2025-10-09 08:27:53', NULL),
+(7, 10, NULL, NULL, 'jdlakjsldkals', 4, '2025-10-06 08:26:09', NULL, 'Chưa phản hồi', NULL, NULL),
+(8, 21, 29, 9, 'Đẹp tuyệt vời!', 5, '2025-10-13 15:01:38', NULL, 'Chưa phản hồi', '2025-10-14 14:21:34', '2025-10-14 14:21:34'),
+(9, 20, 1, 9, 'Đẹp lắm mọi người nên thử ạ!', 5, '2025-10-13 15:04:08', NULL, 'Chưa phản hồi', '2025-10-14 14:21:54', '2025-10-14 14:21:54'),
+(10, 17, 17, 9, '', 5, '2025-10-13 18:11:57', NULL, 'Chưa phản hồi', NULL, NULL),
+(11, 22, 1, 8, '', 5, '2025-10-13 18:12:31', NULL, 'Chưa phản hồi', NULL, NULL),
+(12, 16, 1, 5, 'Nơi đây rất tuyệt cho các cặp đôi!!!!', 5, '2025-10-14 14:23:17', NULL, 'Chưa phản hồi', NULL, NULL),
+(13, 13, 16, 5, 'Rất tệ!!', 1, '2025-10-14 14:23:38', NULL, 'Chưa phản hồi', NULL, NULL),
+(14, 31, 1, 9, 'Phòng sạch sẽ, nhân viên thân thiện.', 5, '2025-10-17 09:30:00', 'Cảm ơn bạn đã đánh giá tích cực!', 'Đã phản hồi', '2025-10-18 10:00:00', '2025-10-18 10:00:00'),
+(15, 32, 2, 9, 'View biển rất đẹp, nhưng wifi hơi yếu.', 4, '2025-10-22 08:40:00', NULL, 'Chưa phản hồi', NULL, NULL),
+(16, 33, 3, 9, 'Giá hợp lý, phòng nhỏ gọn và sạch.', 5, '2025-10-23 11:22:00', 'Chúng tôi rất vui vì bạn hài lòng!', 'Đã phản hồi', '2025-10-23 13:00:00', '2025-10-23 13:00:00'),
+(17, 34, 4, 9, 'Phòng ổn, nhưng lễ tân xử lý hơi chậm.', 3, '2025-10-28 14:15:00', NULL, 'Chưa phản hồi', NULL, NULL),
+(18, 35, 5, 9, 'Không gian yên tĩnh, phù hợp nghỉ dưỡng.', 5, '2025-10-31 09:05:00', 'Rất vui khi bạn hài lòng!', 'Đã phản hồi', '2025-10-31 09:30:00', '2025-10-31 09:30:00'),
+(19, 36, 6, 9, 'Phòng rộng, có ban công, rất tuyệt!', 5, '2025-11-03 10:45:00', NULL, 'Chưa phản hồi', NULL, NULL),
+(20, 37, 7, 9, 'Giá hơi cao nhưng dịch vụ xứng đáng.', 4, '2025-11-08 16:20:00', 'Cảm ơn góp ý của bạn!', 'Đã phản hồi', '2025-11-09 08:00:00', '2025-11-09 08:00:00'),
+(21, 38, 8, 9, 'Phòng nhỏ, không cách âm tốt.', 2, '2025-11-11 18:10:00', NULL, 'Chưa phản hồi', NULL, NULL),
+(22, 39, 9, 9, 'Phòng đẹp, nhân viên chu đáo.', 5, '2025-11-16 19:40:00', 'Cảm ơn bạn đã chọn homestay của chúng tôi!', 'Đã phản hồi', '2025-11-17 08:45:00', '2025-11-17 08:45:00'),
+(23, 40, 10, 9, 'Mọi thứ đều ổn, nhưng checkin hơi lâu.', 4, '2025-11-22 20:15:00', NULL, 'Chưa phản hồi', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `db_room`
+-- Cấu trúc bảng cho bảng `db_review_backup`
 --
 
-CREATE TABLE `db_room` (
-  `room_id` varchar(10) NOT NULL,
-  `room_name` varchar(255) NOT NULL,
-  `room_type` varchar(255) NOT NULL,
-  `homestay_name` varchar(255) NOT NULL,
-  `room_describe` varchar(255) NOT NULL,
-  `room_people` int(10) NOT NULL,
-  `room_status` varchar(255) NOT NULL,
-  `room_price` int(10) NOT NULL,
-  `image_room` varchar(255) NOT NULL
+CREATE TABLE `db_review_backup` (
+  `review_id` int(11) NOT NULL DEFAULT 0,
+  `booking_id` int(11) DEFAULT NULL,
+  `content_review` text DEFAULT NULL,
+  `rating` decimal(3,0) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `content_feedback` text DEFAULT NULL,
+  `status_review` enum('Đã phản hồi','Chưa phản hồi') DEFAULT 'Chưa phản hồi',
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `db_room`
+-- Đang đổ dữ liệu cho bảng `db_review_backup`
 --
 
-INSERT INTO `db_room` (`room_id`, `room_name`, `room_type`, `homestay_name`, `room_describe`, `room_people`, `room_status`, `room_price`, `image_room`) VALUES
-('P_01', 'Phòng Đôi View Biển', 'Deluxe', 'Nhà của Bố', 'Phòng rộng rãi với ban công hướng ra biển, đầy đủ tiện nghi, phù hợp cho cặp đôi.', 2, 'Đang trống', 1200000, 'https://example.com/images/phong-doi-bien-1.jpg, https://example.com/images/phong-doi-bien-2.jpg'),
-('P_012', 'Phòng Đôi View Biển', 'ViP', 'Ngôi Nhà Biển', 'fsàdsàd', 5, 'Đang trống', 5400000, 'Amaya Retreat -Standrad4.jpg'),
-('P_02', 'Phòng Gia Đình', 'Standard', 'Gác Mơ Đà Lạt', 'Phòng lớn có 2 giường đôi, phù hợp cho gia đình hoặc nhóm bạn.', 4, 'Đã đặt', 1500000, 'https://example.com/images/phong-gia-dinh-1.jpg, https://example.com/images/phong-gia-dinh-2.jpg'),
-('P_03', 'Phòng Đơn Hướng Vườn', 'Standard', 'Ngôi Nhà Biển', 'Phòng nhỏ gọn, yên tĩnh, có cửa sổ nhìn ra khu vườn.', 1, 'Đang trống', 800000, 'https://example.com/images/phong-don-vuon-1.jpg'),
-('P_04', 'Suite Tầm Nhìn Thành Phố', 'VIP', 'Bungalow Vườn Xanh', 'Phòng suite cao cấp, có phòng khách riêng, tầm nhìn toàn cảnh thành phố.', 2, 'Đang dọn dẹp', 2500000, 'https://example.com/images/phong-suite-1.jpg, https://example.com/images/phong-suite-2.jpg'),
-('P_05', 'Bungalow Bể Bơi Riêng', 'VIP', 'Sun View Villa', 'Bungalow độc lập với bể bơi riêng, không gian riêng tư và sang trọng.', 2, 'Đang trống', 3000000, 'https://example.com/images/bungalow-be-boi-1.jpg'),
-('P_06', 'Phòng Dorm Thập', 'Standard', 'The Forest House', 'Phòng tập thể với giường tầng, phù hợp cho khách du lịch bụi.', 8, 'Đã đặt', 250000, 'https://example.com/images/phong-dorm-1.jpg'),
-('P_07', 'Phòng Ba Người', 'Standard', 'Urban Escape', 'Phòng có một giường đôi và một giường đơn, phù hợp cho nhóm 3 người.', 3, 'Đang trống', 1000000, 'https://example.com/images/phong-ba-nguoi-1.jpg'),
-('P_08', 'Phòng Deluxe Sân Thượng', 'Deluxe', 'Tâm An Homestay', 'Phòng có sân thượng riêng, lý tưởng để thư giãn và ngắm sao.', 2, 'Đã đặt', 1800000, 'https://example.com/images/phong-deluxe-san-thuong-1.jpg'),
-('P_09', 'Căn Hộ Một Phòng Ngủ', 'Standard', 'Tropical Nest', 'Căn hộ đầy đủ tiện nghi với bếp, phòng khách, thích hợp cho lưu trú dài ngày.', 2, 'Đang trống', 1600000, 'https://example.com/images/can-ho-mot-phong-ngu-1.jpg, https://example.com/images/can-ho-mot-phong-ngu-2.jpg'),
-('P_10', 'Villa Tổng Thống', 'VIP', 'Hana\'s Tiny House', 'Villa có nhiều phòng ngủ, phòng khách rộng, bể bơi và khu vực ăn uống riêng.', 10, 'Đang bảo trì', 10000000, 'https://example.com/images/villa-tong-thong-1.jpg, https://example.com/images/villa-tong-thong-2.jpg');
+INSERT INTO `db_review_backup` (`review_id`, `booking_id`, `content_review`, `rating`, `created_at`, `content_feedback`, `status_review`, `update_at`) VALUES
+(3, 10, 'Tôi đã có một trải nghiệm rất thú vị tại đây', 5, '2025-10-08 07:30:57', 'Tôi cảm ơn bạn khi đã để lại đánh giá này cho chúng tôi', 'Đã phản hồi', '2025-10-09 08:15:28'),
+(4, 10, 'Tôi đã có một trải nghiệm tệ hại tại homestay', 1, '2025-10-08 08:02:35', NULL, 'Chưa phản hồi', '2025-10-09 08:03:17'),
+(6, 13, 'tôi không thích dịch vụ ở đây', 3, '2025-10-07 08:24:49', '', 'Chưa phản hồi', '2025-10-09 08:27:53'),
+(7, 10, 'jdlakjsldkals', 4, '2025-10-06 08:26:09', NULL, 'Chưa phản hồi', NULL),
+(14, 31, 'Phòng sạch sẽ, nhân viên thân thiện.', 5, '2025-10-17 09:30:00', 'Cảm ơn bạn đã đánh giá tích cực!', 'Đã phản hồi', '2025-10-18 10:00:00'),
+(15, 32, 'View biển rất đẹp, nhưng wifi hơi yếu.', 4, '2025-10-22 08:40:00', NULL, 'Chưa phản hồi', NULL),
+(16, 33, 'Giá hợp lý, phòng nhỏ gọn và sạch.', 5, '2025-10-23 11:22:00', 'Chúng tôi rất vui vì bạn hài lòng!', 'Đã phản hồi', '2025-10-23 13:00:00'),
+(17, 34, 'Phòng ổn, nhưng lễ tân xử lý hơi chậm.', 3, '2025-10-28 14:15:00', NULL, 'Chưa phản hồi', NULL),
+(18, 35, 'Không gian yên tĩnh, phù hợp nghỉ dưỡng.', 5, '2025-10-31 09:05:00', 'Rất vui khi bạn hài lòng!', 'Đã phản hồi', '2025-10-31 09:30:00'),
+(19, 36, 'Phòng rộng, có ban công, rất tuyệt!', 5, '2025-11-03 10:45:00', NULL, 'Chưa phản hồi', NULL),
+(20, 37, 'Giá hơi cao nhưng dịch vụ xứng đáng.', 4, '2025-11-08 16:20:00', 'Cảm ơn góp ý của bạn!', 'Đã phản hồi', '2025-11-09 08:00:00'),
+(21, 38, 'Phòng nhỏ, không cách âm tốt.', 2, '2025-11-11 18:10:00', 'Cảm ơn đã ghé!', 'Đã phản hồi', '2025-11-12 09:00:00'),
+(22, 39, 'Phòng đẹp, nhân viên chu đáo.', 5, '2025-11-16 19:40:00', 'Cảm ơn bạn đã chọn homestay của chúng tôi!', 'Đã phản hồi', '2025-11-17 08:45:00'),
+(23, 40, 'Mọi thứ đều ổn, nhưng checkin hơi lâu.', 4, '2025-11-22 20:15:00', 'Cảm ơn bạn đã tới đây!', 'Đã phản hồi', '2025-11-23 08:00:00');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -299,43 +386,137 @@ INSERT INTO `db_room` (`room_id`, `room_name`, `room_type`, `homestay_name`, `ro
 -- Chỉ mục cho bảng `db_account`
 --
 ALTER TABLE `db_account`
-  ADD PRIMARY KEY (`email`);
+  ADD PRIMARY KEY (`account_id`);
+
+--
+-- Chỉ mục cho bảng `db_admin`
+--
+ALTER TABLE `db_admin`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD KEY `account_id` (`account_id`);
 
 --
 -- Chỉ mục cho bảng `db_booking`
 --
 ALTER TABLE `db_booking`
-  ADD PRIMARY KEY (`booking_id`);
+  ADD PRIMARY KEY (`booking_id`),
+  ADD KEY `homestay_id` (`homestay_id`),
+  ADD KEY `customer_id` (`customer_id`);
 
 --
 -- Chỉ mục cho bảng `db_customer`
 --
 ALTER TABLE `db_customer`
-  ADD PRIMARY KEY (`customer_id`);
+  ADD PRIMARY KEY (`customer_id`),
+  ADD KEY `account_id` (`account_id`);
 
 --
 -- Chỉ mục cho bảng `db_homestay`
 --
 ALTER TABLE `db_homestay`
-  ADD PRIMARY KEY (`homestay_id`);
+  ADD PRIMARY KEY (`homestay_id`),
+  ADD KEY `owner_id` (`owner_id`);
 
 --
--- Chỉ mục cho bảng `db_payment`
+-- Chỉ mục cho bảng `db_owner`
 --
-ALTER TABLE `db_payment`
-  ADD PRIMARY KEY (`payment_id`);
+ALTER TABLE `db_owner`
+  ADD PRIMARY KEY (`owner_id`),
+  ADD KEY `account_id` (`account_id`);
 
 --
 -- Chỉ mục cho bảng `db_review`
 --
 ALTER TABLE `db_review`
-  ADD PRIMARY KEY (`review_id`);
+  ADD PRIMARY KEY (`review_id`),
+  ADD KEY `booking_id` (`booking_id`);
 
 --
--- Chỉ mục cho bảng `db_room`
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
-ALTER TABLE `db_room`
-  ADD PRIMARY KEY (`room_id`);
+
+--
+-- AUTO_INCREMENT cho bảng `db_account`
+--
+ALTER TABLE `db_account`
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT cho bảng `db_admin`
+--
+ALTER TABLE `db_admin`
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT cho bảng `db_booking`
+--
+ALTER TABLE `db_booking`
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT cho bảng `db_customer`
+--
+ALTER TABLE `db_customer`
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT cho bảng `db_homestay`
+--
+ALTER TABLE `db_homestay`
+  MODIFY `homestay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+--
+-- AUTO_INCREMENT cho bảng `db_owner`
+--
+ALTER TABLE `db_owner`
+  MODIFY `owner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT cho bảng `db_review`
+--
+ALTER TABLE `db_review`
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `db_admin`
+--
+ALTER TABLE `db_admin`
+  ADD CONSTRAINT `db_admin_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `db_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `db_booking`
+--
+ALTER TABLE `db_booking`
+  ADD CONSTRAINT `db_booking_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `db_customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `db_booking_ibfk_2` FOREIGN KEY (`homestay_id`) REFERENCES `db_homestay` (`homestay_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `db_customer`
+--
+ALTER TABLE `db_customer`
+  ADD CONSTRAINT `db_customer_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `db_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `db_homestay`
+--
+ALTER TABLE `db_homestay`
+  ADD CONSTRAINT `db_homestay_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `db_owner` (`owner_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `db_owner`
+--
+ALTER TABLE `db_owner`
+  ADD CONSTRAINT `db_owner_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `db_account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `db_review`
+--
+ALTER TABLE `db_review`
+  ADD CONSTRAINT `db_review_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `db_booking` (`booking_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -8,10 +8,12 @@
                 include "../page/account.php";
             }elseif(($_GET['page'])=='user'){
                 include "../page/user.php";
+            }elseif(($_GET['page'])=='admin'){
+                include "../page/admin.php";
+            }elseif(($_GET['page'])=='owner'){
+                include "../page/owner.php";
             }elseif(($_GET['page'])=='homestay'){
-                include "../page/homestay.php";
-            }elseif(($_GET['page'])=='rooms'){
-                include "../page/rooms.php";
+                include "../page/homestay.php";     
             }elseif(($_GET['page'])=='booking'){
                 include "../page/booking.php";
             }elseif(($_GET['page'])=='payment'){
@@ -20,8 +22,6 @@
                 include "../page/reviews.php";
             }elseif(($_GET['page'])=='statistic'){
                 include "../page/statistic.php";
-            }elseif(($_GET['page'])=='feedback'){
-                include "../page/feedback.php";
             }elseif(($_GET['page'])=='reply'){
                 include "../modules/update_function.php";
             }elseif(($_GET['page'])=='delete'){

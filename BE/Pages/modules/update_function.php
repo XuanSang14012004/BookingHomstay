@@ -2,6 +2,7 @@
 include "../../config/connect.php";
 // ------------ Account ------------
 if (isset($_POST['submit_account'])) {
+    $account_id= $_POST['account_id'];
     $fullname = $_POST['fullname'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
@@ -10,10 +11,11 @@ if (isset($_POST['submit_account'])) {
     
     $sql = "UPDATE db_account SET 
                 fullname='$fullname', 
-                phone='$phone', 
+                phone='$phone',
+                email = '$email', 
                 password='$password', 
                 role='$role' 
-            WHERE email='$email'";
+            WHERE account_id='$account_id'";
     
     $query = mysqli_query($conn, $sql);
     if ($query&& mysqli_affected_rows($conn) > 0) {
@@ -32,19 +34,26 @@ include "../../config/connect.php";
 // ------------ Customer ------------
 if (isset($_POST['submit_user'])) {
     $customer_id = $_POST['customer_id'];
-    $customer_name = $_POST['customer_name'];
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
+    }
+    $fullname = $_POST['fullname'];
     $birthday = $_POST['birthday'];
     $gender = $_POST['gender'];
     $email = $_POST['email'];
-    $customer_phone = $_POST['customer_phone'];
+    $phone = $_POST['phone'];
     $address = $_POST['address'];
     
     $sql = "UPDATE db_customer SET 
-                customer_name='$customer_name', 
+                account_id=$account_id,
+                fullname='$fullname', 
                 birthday='$birthday', 
                 gender='$gender', 
                 email='$email', 
-                customer_phone='$customer_phone', 
+                phone='$phone', 
                 address='$address' 
             WHERE customer_id='$customer_id'";
             
@@ -59,68 +68,170 @@ if (isset($_POST['submit_user'])) {
 }
 ?>
 
+<?php
+include "../../config/connect.php";
+
+if (isset($_POST['submit_admin'])) {
+    $admin_id = $_POST['admin_id'];
+    $temp = $_POST['account_id'];
+    $account_id = ($temp == '' || $temp == null) ? "NULL" : (int)$temp;
+
+    $fullname = $_POST['fullname'];
+    $birthday = $_POST['birthday'];
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    $image = null;
+    if (isset($_FILES['image'])) {
+        $image = basename($_FILES['image']['name']);
+        $target_dir = "../../Images/";
+        $target_file = $target_dir . $image;
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+    }
+    if (!empty($image)) {
+        $sql = "UPDATE db_admin SET 
+                    account_id=$account_id,
+                    fullname='$fullname', 
+                    birthday='$birthday', 
+                    gender='$gender', 
+                    email='$email', 
+                    phone='$phone', 
+                    `address`='$address',
+                    `image`='$image'
+                WHERE admin_id='$admin_id'";
+    } else {
+        $sql = "UPDATE db_admin SET 
+                    account_id=$account_id,
+                    fullname='$fullname', 
+                    birthday='$birthday', 
+                    gender='$gender', 
+                    email='$email', 
+                    phone='$phone', 
+                    `address`='$address'
+                WHERE admin_id='$admin_id'";
+    }
+
+    $query = mysqli_query($conn, $sql);
+
+    if ($query && mysqli_affected_rows($conn) > 0) {
+        header("Location: ../home/home.php?page=admin&status=update_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=admin&status=update_error");
+        exit();
+    }
+}
+?>
+
+<?php
+include "../../config/connect.php";
+// ------------ Owner ------------
+if (isset($_POST['submit_owner'])) {
+    $owner_id = $_POST['owner_id'];
+    $temp = $_POST['account_id'];
+    if ($temp == '' || $temp == null) {
+        $account_id = "NULL";
+    } else {
+        $account_id = (int)$temp;
+    }
+    $fullname = $_POST['fullname'];
+    $birthday = $_POST['birthday'];
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    
+    $sql = "UPDATE db_owner SET 
+                account_id=$account_id,
+                fullname='$fullname', 
+                birthday='$birthday', 
+                gender='$gender', 
+                email='$email', 
+                phone='$phone', 
+                address='$address' 
+            WHERE owner_id='$owner_id'";
+            
+    $query = mysqli_query($conn, $sql);
+    if ($query&& mysqli_affected_rows($conn) > 0) {
+        header("Location: ../home/home.php?page=owner&status=update_success");
+        exit();
+    } else {
+        header("Location: ../home/home.php?page=owner&status=update_error");
+        exit();
+    }
+}
+?>
+
 
 <?php
 include "../../config/connect.php";
 // ------------ Homestay ------------
 if (isset($_POST['submit_homestay'])) {
     $homestay_id = $_POST['homestay_id'];
-    $temp = $_POST['homestay_name'];
-    $homestay_name = mysqli_real_escape_string($conn, $temp);
-    $homestay_type = $_POST['homestay_type'];
-    $homestay_status = $_POST['homestay_status'];
-    $room_number = $_POST['room_number'];
-    $home_price = $_POST['home_price'];
-    $phone_owner = $_POST['phone_owner'];
-    $email = $_POST['email'];
-    $homestay_address = $_POST['homestay_address'];
-    $describe = $_POST['describe'];
-    $amenities = $_POST['amenities'];
-    $policy = $_POST['policy'];
-    $home_rating = $_POST['home_rating'];
-    $rating_number = $_POST['rating_number'];
-    
-    $image = basename($_FILES['image_new']['name']);
-    $target_dir = "../../Images/";
-    $target_file = $target_dir . $image;
-    
-    if (!empty($image) && move_uploaded_file($_FILES["image_new"]["tmp_name"], $target_file)) {
-        $sql = "UPDATE db_homestay SET 
-                    homestay_name='$homestay_name', 
-                    homestay_type='$homestay_type', 
-                    homestay_status='$homestay_status', 
-                    room_number='$room_number', 
-                    home_price='$home_price', 
-                    phone_owner='$phone_owner', 
-                    email='$email', 
-                    homestay_address='$homestay_address', 
-                    `describe`='$describe', 
-                    amenities='$amenities', 
-                    `policy`='$policy', 
-                    `image`='$image', 
-                    home_rating='$home_rating', 
-                    rating_number='$rating_number' 
-                WHERE homestay_id='$homestay_id'";
+    $homestay_name = mysqli_real_escape_string($conn, $_POST['homestay_name']);
+    $room_type = $_POST['room_type'];
+    $guests = $_POST['guests'];
+    $status = $_POST['status'];
+    $price = $_POST['price'];
+    $checkin = $_POST['checkin'];
+    $checkout = $_POST['checkout'];
+    $temp = $_POST['owner_id'];
+    if ($temp == '' || $temp == null) {
+        $owner_id = "NULL";
     } else {
-        $sql = "UPDATE db_homestay SET 
-                    homestay_name='$homestay_name', 
-                    homestay_type='$homestay_type', 
-                    homestay_status='$homestay_status', 
-                    room_number='$room_number', 
-                    home_price='$home_price', 
-                    phone_owner='$phone_owner', 
-                    email='$email', 
-                    homestay_address='$homestay_address', 
-                    `describe`='$describe', 
-                    amenities='$amenities', 
-                    `policy`='$policy', 
-                    home_rating='$home_rating', 
-                    rating_number='$rating_number' 
-                WHERE homestay_id='$homestay_id'";
+        $owner_id = (int)$temp;
     }
-    
+    $homestay_phone = $_POST['homestay_phone'];
+    $homestay_email = $_POST['homestay_email'];
+    $address = $_POST['address'];
+    $description = $_POST['description'];
+    $policy = $_POST['policy'];
+    $rating = $_POST['rating'];
+    $reviews_count = $_POST['reviews_count'];
+
+    $update_fields = "
+        homestay_name='$homestay_name',
+        room_type='$room_type',
+        `status`='$status',
+        price='$price',
+        owner_id=$owner_id,
+        homestay_phone='$homestay_phone',
+        homestay_email='$homestay_email',
+        `address`='$address',
+        `description`='$description',
+        checkin='$checkin',
+        checkout='$checkout',
+        guests='$guests',
+        `policy`='$policy',
+        rating='$rating',
+        reviews_count='$reviews_count'
+    ";
+
+    $image_fields = [
+        'img'  => 'image_new',
+        'img1' => 'image1_new',
+        'img2' => 'image2_new',
+        'img3' => 'image3_new'
+    ];
+
+    foreach ($image_fields as $db_field => $input_name) {
+        if (!empty($_FILES[$input_name]['name'])) {
+            $file_name = basename($_FILES[$input_name]['name']);
+            $target_file = "../../../FE/images/" . $file_name;
+
+            if (move_uploaded_file($_FILES[$input_name]['tmp_name'], $target_file)) {
+                $update_fields .= ", `$db_field` = '" . $file_name . "'";
+            }
+        }
+    }
+
+    $sql = "UPDATE db_homestay SET $update_fields WHERE homestay_id='$homestay_id'";
+
     $query = mysqli_query($conn, $sql);
-    if ($query && mysqli_affected_rows($conn) > 0) {
+
+    if ($query && mysqli_affected_rows($conn) >= 0) {
         header("Location: ../home/home.php?page=homestay&status=update_success");
         exit();
     } else {
@@ -132,86 +243,49 @@ if (isset($_POST['submit_homestay'])) {
 
 
 
-<?php
-include "../../config/connect.php";
-// ------------ Rooms ------------
-if (isset($_POST['submit_room'])) {
-    $room_id = $_POST['room_id']; 
-    $room_name = $_POST['room_name'];
-    $room_type = $_POST['room_type'];
-    $temp = $_POST['homestay_name'];
-    $homestay_name = mysqli_real_escape_string($conn, $temp);
-    $room_describe = $_POST['room_describe'];
-    $room_people = $_POST['room_people'];
-    $room_price = $_POST['room_price'];
-    $room_status = $_POST['room_status'];
-    
-    $image_room = basename($_FILES['image_room']['name']);
-    $target_dir = "../../Images/";
-    $target_file = $target_dir . $image_room;
-    
-    if (!empty($image_room) && move_uploaded_file($_FILES["image_room"]["tmp_name"], $target_file)) {
-        $sql = "UPDATE db_room SET 
-                    room_name='$room_name', 
-                    room_type='$room_type', 
-                    homestay_name='$homestay_name', 
-                    room_describe='$room_describe', 
-                    room_people='$room_people', 
-                    room_price='$room_price', 
-                    room_status='$room_status', 
-                    image_room='$image_room' 
-                WHERE room_id='$room_id'";
-    } else {
-        $sql = "UPDATE db_room SET 
-                    room_name='$room_name', 
-                    room_type='$room_type', 
-                    homestay_name='$homestay_name', 
-                    room_describe='$room_describe', 
-                    room_people='$room_people', 
-                    room_price='$room_price', 
-                    room_status='$room_status' 
-                WHERE room_id='$room_id'";
-    }
-    
-    $query = mysqli_query($conn, $sql);
-    if ($query) {
-        header("Location: ../home/home.php?page=rooms&status=update_success");
-        exit();
-    } else {
-        header("Location: ../home/home.php?page=rooms&status=update_error");
-        exit();
-    }
-}
-?>
+
 
 <?php
 include "../../config/connect.php";
 // ------------ Booking ------------
 if (isset($_POST['submit_booking'])) {
     $booking_id = $_POST['booking_id'];
-    $customer_id = $_POST['customer_id'];
-    $customer_name = $_POST['customer_name'];
     $homestay_id = $_POST['homestay_id'];
-    $room_id = $_POST['room_id'];
-    $date_booking = $_POST['date_booking'];
-    $date_checkin = $_POST['date_checkin'];
-    $date_checkout = $_POST['date_checkout'];
-    $booking_people = $_POST['booking_people'];
-    $booking_price = $_POST['booking_price'];
-    $booking_status = $_POST['booking_status'];
-    $note = $_POST['note'];
+    $temp = $_POST['customer_id'];
+    if ($temp == '' || $temp == null) {
+        $customer_id = "NULL";
+    } else {
+        $customer_id = (int)$temp;
+    }
+    $customer_name = $_POST['customer_name'];
+    $customer_email = $_POST['customer_email'];
+    $customer_phone = $_POST['customer_phone'];
+    $date_booking = $_POST['created_at']; 
+    $date_checkin = $_POST['checkin_date']; 
+    $date_checkout = $_POST['checkout_date']; 
+    $guests = $_POST['guests'];
+    $payment_method = $_POST['payment_method'];
+    $booking_price = $_POST['total_price']; 
+    $booking_status = $_POST['status']; 
+    $payment_status = $_POST['payment_status'];
+    $payment_date = $_POST['payment_date'];  
+    $note = $_POST['note']; 
 
     $sql = "UPDATE db_booking SET 
-                customer_id='$customer_id', 
-                customer_name='$customer_name', 
-                homestay_id='$homestay_id', 
-                room_id='$room_id', 
-                date_booking='$date_booking', 
-                date_checkin='$date_checkin', 
-                date_checkout='$date_checkout', 
-                booking_people='$booking_people', 
-                booking_price='$booking_price', 
-                booking_status='$booking_status', 
+                homestay_id ='$homestay_id',
+                customer_id=$customer_id, 
+                customer_name='$customer_name',
+                customer_email='$customer_email', 
+                customer_phone='$customer_phone',  
+                created_at='$date_booking', 
+                checkin_date='$date_checkin', 
+                checkout_date='$date_checkout', 
+                guests='$guests',
+                payment_method='$payment_method', 
+                total_price='$booking_price', 
+                `status`='$booking_status',
+                payment_status='$payment_status', 
+                payment_date='$payment_date',  
                 note='$note' 
             WHERE booking_id='$booking_id'";
             
@@ -230,11 +304,10 @@ if (isset($_POST['submit_booking'])) {
 include "../../config/connect.php";
 // ------------ Payment ------------
 $action = isset($_GET['action']) ? $_GET['action'] :'';
-// ------------ Reviews ------------
 if (isset($_POST['done_payment'])) {
-    $payment_id = $_POST['payment_id'];
+    $booking_id = $_POST['booking_id'];
     $payment_status = "Đã thanh toán";
-    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE payment_id = '$payment_id'";
+    $sql = "UPDATE db_payment SET payment_status = '$payment_status' WHERE booking_id = '$booking_id'";
     $query = mysqli_query($conn, $sql);
     if ($query) {
         header("Location: ../home/home.php?page=payment&status=success_payment");
@@ -246,20 +319,24 @@ if (isset($_POST['done_payment'])) {
 }
 
 if (isset($_POST['submit_payment'])) {
-    $payment_id = $_POST['payment_id'];
     $booking_id = $_POST['booking_id'];
-    $method = $_POST['method'];
-    $payment_price = $_POST['payment_price'];
-    $date = $_POST['date'];
+    $customer_name = $_POST['customer_name'];
+    $customer_email = $_POST['customer_email'];
+    $customer_phone = $_POST['customer_phone'];
+    $payment_method = $_POST['payment_method'];
+    $total_price = $_POST['total_price'];
+    $payment_date = $_POST['payment_date'];
     $payment_status = $_POST['payment_status'];
     
-    $sql = "UPDATE db_payment SET 
-                booking_id='$booking_id', 
-                method='$method', 
-                payment_price='$payment_price', 
-                date='$date', 
-                payment_status='$payment_status' 
-            WHERE payment_id='$payment_id'";
+    $sql = "UPDATE db_booking SET
+                customer_name ='$customer_name',
+                customer_email ='$customer_email',
+                customer_phone ='$customer_phone',
+                payment_method = '$payment_method',
+                total_price = '$total_price',
+                payment_date = '$payment_date',
+                payment_status = '$payment_status' 
+            WHERE booking_id='$booking_id'";
             
     $query = mysqli_query($conn, $sql);
     if ($query) {
@@ -276,53 +353,20 @@ if (isset($_POST['submit_payment'])) {
 include "../../config/connect.php";
 $action = isset($_GET['action']) ? $_GET['action'] :'';
 // ------------ Reviews ------------
-if ($action === 'reply_review') {
-    $review_id =  isset($_GET['id']) ? $_GET['id'] : null; 
-    $review_status = "Đã duyệt";
-    $sql = "UPDATE db_review SET review_status = '$review_status' WHERE review_id = '$review_id'";
-    $query = mysqli_query($conn, $sql);
-    if ($query) {
-        header("Location: ../home/home.php?page=reviews&status=update_success");
-        exit();
-    } else {
-    header("Location: ../home/home.php?page=reviews&status=update_error");
-        exit();
-    }
-}
-elseif (isset($_POST['submit_review'])) {
+if (isset($_POST['submit_review'])) {
     $review_id =  $_POST['review_id'];
-    $review_status = $_POST['review_status'];
-    $sql = "UPDATE db_review SET  review_status = '$review_status' WHERE review_id='$review_id'";         
+    $content_feedback = $_POST['content_feedback'];
+    $status_review = $_POST['status_review'];
+    $sql = "UPDATE db_review SET
+    content_feedback ='$content_feedback', 
+    status_review = '$status_review' 
+    WHERE review_id='$review_id'";         
     $query = mysqli_query($conn, $sql);
     if ($query) {
         header("Location: ../home/home.php?page=reviews&status=update_success");
         exit();
     } else {
         header("Location: ../home/home.php?page=reviews&status=update_error");
-        exit();
-    }
-}
-?>
-
-<?php
-include "../../config/connect.php";
-// ------------ Feedback ------------
-if (isset($_POST['submit_feedback'])) {
-    $feedback_id = $_POST['feedback_id'];
-    $feedback_status = $_POST['feedback_status'];
-    $reply = $_POST['reply'];
-    
-    $sql = "UPDATE db_feedback SET  
-                feedback_status='$feedback_status', 
-                reply='$reply' 
-            WHERE feedback_id='$feedback_id'";
-            
-    $query = mysqli_query($conn, $sql);
-    if ($query) {
-        header("Location: ../home/home.php?page=feedback&status=update_success");
-        exit();
-    } else {
-        header("Location: ../home/home.php?page=feedback&status=update_error");
         exit();
     }
 }

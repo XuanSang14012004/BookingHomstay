@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // -------------------------------------------------------------
-    // Biểu đồ Doanh thu theo tháng (Chức năng Thống kê & Báo cáo)
-    // -------------------------------------------------------------
     const monthlyRevenueChartElement = document.getElementById('monthlyRevenueChart');
     if (monthlyRevenueChartElement) {
         const monthlyRevenueData = {
@@ -10,12 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 label: 'Doanh thu (triệu VNĐ)',
                 data: [120, 150, 100, 180, 200, 160],
                 backgroundColor: [
-                    'rgba(52, 152, 219, 0.8)', // Xanh dương
-                    'rgba(241, 196, 15, 0.8)',  // Vàng
-                    'rgba(46, 204, 113, 0.8)', // Xanh lá
-                    'rgba(230, 126, 34, 0.8)',  // Cam
-                    'rgba(155, 89, 182, 0.8)',  // Tím
-                    'rgba(26, 188, 156, 0.8)'  // Xanh ngọc
+                    'rgba(52, 152, 219, 0.8)',
+                    'rgba(241, 196, 15, 0.8)',
+                    'rgba(46, 204, 113, 0.8)',
+                    'rgba(230, 126, 34, 0.8)',
+                    'rgba(155, 89, 182, 0.8)', 
+                    'rgba(26, 188, 156, 0.8)' 
                 ],
                 borderColor: [
                     'rgba(52, 152, 219, 1)',
