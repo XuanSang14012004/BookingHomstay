@@ -11,8 +11,8 @@ function createMomoPayment($bookingId, $amount) {
 
     // $redirectUrl = "http://localhost/BookingHomstay/PLACE/history.php"; 
     // $ipnUrl      = "http://localhost/booking/notify_momo.php"; 
-      $redirectUrl = "http://localhost/BookingHomstay/PAY/return_momo.php";
-      $ipnUrl      = "http://localhost/BookingHomstay/PAY/notify_momo.php";
+      $redirectUrl = "http://localhost/BS/FE/PAY/return_momo.php";
+      $ipnUrl      = "http://localhost/BS/FE/PAY/notify_momo.php";
 
 
     $requestId   = time() . "";

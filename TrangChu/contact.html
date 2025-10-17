@@ -1,103 +1,188 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liên hệ</title>
-<link rel="stylesheet" href="../CSS/style_user.css?v=4.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liên hệ | BookingHomeStay</title>
+  <link rel="stylesheet" href="../CSS/style_user.css?v=14">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+
 <body>
-     <div class="header-top">
+  <header class="main-header">
+    <div class="header-container">
+      <a href="./../TrangChu/user_main.php" class="logo">BookingHomeStay</a>
+      <nav class="main-nav">
         <ul>
-            <li><a href="user.php">Trang chủ</a></li>
-            <li><a href="about.php">Về chúng tôi</a></li>
-            <li><a href="contact.html">&#9742;Liên hệ</a></li>
-            <li><a href="##review">Đánh giá</a></li>
-            <li><a href="#explore-location">Danh sách các HomeStay</a></li>
-             <li><a href="login.php">Đăng nhập</a></li>
-             <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
-             <li><a><i class="fa-solid fa-cart-shopping"></i></a></li>
+          <li><a href="./../TrangChu/user_main.php">Trang chủ</a></li>
+          <li><a href="./../TrangChu/about.php">Về chúng tôi</a></li>
+          <li><a href="./../TrangChu/user_homestay.php">HomeStay</a></li>
+          <li><a href="#explore-location">Khám phá</a></li>
+          <li><a href="#feedback">Đánh giá</a></li>
+          <li><a href="./../TrangChu/contact.html">Liên hệ</a></li>
         </ul>
-    </div>
-<div class="container-review">
-    <h2>Liên hệ với chúng tôi</h2>
-    <p class="description">Hãy liên hệ qua các kênh nhanh hoặc điền form để gửi thông tin trực tiếp đến chúng tôi.</p>
+      </nav>
 
-    <!-- Thông tin nhanh -->
-    <div class="contact-info">
-        <div class="info-item">
-            <p><strong>Địa chỉ:</strong>Đại học Mỏ-Địa Chất,phường Đức Thắng,Hà Nội</p>
+      <div class="user-actions">
+        <a href="../PLACE/history.php" class="cart-icon" title="Giỏ hàng"><i class="fa-solid fa-cart-shopping"></i></a>
+
+        <div class="user-menu-wrapper">
+          <a href="javascript:void(0);" id="userIcon" class="user-icon-link">
+            <i class="fa-solid fa-user"></i> User
+          </a>
+          <div class="dropdown-menu" id="userDropdown">
+            <div class="user-info">
+              <img src="../images/user.jpg" alt="Avatar" class="avatar">
+              <span>Trường Giang</span>
+            </div>
+            <hr>
+            <a href="../TrangChu/profile.php"><i class="fa-solid fa-user-circle"></i> Profile</a>
+            <a href=""><i class="fa-solid fa-gear"></i> Cài đặt & quyền riêng tư</a>
+            <a href="#"><i class="fa-solid fa-question-circle"></i> Trợ giúp & hỗ trợ</a>
+            <a href="../../Login/logout.php" class="logout"><i class="fa-solid fa-sign-out"></i> Đăng
+              xuất</a>
+          </div>
         </div>
-        <div class="info-item">
-            <p><strong>Điện thoại:</strong>0328947360</p>
+      </div>
+    </div>
+  </header>
+  <div class="contact-page-wrapper">
+    <div class="contact-header">
+      <h1>Bạn cần hỗ trợ? Liên hệ với chúng tôi</h1>
+      <p class="subtitle">Đội ngũ BookingHomeStay luôn sẵn lòng giải đáp mọi thắc mắc của bạn 24/7. Hãy chọn cách
+        thức liên hệ phù hợp nhất!</p>
+    </div>
+
+    <div class="contact-content-grid">
+      <div class="contact-info-col">
+
+        <div class="contact-card quick-contact">
+          <h3>Kênh liên hệ nhanh</h3>
+          <div class="info-group">
+            <i class="fa-solid fa-phone-volume"></i>
+            <div class="info-details">
+              <strong>Hotline hỗ trợ:</strong>
+              <p>1900 6789</p>
+              <small>Hoạt động 24/7</small>
+            </div>
+          </div>
+          <div class="info-group">
+            <i class="fa-solid fa-envelope"></i>
+            <div class="info-details">
+              <strong>Email hỗ trợ:</strong>
+              <p><a href="mailto:support@bookinghomestay.com">bookinghomestay@gmail.com</a></p>
+              <small>Thời gian phản hồi: 1-2 giờ làm việc</small>
+            </div>
+          </div>
+          <div class="info-group">  
+            <i class="fa-solid fa-handshake"></i>
+            <div class="info-details">
+              <strong>Hợp tác & Đối tác:</strong>
+              <p><a href="mailto:partner@bookinghomestay.com">bookinghomestaypartner@gmail.com</a></p>
+              <small>Liên hệ để đưa homestay lên hệ thống</small>
+            </div>
+          </div>
         </div>
-        <div class="info-item">
-            <p><strong>Email:</strong> <a href="mailto:contact@homestay.com">khuctruonggiang58@gmail.com</a></p>
+
+        <div class="contact-card social-contact">
+          <h3>Kết nối với chúng tôi</h3>
+          <div class="social-links-contact">
+            <a href="" target="_blank" title="Chat Zalo"><i class="fa-brands fa-phone"></i></a>
+            <a href="https://www.facebook.com/share/16X5Z7mVcN/" target="_blank" title="Chat Messenger"><i
+                class="fa-brands fa-facebook-messenger"></i></a>
+            <a href="https://www.facebook.com/share/16X5Z7mVcN/" target="_blank" title="Theo dõi Facebook"><i
+                class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.instagram.com/xktggx?igsh=MTNpdnQ0N3cxbG1hcA==" target="_blank" title="Theo dõi Instagram"><i class="fa-brands fa-instagram"></i></a>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- Mạng xã hội -->
-    <div class="social-links-contact">
-        <a href="https://zalo.me/0123456789" target="_blank"><i class="fa-brands fa-zalo"></i></a>
-        <a href="https://m.me/yourpage" target="_blank"><i class="fa-brands fa-facebook-messenger"></i></a>
-        <a href="https://web.facebook.com/?_rdc=1&_rdr#" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-        <a href="https://www.instagram.com/yourpage" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-        <a href="mailto:contact@homestay.com"><i class="fa-solid fa-envelope"></i></a>
-    </div>
+      <div class="contact-form-col">
+        <div class="contact-card form-wrapper">
+          <h3>Gửi yêu cầu qua Form</h3>
+          <form action="process_contact.php" method="POST" class="contact-form">
+            <div class="form-group">
+              <label for="name"><i class="fa-solid fa-user"></i> Họ và tên:</label>
+              <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+            </div>
 
-    <!-- Form liên hệ -->
-    <form action="process_contact.php" method="POST" class="form">
-        <label for="name">Họ và tên:</label>
-        <input type="text" id="name" name="name" placeholder="Nhập họ và tên" required>
+            <div class="form-group">
+              <label for="email"><i class="fa-solid fa-at"></i> Email:</label>
+              <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+            </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+            <div class="form-group">
+              <label for="phone"><i class="fa-solid fa-phone"></i> Số điện thoại:</label>
+              <input type="tel" id="phone" name="phone" placeholder="VD: 0912345678" required pattern="0[0-9]{9,11}">
+            </div>
 
-        <label for="phone">Số điện thoại:</label>
-        <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" required pattern="[0-9]{9,12}">
+            <div class="form-group">
+              <label for="subject"><i class="fa-solid fa-tag"></i> Phân loại yêu cầu:</label>
+              <select id="subject" name="subject" required>
+                <option value="" disabled selected>Chọn chủ đề liên hệ</option>
+                <option value="DatPhong">Hỗ trợ đặt phòng/Thanh toán</option>
+                <option value="HoanHuyDoi">Yêu cầu hoàn, hủy hoặc thay đổi đặt phòng</option>
+                <option value="DoiTac">Đăng ký làm đối tác HomeStay</option>
+                <option value="KyThuat">Vấn đề kỹ thuật/Lỗi website</option>
+                <option value="GopY">Góp ý, khiếu nại dịch vụ</option>
+                <option value="Khac">Chủ đề khác</option>
+              </select>
+            </div>
 
-        <label for="subject">Tiêu đề:</label>
-        <input type="text" id="subject" name="subject" placeholder="Tiêu đề nội dung liên hệ" required>
+            <div class="form-group">
+              <label for="message"><i class="fa-solid fa-message"></i> Nội dung chi tiết:</label>
+              <textarea id="message" name="message" rows="5" placeholder="Mô tả chi tiết vấn đề của bạn"
+                required></textarea>
+            </div>
 
-        <label for="message">Nội dung:</label>
-        <textarea id="message" name="message" rows="6" placeholder="Nhập nội dung liên hệ" required></textarea>
-
-        <button type="submit">Gửi liên hệ</button>
-    </form>
-</div>
-<footer class="footer">
-  <div class="footer-container">
-    <!-- Cột 1: Logo + giới thiệu -->
-    <div class="footer-col">
-      <h2>BookingHomeStay</h2>
-      <p>Đặt homestay nhanh chóng, dễ dàng và tiện lợi.  
-      Mang đến trải nghiệm nghỉ dưỡng tuyệt vời cho bạn.</p>
-    </div>
-
-    <!-- Cột 2: Thông tin liên hệ -->
-    <div class="footer-col">
-      <h3>Liên hệ</h3>
-      <p>📍 Hà Nội, Việt Nam</p>
-      <p>📞 0123 456 789</p>
-      <p>✉️ bookinghomestay@gmail.com</p>
-    </div>
-
-    <!-- Cột 3: Mạng xã hội -->
-    <div class="footer-col">
-      <h3>Kết nối với chúng tôi</h3>
-      <div class="social-links">
-        <a href="#"><img src="../images/FB.jpg" alt="Facebook"></a>
-        <a href="#"><img src="../images/IG.jpg" alt="Instagram"></a>
-        <a href="#"><img src="../images/zalo.jpg" alt="Zalo"></a>
-        <a href="#"><img src="../images/MES.jpg" alt="TikTok"></a>
+            <button type="submit" class="submit-btn">Gửi yêu cầu hỗ trợ</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>BookingHomeStay</h3>
+        <p>Đặt homestay nhanh chóng, dễ dàng và tiện lợi. Mang đến trải nghiệm nghỉ dưỡng tuyệt vời cho bạn.</p>
+      </div>
 
-  <div class="footer-bottom">
-    <p>© 2025 BookingHomeStay. All rights reserved.</p>
-  </div>
-</footer>
+      <div class="footer-col">
+        <h3>Danh mục</h3>
+        <ul>
+          <li><a href="./../TrangChu/user_main.php">Trang chủ</a></li>
+          <li><a href="./../TrangChu/about.php">Về chúng tôi</a></li>
+          <li><a href="./../TrangChu/user_homestay.php">Danh sách HomeStay</a></li>
+          <li><a href="#explore-location">Khám phá địa điểm</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col contact-info">
+        <h3>Liên hệ</h3>
+        <p><i class="fa-solid fa-location-dot"></i> Hà Nội, Việt Nam</p>
+        <p><i class="fa-solid fa-phone"></i> 0123 456 789</p>
+        <p><i class="fa-solid fa-envelope"></i> bookinghomestay@gmail.com</p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Kết nối</h3>
+        <div class="social-links">
+          <a href="https://www.facebook.com/share/16X5Z7mVcN/" target="_blank" title="Facebook"><i
+              class="fa-brands fa-facebook"></i></a>
+          <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" target="_blank" title="zalo"><i class="fab fa-zalo"></i></a>
+          <a href="#" target="_blank" title="Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>Bản quyền &copy; 2025 BookingHomeStay. All rights reserved.</p>
+    </div>
+  </footer>
+
 </body>
+
 </html>
