@@ -2,10 +2,14 @@
 require_once "../../config/connect.php";
 
 $account_id = $_SESSION['account_id'] ?? null;
-if (!$account_id) {
+$user_role = $_SESSION['role'] ?? null;
+
+if (!$account_id || !$user_role) {
     echo "Bạn chưa đăng nhập!";
     exit();
 }
+
+$user_table = ($user_role === 'admin') ? 'db_admin' : 'db_owner';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_profile') {
     $fullname = trim($_POST['fullname'] ?? '');
@@ -15,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $phone    = trim($_POST['phone'] ?? '');
     $address  = trim($_POST['address'] ?? '');
 
-    $sql_current_img = "SELECT image FROM db_admin WHERE account_id = ?";
+    $sql_current_img = "SELECT image FROM $user_table WHERE account_id = ?";
     $stmt_img = $conn->prepare($sql_current_img);
     $stmt_img->bind_param("s", $account_id);
     $stmt_img->execute();
@@ -26,15 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if (!empty($_FILES['image']['name'])) {
         $uploadDir = __DIR__ . "/../../Images/";
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-        $origName = basename($_FILES['image']['name']);
-        $safeName = time() . '_' . preg_replace('/[^a-zA-Z0-9\._-]/', '_', $origName);
+        $safeName = basename($_FILES['image']['name']);
         $target = $uploadDir . $safeName;
         if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
             $imageName = $safeName;
         }
     }
 
-    $sql_update = "UPDATE db_admin SET fullname = ?, birthday = ?, gender = ?, email = ?, phone = ?, address = ?, image = ? WHERE account_id = ?";
+    $sql_update = "UPDATE $user_table SET fullname = ?, birthday = ?, gender = ?, email = ?, phone = ?, address = ?, image = ? WHERE account_id = ?";
     $stmt = $conn->prepare($sql_update);
     $stmt->bind_param("ssssssss", $fullname, $birthday, $gender, $email, $phone, $address, $imageName, $account_id);
     $success = $stmt->execute();
@@ -48,7 +51,7 @@ $sql_acc = "SELECT * FROM db_account WHERE account_id = '$account_id'";
 $res_acc = mysqli_query($conn, $sql_acc);
 $acc = $res_acc && mysqli_num_rows($res_acc) > 0 ? mysqli_fetch_assoc($res_acc) : null;
 
-$sql = "SELECT * FROM db_admin WHERE account_id = '$account_id'";
+$sql = "SELECT * FROM $user_table WHERE account_id = '$account_id'";
 $result = mysqli_query($conn, $sql);
 $row = $result && mysqli_num_rows($result) > 0 ? mysqli_fetch_assoc($result) : null;
 
@@ -133,6 +136,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <div class="info-group">
                         <label>Địa chỉ:</label>
                         <p><?php echo htmlspecialchars($row['address']); ?></p>
+                    </div>
+                    <div class="info-group">
+                        <label>Phân quyền:</label>
+                        <p><?php if ($user_role ==='admin'){ 
+                            echo "Quản trị viên";}
+                            elseif($user_role ==='owner'){
+                                echo "Chủ Homestay";}  
+                        ?></p>
                     </div>
                     <div style="margin-top:12px;">
                         <button type="button" id="btn-edit-profile" class="btn">Cập nhật thông tin</button>

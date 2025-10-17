@@ -214,7 +214,7 @@ if ($res_status) {
                             echo 'not-completed';
                         } 
                     ?>">
-                 <p class="truncate-text"><?php echo $row['review']; ?></p> 
+                 <p class="truncate-text"><?php if($row['review']=== NULL || $row['review']=== "" ){echo "Khách hàng không ghi nội dung";}else{ echo $row['review'];} ?></p> 
                  <div class="todo-item">
                     <i class='bx bx-dots-vertical-rounded'></i>
                     <div class="action-menu">
