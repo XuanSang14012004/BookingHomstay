@@ -5,14 +5,13 @@ if (
     isset($_SESSION['account_id']) &&
     isset($_SESSION['fullname']) &&
     isset($_SESSION['email']) &&
-    isset($_SESSION['role'])
-) {
-    // Cho phép vào trang admin
+    isset($_SESSION['role'])) 
+{ 
 } else {
     header("Location: ../../../Login/login.php");
     exit();
 }
-if ($_SESSION['role'] !== 'admin') {
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'owner') {
     header("Location: ../../../Login/login.php");
     exit();
 }

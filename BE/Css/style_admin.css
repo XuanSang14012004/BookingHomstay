@@ -310,7 +310,7 @@ body {
 }
 #content nav .profile .info-right .name {
 	color: var(--dark);
-	margin-left: 5px;
+	margin-left: 3px;
 }
 #content nav .profile .info-right:hover {
 	color: var(--blue);

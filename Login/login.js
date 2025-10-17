@@ -34,11 +34,19 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    const form = urlParams.get('form');
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    const action = params.get('action') || params.get('form') || 'signin';
+    const role = params.get('role');
 
-    // Hàm hiển thị thông báo không chặn luồng
+    if (action === 'signup') {
+        document.getElementById('signup-form').style.display = 'block';
+        document.getElementById('signin-form').style.display = 'none';
+    } else {
+        document.getElementById('signin-form').style.display = 'block';
+        document.getElementById('signup-form').style.display = 'none';
+    }
+
     function showMessage(msg) {
         let box = document.createElement('div');
         box.className = 'custom-alert';
@@ -59,21 +67,47 @@ document.addEventListener('DOMContentLoaded', function() {
             box.remove();
         }, 2000);
     }
-    if(form === 'signup'){
-        if(status === 'exist'){
-            showMessage('Email của bạn đã tồn tài. Vui lòng nhập Email khác!');
-        } else if (status === 'success') {
-            showMessage('Đăng kí tài khoản thành công!');
-        }else if (status === 'error') {
-            showMessage('Đăng kí tài khoản thất bài!');
+    function handleStatus(status) {
+        if (!status) return null;
+        switch (status) {
+            case 'exist':
+                return { msg: 'Email của bạn đã tồn tại. Vui lòng nhập Email khác!', redirect: 'login.php?action=signup' };
+            case 'success':
+            case 'signup_success':
+                return { msg: 'Đăng ký tài khoản thành công!', redirect: 'login.php?action=signin' };
+            case 'error':
+                if (action === 'signup') {
+                    return { msg: 'Đăng ký tài khoản thất bại!', redirect: 'login.php?action=signup' };
+                } else {
+                    return { msg: 'Đăng nhập thất bại. Tài khoản hoặc mật khẩu của bạn không chính xác!', redirect: 'login.php?action=signin' };
+                }
+            case 'no_account':
+                return { msg: 'Tài khoản không tồn tại!', redirect: 'login.php?action=signin' };
+            case 'wrong_password':
+                return { msg: 'Mật khẩu không đúng!', redirect: 'login.php?action=signin' };
+            case 'no_role':
+                return { msg: 'Tài khoản chưa được phân quyền. Vui lòng liên hệ quản trị viên.', redirect: 'login.php?action=signin' };
+            case 'invalid_role':
+                return { msg: 'Vai trò tài khoản không hợp lệ. Vui lòng liên hệ quản trị viên.', redirect: 'login.php?action=signin' };
+            case 'missrole': 
+                return { msg: 'Tài khoản chưa được phân quyền. Vui lòng liên hệ quản trị viên.', redirect: 'login.php?action=signin' };
+            case 'signin_success':
+                if (role === 'admin') return { msg: 'Đăng nhập thành công. Đang chuyển hướng...', redirect: '../BE/Pages/home/home.php' };
+                if (role === 'user') return { msg: 'Đăng nhập thành công. Đang chuyển hướng...', redirect: '../FE/TrangChu/user_main.php' };
+                return { msg: 'Đăng nhập thành công nhưng vai trò không xác định.', redirect: 'login.php?action=signin' };
+
+            default:
+                return null;
         }
     }
 
-    if(form === 'signin'){
-        if (status === 'error') {
-            showMessage('Đăng nhập thất bài. Tài khoản hoặc mật khẩu của bạn không chính xác!');
-        } else if(status === 'missrole'){
-            showMessage('Đăng nhập thất bài. Tài khoản mà bạn nhập chưa được xếp nhóm phân quyền!');
+    const result = handleStatus(status);
+    if (result) {
+        showMessage(result.msg);
+        if (result.redirect) {
+            setTimeout(() => {
+                window.location.href = result.redirect;
+            }, 2100);
         }
     }
 });
